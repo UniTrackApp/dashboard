@@ -4,14 +4,33 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 
 import { Inter } from "next/font/google";
+import { useEffect, useState } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
 });
 
+type MessageFromFlask = {
+  message: string;
+};
+
 export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const apiUrl = "http://127.0.0.1:5000/message";
+
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data: MessageFromFlask) => {
+        console.log("Data from API:", data);
+        setMessage(data.message);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   return (
     <>
@@ -24,14 +43,13 @@ export default function Home() {
         className={`${inter.className} flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-neutral-950 to-neutral-900`}
       >
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+          <h1 className="text-center text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Welcome to UniTrack
           </h1>
 
+          <p className="text-white">Current message: {message}</p>
+
           <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-            </p>
             <AuthShowcase />
           </div>
         </div>

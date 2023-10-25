@@ -39,4 +39,18 @@ export const postRouter = createTRPCRouter({
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
+
+  fetchLatestMessage: publicProcedure.query(() => {
+    const apiUrl = "http://127.0.0.1:5000/message";
+
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data: { message: string }) => {
+        console.log("Data from API:", data);
+        return data.message;
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }),
 });
