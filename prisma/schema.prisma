@@ -14,72 +14,64 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model AttendanceRecord {
-    attendanceRecordId String   @id @default(cuid())
-    classroomId        String
-    date               DateTime
-    status             Status   @default(PRESENT)
-
-    studentId String
-    student   Student @relation(fields: [studentId], references: [studentId])
-    lectureId String
-    Lecture   Lecture @relation(fields: [lectureId], references: [lectureId])
-}
-
-// All good
 model Student {
-    studentId     String  @id @unique @default(cuid())
-    studentCardId String  @unique
+    studentId     String  @id @default(cuid())
+    studentCardId String
     firstName     String
     lastName      String?
 
-    attendanceRecord AttendanceRecord[]
-    course           Course[]
-}
-
-model Course {
-    courseId   String @id @default(cuid())
-    courseName String
-
-    moduleId         String
-    module           Module[]   @relation(fields: [moduleId], references: [moduleId])
-    Student          Student? @relation(fields: [studentStudentId], references: [studentId])
-    studentStudentId String?
+    // Prisma relations
+    AttendanceRecords AttendanceRecord[]
+    Enrollments       Enrollment[]
 }
 
 model Module {
-    moduleId   String    @id @default(cuid())
-    moduleName String?
-    moduleCode String?
-    schedule   String?
-    lecture    Lecture[]
+    moduleId   String  @id @default(cuid())
+    moduleName String
+    moduleDesc String?
 
-    studentId String?
-    student   Student? @relation(fields: [studentId], references: [studentId])
-    Course    Course[]
-
-    @@map("Module")
+    // Prisma relations
+    Lectures    Lecture[]
+    Enrollments Enrollment[]
 }
 
 model Lecture {
-    lectureId   String @id @default(cuid())
-    lectureName String
-    lectureCode String
+    lectureId String   @id @default(cuid())
+    startTime DateTime
+    endTime   DateTime
 
-    moduleId           String
-    module             Module             @relation(fields: [moduleId], references: [moduleId])
-    classroomId        String
-    classroom          Classroom          @relation(fields: [classroomId], references: [classroomId])
-    attendanceRecordId String
-    attendanceRecord   AttendanceRecord[]
+    // Foreign keys
+    moduleId String
+
+    // Prisma relations
+    Module            Module             @relation(fields: [moduleId], references: [moduleId])
+    AttendanceRecords AttendanceRecord[]
 }
 
-model Classroom {
-    classroomId   String @id @default(cuid())
-    classroomName String
-    capacity      Int?
+model AttendanceRecord {
+    attendanceRecordId String   @id @unique @default(cuid())
+    status             Status
+    timestamp          DateTime @default(now())
 
-    Lecture Lecture[]
+    // Foreign keys
+    studentId String
+    lectureId String
+
+    // Prisma relations
+    Student Student @relation(fields: [studentId], references: [studentId])
+    Lecture Lecture @relation(fields: [lectureId], references: [lectureId])
+}
+
+model Enrollment {
+    enrollmentId String @id @default(cuid())
+
+    // Foreign keys
+    studentId String
+    moduleId  String
+
+    // Prisma relations
+    Student Student @relation(fields: [studentId], references: [studentId])
+    Module  Module  @relation(fields: [moduleId], references: [moduleId])
 }
 
 enum Status {
