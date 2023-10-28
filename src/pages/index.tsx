@@ -17,9 +17,13 @@ type MessageFromFlask = {
 
 export default function Home() {
   const [message, setMessage] = useState("");
+  const { data: aryanAttendance } =
+    api.student.getAryansAttendanceInfo.useQuery({ UID: "c7240944" });
 
   useEffect(() => {
     const apiUrl = "http://127.0.0.1:5000/message";
+
+    console.log(aryanAttendance);
 
     fetch(apiUrl)
       .then((response) => response.json())
