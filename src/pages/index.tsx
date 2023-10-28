@@ -1,15 +1,9 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-
-import { api } from "~/utils/api";
-
-import { Inter } from "next/font/google";
 import { useEffect, useState } from "react";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-});
+import { inter } from "~/styles/fonts";
+import { api } from "~/utils/api";
 
 type MessageFromFlask = {
   message: string;
@@ -17,13 +11,9 @@ type MessageFromFlask = {
 
 export default function Home() {
   const [message, setMessage] = useState("");
-  const { data: aryanAttendance } =
-    api.student.getAryansAttendanceInfo.useQuery({ UID: "c7240944" });
 
   useEffect(() => {
     const apiUrl = "http://127.0.0.1:5000/message";
-
-    console.log(aryanAttendance);
 
     fetch(apiUrl)
       .then((response) => response.json())
