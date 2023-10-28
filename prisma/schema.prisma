@@ -14,16 +14,70 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Student {
+    studentId     String  @id @default(cuid())
+    studentCardId String
+    firstName     String
+    lastName      String?
 
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
+    // Prisma relations
+    AttendanceRecords AttendanceRecord[]
+    Enrollments       Enrollment[]
+}
 
-    @@index([name])
+model Module {
+    moduleId   String  @id @default(cuid())
+    moduleName String
+    moduleDesc String?
+
+    // Prisma relations
+    Lectures    Lecture[]
+    Enrollments Enrollment[]
+}
+
+model Lecture {
+    lectureId String   @id @default(cuid())
+    startTime DateTime
+    endTime   DateTime
+
+    // Foreign keys
+    moduleId String
+
+    // Prisma relations
+    Module            Module             @relation(fields: [moduleId], references: [moduleId])
+    AttendanceRecords AttendanceRecord[]
+}
+
+model AttendanceRecord {
+    attendanceRecordId String   @id @unique @default(cuid())
+    status             Status
+    timestamp          DateTime @default(now())
+
+    // Foreign keys
+    studentId String
+    lectureId String
+
+    // Prisma relations
+    Student Student @relation(fields: [studentId], references: [studentId])
+    Lecture Lecture @relation(fields: [lectureId], references: [lectureId])
+}
+
+model Enrollment {
+    enrollmentId String @id @default(cuid())
+
+    // Foreign keys
+    studentId String
+    moduleId  String
+
+    // Prisma relations
+    Student Student @relation(fields: [studentId], references: [studentId])
+    Module  Module  @relation(fields: [moduleId], references: [moduleId])
+}
+
+enum Status {
+    PRESENT
+    ABSENT
+    LATE
 }
 
 // Necessary for Next auth
@@ -70,4 +124,17 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+// Example table from T3 setup. Keeping this for testing, delete this later
+model Post {
+    id        Int      @id @default(autoincrement())
+    name      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdById String
+
+    @@index([name])
 }
