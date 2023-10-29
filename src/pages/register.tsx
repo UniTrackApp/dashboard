@@ -6,6 +6,11 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
 import { inter } from "~/styles/fonts";
+import { api } from "~/utils/api";
+
+import { Loader2, Trash2, UserPlus2 } from "lucide-react";
+import { useRouter } from "next/router";
+import { useToast } from "~/components/ui/use-toast";
 
 type StudentInfo = {
   firstName: string;
@@ -15,7 +20,58 @@ type StudentInfo = {
 };
 
 export default function Dashboard() {
-  const [setstudentInfo, setSetstudentInfo] = useState<StudentInfo>();
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const [studentFormInfo, setStudentFormInfo] = useState<StudentInfo>({
+    firstName: "",
+    lastName: "",
+    studentId: "",
+    studentCardId: "",
+  });
+
+  const [studentDisplayInfo, setStudentDisplayInfo] = useState<StudentInfo[]>();
+
+  const { data: getAllStudentInfo, isSuccess } =
+    api.student.getAllStudents.useQuery();
+
+  if (isSuccess && !studentDisplayInfo) {
+    setStudentDisplayInfo(getAllStudentInfo);
+  }
+
+  const { mutate: createNewStudentEntry, status } =
+    api.student.createStudent.useMutation({
+      onSuccess({ firstName }) {
+        toast({
+          title: "Student Added 🎉",
+          description: `${firstName} has been added to the database.`,
+        });
+        // router.reload();
+      },
+      onError() {
+        toast({
+          title: "Error 😢",
+          description: "Something went wrong, please try again.",
+        });
+      },
+    });
+
+  const { mutate: deleteStudentById } =
+    api.student.deleteStudentById.useMutation({
+      onMutate(props) {
+        toast({
+          title: "Student Deleted 🎉",
+          description: `${props.firstName} has been deleted from the database.`,
+        });
+        // router.reload();
+      },
+      onError() {
+        toast({
+          title: "Error 😢",
+          description: "Something went wrong, please try again.",
+        });
+      },
+    });
 
   return (
     <>
@@ -32,37 +88,125 @@ export default function Dashboard() {
               <ModeToggle />
             </div>
           </div>
-          <div className="mt-8 flex flex-col">
-            <div className="flex flex-col gap-6">
+          <div className="mt-8 flex flex-col lg:items-center">
+            <div className="flex flex-col gap-8">
               <Label htmlFor="firstName">First Name</Label>
               <Input
                 id="firstName"
                 type="text"
                 placeholder="John"
-                className="-mt-3"
+                className="-mt-6 lg:w-72"
+                value={studentFormInfo?.firstName}
+                onChange={(e) => {
+                  setStudentFormInfo({
+                    ...studentFormInfo,
+                    firstName: e.target.value,
+                  });
+                }}
               />
-              <Label htmlFor="lastName">First Name</Label>
+              <Label htmlFor="lastName">Last Name</Label>
               <Input
                 id="lastName"
                 type="text"
                 placeholder="Doe"
-                className="-mt-3"
+                className="-mt-6 lg:w-72"
+                value={studentFormInfo?.lastName}
+                onChange={(e) => {
+                  setStudentFormInfo({
+                    ...studentFormInfo,
+                    lastName: e.target.value,
+                  });
+                }}
               />
               <Label htmlFor="studentId">Student ID</Label>
               <Input
                 id="studentId"
                 type="text"
                 placeholder="c1234567"
-                className="-mt-3"
+                className="-mt-6 lg:w-72"
+                value={studentFormInfo?.studentId}
+                onChange={(e) => {
+                  setStudentFormInfo({
+                    ...studentFormInfo,
+                    studentId: e.target.value,
+                  });
+                }}
               />
               <Label htmlFor="studentCardId">Student Card ID</Label>
               <Input
                 id="studentCardId"
                 type="text"
                 placeholder="ABC123"
-                className="-mt-3"
+                className="-mt-6 lg:w-72"
+                value={studentFormInfo?.studentCardId}
+                onChange={(e) => {
+                  setStudentFormInfo({
+                    ...studentFormInfo,
+                    studentCardId: e.target.value,
+                  });
+                }}
               />
-              <Button className="mt-8">Register</Button>
+
+              <Button
+                className="mx-auto w-fit"
+                onClick={() => {
+                  createNewStudentEntry(studentFormInfo);
+                }}
+                disabled={status === "loading"}
+                variant={"default"}
+                size={"lg"}
+              >
+                {status === "loading" && (
+                  <Loader2 className="mr-2 animate-spin" size={24} />
+                )}
+                <UserPlus2 className="mr-2" />
+                Add Student
+              </Button>
+            </div>
+
+            <div className="mt-8 grid place-items-center gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {studentDisplayInfo?.map((student) => {
+                return (
+                  <div
+                    key={student.studentId}
+                    className="relative w-72 rounded-md border p-4"
+                  >
+                    <Button
+                      size={"icon"}
+                      variant={"destructive"}
+                      className="absolute right-2 top-2"
+                      onClick={() => {
+                        deleteStudentById({
+                          studentId: student.studentId,
+                          firstName: student.firstName,
+                        });
+                        toast({
+                          title: "Student Deleted 🎉",
+                          description: `${student.firstName} has been deleted from the database.`,
+                        });
+                      }}
+                    >
+                      <Trash2 />
+                    </Button>
+                    <p className="truncate">
+                      <span className="font-medium">First Name: </span>
+                      {student.firstName}
+                    </p>
+                    <p className="truncate">
+                      <span className="font-medium">Last Name: </span>
+                      {student.lastName}
+                    </p>
+                    <p>
+                      <span className="font-medium">Student ID: </span>
+                      {student.studentId}
+                    </p>
+                    <p>
+                      <span className="font-medium">Student ID Card: </span>
+                      {student.studentCardId}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

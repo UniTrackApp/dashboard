@@ -15,10 +15,10 @@ datasource db {
 }
 
 model Student {
-    studentId     String  @id @default(cuid())
+    studentId     String @id @default(cuid())
     studentCardId String
     firstName     String
-    lastName      String?
+    lastName      String
 
     // Prisma relations
     AttendanceRecords AttendanceRecord[]
