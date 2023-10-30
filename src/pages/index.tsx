@@ -27,7 +27,7 @@ export default function Home() {
       </Head>
 
       <main
-        className={`${inter.className} flex min-h-screen flex-col items-center justify-between bg-gradient-to-b from-neutral-950 to-neutral-900 text-white selection:bg-violet-600 selection:text-white`}
+        className={`${inter.className} flex min-h-screen flex-col items-center justify-between bg-gradient-to-b from-neutral-950 to-neutral-900 text-white antialiased selection:bg-violet-600 selection:text-white`}
       >
         <Navbar sessionData={sessionData} />
         <div className="container flex w-full flex-col items-center justify-center gap-12">
