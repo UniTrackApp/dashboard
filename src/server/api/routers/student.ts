@@ -43,4 +43,14 @@ export const studentRouter = createTRPCRouter({
         },
       });
     }),
+
+  getStudentById: protectedProcedure
+    .input(z.string().min(1).max(8))
+    .query(async (props) => {
+      return props.ctx.db.student.findFirst({
+        where: {
+          studentCardId: props.input,
+        },
+      });
+    }),
 });
