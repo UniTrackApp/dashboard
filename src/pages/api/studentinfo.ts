@@ -1,15 +1,22 @@
-// // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-// import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-// import { db } from "~/server/db";
+import { db } from "~/server/db";
 
-// const data = await db.student.findFirst({
-//   where: {
-//     studentCardId: "SX69",
-//   },
-//   include: {},
-// });
+export default async (request: NextApiRequest, response: NextApiResponse) => {
+  if (request.method == "GET") {
+    const uid = request.query.uid as string;
 
-// export default function handler(req: NextApiRequest, res: NextApiResponse) {
-//   res.json(data?.firstName);
-// }
+    try {
+      const result = await db.student.findFirst({
+        where: {
+          studentCardId: uid,
+        },
+      });
+      response.status(200).json(result);
+    } catch (error) {
+      response.status(500).json({ error: "Server Error" });
+    }
+  } else {
+    response.status(405).end;
+  }
+};
