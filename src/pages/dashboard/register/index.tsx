@@ -10,7 +10,6 @@ import { api } from "~/utils/api";
 
 import { Loader2, RefreshCcw, Trash2, UserPlus2 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useToast } from "~/components/ui/use-toast";
 
 type StudentInfo = {
@@ -22,7 +21,6 @@ type StudentInfo = {
 
 export default function Dashboard() {
   const { toast } = useToast();
-  const router = useRouter();
 
   const [formData, setFormData] = useState<StudentInfo>({
     firstName: "",
@@ -58,7 +56,6 @@ export default function Dashboard() {
           title: "Student Deleted ❌",
           description: `${firstName} has been deleted from the database.`,
         });
-        // router.reload();
         void refetchLatestStudents();
       },
       onError() {
