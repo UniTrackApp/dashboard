@@ -1,16 +1,15 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-
-import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 
 import { ArrowRight } from "lucide-react";
 import { type Session } from "next-auth";
-import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button, buttonVariants } from "~/components/ui/button";
+
 import { inter } from "~/styles/fonts";
-import { api } from "~/utils/api";
 
 export default function Home() {
   const { data: sessionData } = useSession();
@@ -48,37 +47,6 @@ export default function Home() {
         <Footer />
       </main>
     </>
-  );
-}
-
-// Unused function, part of the NextAuth.js showcase
-function AuthShowcase() {
-  const { data: sessionData } = useSession();
-
-  const { data: secretMessage } = api.post.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined },
-  );
-
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      {sessionData?.user.image && (
-        <Avatar>
-          <AvatarImage src={sessionData?.user?.image} />
-          <AvatarFallback>DP</AvatarFallback>
-        </Avatar>
-      )}
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
   );
 }
 
@@ -168,31 +136,62 @@ function Footer() {
   );
 }
 
-// Test function used to test the Flask API integration
-function FlaskTest() {
-  type MessageFromFlask = {
-    message: string;
-  };
+// // Unused function, part of the NextAuth.js showcase
+// function AuthShowcase() {
+//   const { data: sessionData } = useSession();
 
-  const [message, setMessage] = useState("");
+//   const { data: secretMessage } = api.post.getSecretMessage.useQuery(
+//     undefined, // no input
+//     { enabled: sessionData?.user !== undefined },
+//   );
 
-  useEffect(() => {
-    const apiUrl = "http://127.0.0.1:5000/message";
+//   return (
+//     <div className="flex flex-col items-center justify-center gap-4">
+//       <p className="text-center text-2xl">
+//         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
+//         {secretMessage && <span> - {secretMessage}</span>}
+//       </p>
+//       {sessionData?.user.image && (
+//         <Avatar>
+//           <AvatarImage src={sessionData?.user?.image} />
+//           <AvatarFallback>DP</AvatarFallback>
+//         </Avatar>
+//       )}
+//       <button
+//         className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
+//         onClick={sessionData ? () => void signOut() : () => void signIn()}
+//       >
+//         {sessionData ? "Sign out" : "Sign in"}
+//       </button>
+//     </div>
+//   );
+// }
 
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data: MessageFromFlask) => {
-        console.log("Data from API:", data);
-        setMessage(data.message);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+// // Test function used to test the Flask API integration
+// function FlaskTest() {
+//   type MessageFromFlask = {
+//     message: string;
+//   };
 
-  return (
-    <>
-      <p>Current message: {message}</p>
-    </>
-  );
-}
+//   const [message, setMessage] = useState("");
+
+//   useEffect(() => {
+//     const apiUrl = "http://127.0.0.1:5000/message";
+
+//     fetch(apiUrl)
+//       .then((response) => response.json())
+//       .then((data: MessageFromFlask) => {
+//         console.log("Data from API:", data);
+//         setMessage(data.message);
+//       })
+//       .catch((error) => {
+//         console.error("Error fetching data:", error);
+//       });
+//   }, []);
+
+//   return (
+//     <>
+//       <p>Current message: {message}</p>
+//     </>
+//   );
+// }
