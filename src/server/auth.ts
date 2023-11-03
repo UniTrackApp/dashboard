@@ -49,8 +49,8 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
     GitHubProvider({
-      clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET,
+      clientId: env.NEXTAUTH_GITHUB_CLIENT_ID,
+      clientSecret: env.NEXTAUTH_GITHUB_CLIENT_SECRET,
     }),
     /**
      * ...add more providers here.
