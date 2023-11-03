@@ -1,11 +1,14 @@
-name: "Lint PR title"
-
-permissions:
-  pull-requests: read
+name: "Lint PR"
 
 on:
   pull_request_target:
-    types: [opened, reopened, edited, synchronize]
+    types:
+      - opened
+      - edited
+      - synchronize
+
+permissions:
+  pull-requests: read
 
 jobs:
   main:
