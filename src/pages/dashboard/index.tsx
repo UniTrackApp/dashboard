@@ -176,7 +176,7 @@ function LoginLogoutButton({ sessionData }: { sessionData: Session | null }) {
     <div>
       {/* WHEN SIGNED OUT */}
       {!sessionData && (
-        <Button variant={"secondary"} onClick={() => signIn()}>
+        <Button className="w-full" variant={"secondary"} onClick={() => signIn()}>
           Sign in
         </Button>
       )}
