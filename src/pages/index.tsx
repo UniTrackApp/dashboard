@@ -1,4 +1,3 @@
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -35,15 +34,6 @@ export default function Home({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
-      <Head>
-        <title>UniTrack</title>
-        <meta
-          name="description"
-          content="A student monitoring system for the modern universities."
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main
         className={`${inter.className} flex min-h-screen flex-col items-center justify-between bg-gradient-to-b from-neutral-950 to-neutral-900 text-white antialiased selection:bg-violet-600 selection:text-white`}
       >
