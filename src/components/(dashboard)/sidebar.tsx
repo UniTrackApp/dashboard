@@ -25,7 +25,7 @@ const links = [
   },
   {
     name: "Settings",
-    href: "dashboard/settings",
+    href: "/dashboard/settings",
     icon: <Settings size={22} className="mr-2" />,
   },
 ];

@@ -1,9 +1,36 @@
-import React from 'react'
+import Link from "next/link";
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next/types";
+import React from "react";
+import Sidebar from "~/components/(dashboard)/sidebar";
+import { getServerAuthSession } from "~/server/auth";
 
-function Manage() {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const session = await getServerAuthSession(ctx);
+
+  return {
+    props: {
+      sessionData: session,
+    },
+  };
+};
+
+export default function Manage({
+  sessionData,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <div>Manage</div>
-  )
-}
+    <div className="flex flex-row">
+      {/* Sidebar */}
+      <Sidebar sessionData={sessionData} />
 
-export default Manage
+      {/* Main Content */}
+      <div className="container mt-8">
+        <Link href="/dashboard" className="text-3xl font-bold">
+          Manage Page
+        </Link>
+      </div>
+    </div>
+  );
+}
