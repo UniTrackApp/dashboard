@@ -1,17 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-
-import { ArrowRight } from "lucide-react";
-import { getServerSession, type Session } from "next-auth";
-import { signIn, signOut } from "next-auth/react";
-
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Button, buttonVariants } from "~/components/ui/button";
-
 import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next/types";
+
+import { getServerSession, type Session } from "next-auth";
+import { signIn, signOut } from "next-auth/react";
+
+import { ArrowRight } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { authOptions } from "~/server/auth";
 import { inter } from "~/styles/fonts";
 
@@ -20,7 +19,14 @@ export const getServerSideProps = async (
 ) => {
   const session = await getServerSession(context.req, context.res, authOptions);
 
-  console.log("Session:", session);
+  if (session) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {
@@ -73,7 +79,7 @@ function Navbar({ sessionData }: { sessionData: Session | null }) {
 
         {/* WHEN SIGNED OUT */}
         {!sessionData && (
-          <Button variant={"secondary"} onClick={() => signIn()}>
+          <Button variant={"secondary"} onClick={() => signIn("github")}>
             Sign in
           </Button>
         )}
