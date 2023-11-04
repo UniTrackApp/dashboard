@@ -14,27 +14,48 @@ import {
   UserPlus,
   Users,
 } from "lucide-react";
-import { type Session } from "next-auth";
-import { signIn, signOut, useSession } from "next-auth/react";
+import {
+  type GetServerSidePropsContext,
+  type InferGetServerSidePropsType,
+} from "next";
+import { getServerSession, type Session } from "next-auth";
+import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import { ModeToggle } from "~/components/theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button, buttonVariants } from "~/components/ui/button";
+import { authOptions } from "~/server/auth";
+import { db } from "~/server/db";
 import { inter } from "~/styles/fonts";
-import { api } from "~/utils/api";
 import { cn } from "~/utils/shadcn";
 
-export default function Dashboard() {
-  const { data: studentCount } = api.student.getStudentCount.useQuery();
-  const { data: lectureCount } = api.lecture.getLectureCount.useQuery();
-  const { data: moduleCount } = api.module.getModuleCount.useQuery();
-  const { data: attendanceCount } =
-    api.attendanceRecord.getAttendanceRecordCount.useQuery();
-  const { data: enrollmentCount } =
-    api.enrollment.getEnrollmentCount.useQuery();
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const studentCount = await db.student.count();
+  const lectureCount = await db.lecture.count();
+  const moduleCount = await db.module.count();
+  const attendanceCount = await db.attendanceRecord.count();
+  const enrollmentCount = await db.enrollment.count();
 
-  const { data: sessionData } = useSession();
+  const session = await getServerSession(ctx.req, ctx.res, authOptions);
 
+  return {
+    props: {
+      sessionData: session,
+      counts: {
+        studentCount,
+        lectureCount,
+        moduleCount,
+        attendanceCount,
+        enrollmentCount,
+      },
+    },
+  };
+};
+
+export default function Dashboard({
+  sessionData,
+  counts,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
       <Head>
@@ -117,35 +138,35 @@ export default function Dashboard() {
                   <Users size={16} className="mr-2" />
                   Students
                 </Text>
-                <Metric>{studentCount}</Metric>
+                <Metric>{counts.studentCount}</Metric>
               </Card>
               <Card className="" decoration="top" decorationColor="indigo">
                 <Text className="mb-2 flex items-center">
                   <Clock size={16} className="mr-2" />
                   Lectures
                 </Text>
-                <Metric>{lectureCount}</Metric>
+                <Metric>{counts.lectureCount}</Metric>
               </Card>
               <Card className="" decoration="top" decorationColor="indigo">
                 <Text className="mb-2 flex items-center">
                   <BookCopy size={16} className="mr-2" />
                   Modules
                 </Text>
-                <Metric>{moduleCount}</Metric>
+                <Metric>{counts.moduleCount}</Metric>
               </Card>
               <Card className="" decoration="top" decorationColor="indigo">
                 <Text className="mb-2 flex items-center">
                   <CopyCheck size={16} className="mr-2" />
                   Records
                 </Text>
-                <Metric>{attendanceCount}</Metric>
+                <Metric>{counts.attendanceCount}</Metric>
               </Card>
               <Card className="" decoration="top" decorationColor="indigo">
                 <Text className="mb-2 flex items-center">
                   <GraduationCap size={16} className="mr-2" />
                   Enrollments
                 </Text>
-                <Metric>{enrollmentCount}</Metric>
+                <Metric>{counts.enrollmentCount}</Metric>
               </Card>
             </div>
           </div>
@@ -176,7 +197,11 @@ function LoginLogoutButton({ sessionData }: { sessionData: Session | null }) {
     <div>
       {/* WHEN SIGNED OUT */}
       {!sessionData && (
-        <Button className="w-full" variant={"secondary"} onClick={() => signIn()}>
+        <Button
+          className="w-full"
+          variant={"secondary"}
+          onClick={() => signIn()}
+        >
           Sign in
         </Button>
       )}

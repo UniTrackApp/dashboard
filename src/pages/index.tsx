@@ -3,17 +3,36 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ArrowRight } from "lucide-react";
-import { type Session } from "next-auth";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { getServerSession, type Session } from "next-auth";
+import { signIn, signOut } from "next-auth/react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button, buttonVariants } from "~/components/ui/button";
 
+import {
+  type GetServerSidePropsContext,
+  type InferGetServerSidePropsType,
+} from "next/types";
+import { authOptions } from "~/server/auth";
 import { inter } from "~/styles/fonts";
 
-export default function Home() {
-  const { data: sessionData } = useSession();
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
 
+  console.log("Session:", session);
+
+  return {
+    props: {
+      sessionData: session,
+    },
+  };
+};
+
+export default function Home({
+  sessionData,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
       <Head>
