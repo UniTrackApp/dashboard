@@ -5,6 +5,7 @@ import { type AppType } from "next/app";
 import { api } from "~/utils/api";
 
 import Head from "next/head";
+import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
 import { Toaster } from "~/components/ui/toaster";
 import "~/styles/globals.css";
@@ -33,6 +34,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         >
           <Component {...pageProps} />
           <Toaster />
+          <TailwindIndicator />
         </ThemeProvider>
       </SessionProvider>
     </>
