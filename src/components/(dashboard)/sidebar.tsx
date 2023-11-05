@@ -1,8 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
 import { type Session } from "next-auth";
-import { signIn, signOut } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 import { Home, Settings, UserCog } from "lucide-react";
 
@@ -30,12 +32,12 @@ const links = [
   },
 ];
 
-export default function Sidebar({
-  sessionData,
-}: {
-  sessionData: Session | null;
-}) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function Sidebar({ session }: { session?: Session | null }) {
   const path = usePathname();
+  const { data: sessionData } = useSession();
+
+  console.log("sessionData", sessionData);
 
   return (
     <>

@@ -32,6 +32,7 @@ export default async function RootLayout({
       <body className={`font-sans ${inter.className} bg-blue-50`}>
         <NextAuthSessionProvider session={session}>
           <main className="mx-auto flex max-w-7xl divide-x">
+            <Sidebar />
             {children}
           </main>
         </NextAuthSessionProvider>
