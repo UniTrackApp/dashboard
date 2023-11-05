@@ -5,7 +5,6 @@ import { type AppType } from "next/app";
 import { api } from "~/utils/api";
 
 import { ThemeProvider } from "~/components/theme-provider";
-import { Toaster } from "~/components/ui/toaster";
 import "~/styles/globals.css";
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -13,17 +12,21 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <SessionProvider session={session}>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <Component {...pageProps} />
-        <Toaster />
-      </ThemeProvider>
-    </SessionProvider>
+    <>
+      <SessionProvider session={session}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Component {...pageProps} />
+          <p className="absolute bottom-1 right-1 z-50 rounded-md bg-neutral-200 text-xs">
+            This is the old Pages router!
+          </p>
+        </ThemeProvider>
+      </SessionProvider>
+    </>
   );
 };
 

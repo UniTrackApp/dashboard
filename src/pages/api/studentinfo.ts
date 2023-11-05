@@ -2,7 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { db } from "~/server/db";
 
-export default async (request: NextApiRequest, response: NextApiResponse) => {
+export const handler = async (
+  request: NextApiRequest,
+  response: NextApiResponse,
+) => {
   if (request.method == "GET") {
     const uid = request.query.uid as string;
 
@@ -17,6 +20,6 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
       response.status(500).json({ error: "Server Error" });
     }
   } else {
-    response.status(405).end;
+    response.status(405);
   }
 };
