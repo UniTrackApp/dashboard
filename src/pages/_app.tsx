@@ -4,10 +4,7 @@ import { type AppType } from "next/app";
 
 import { api } from "~/utils/api";
 
-import Head from "next/head";
-import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
-import { Toaster } from "~/components/ui/toaster";
 import "~/styles/globals.css";
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -16,15 +13,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <>
-      <Head>
-        <title>UniTrack</title>
-        <meta
-          name="description"
-          content="A student monitoring system for the modern universities."
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <SessionProvider session={session}>
         <ThemeProvider
           attribute="class"
@@ -33,8 +21,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
           disableTransitionOnChange
         >
           <Component {...pageProps} />
-          <Toaster />
-          <TailwindIndicator />
+          <p className="absolute bottom-1 right-1 z-50 rounded-md bg-neutral-200 text-xs">
+            This is the old Pages router!
+          </p>
         </ThemeProvider>
       </SessionProvider>
     </>

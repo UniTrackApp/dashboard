@@ -30,7 +30,7 @@ export default function LoginPage() {
             Login with GitHub to enter your dashboard
           </p>
         </div>
-        <Button onClick={() => signIn("github")} variant={"secondary"}>
+        <Button variant={"secondary"}>
           <Github size={18} className="mr-2" />
           Sign in with GitHub
         </Button>
