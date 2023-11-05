@@ -10,6 +10,13 @@ on:
     branches: ["main"]
     types: [opened, synchronize, reopened]
 
+env:
+  DATABASE_URL: ${{secrets.DATABASE_URL}}
+  NEXTAUTH_SECRET: ${{secrets.NEXTAUTH_SECRET}}
+  NEXTAUTH_URL: ${{secrets.NEXTAUTH_URL}}
+  NEXTAUTH_GITHUB_CLIENT_ID: ${{secrets.NEXTAUTH_GITHUB_CLIENT_ID}}
+  NEXTAUTH_GITHUB_CLIENT_SECRET: ${{secrets.NEXTAUTH_GITHUB_CLIENT_SECRET}}
+
 jobs:
   build:
     runs-on: ubuntu-latest
