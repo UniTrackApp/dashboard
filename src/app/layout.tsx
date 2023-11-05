@@ -1,9 +1,15 @@
 import { type Metadata } from "next";
-import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
-import Sidebar from "~/components/(dashboard)/sidebar";
+import { headers } from "next/headers";
+
+import { getServerSession } from "next-auth";
+
+import Sidebar from "~/app/dashboard/sidebar";
 import { NextAuthSessionProvider } from "~/components/SessionProvider";
+import { TailwindIndicator } from "~/components/tailwind-indicator";
+import { Toaster } from "~/components/ui/toaster";
 import "~/styles/globals.css";
+import { TRPCReactProvider } from "./trpc/react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,13 +35,16 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.className} bg-blue-50`}>
-        <NextAuthSessionProvider session={session}>
-          <main className="mx-auto flex max-w-7xl divide-x">
-            <Sidebar />
-            {children}
-          </main>
-        </NextAuthSessionProvider>
+      <body className={`font-sans antialiased ${inter.className}`}>
+        <TRPCReactProvider headers={headers()}>
+          <NextAuthSessionProvider session={session}>
+            <main className="mx-auto max-w-7xl">
+              {children}
+              <Toaster />
+              <TailwindIndicator />
+            </main>
+          </NextAuthSessionProvider>
+        </TRPCReactProvider>
       </body>
     </html>
   );
