@@ -1,30 +1,45 @@
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  type GetServerSidePropsContext,
+  type InferGetServerSidePropsType,
+} from "next/types";
+
+import { getServerSession, type Session } from "next-auth";
+import { signIn, signOut } from "next-auth/react";
 
 import { ArrowRight } from "lucide-react";
-import { type Session } from "next-auth";
-import { signIn, signOut, useSession } from "next-auth/react";
-
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button, buttonVariants } from "~/components/ui/button";
-
+import { authOptions } from "~/server/auth";
 import { inter } from "~/styles/fonts";
 
-export default function Home() {
-  const { data: sessionData } = useSession();
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
 
+  if (session) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      sessionData: session,
+    },
+  };
+};
+
+export default function Home({
+  sessionData,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
-      <Head>
-        <title>UniTrack</title>
-        <meta
-          name="description"
-          content="A student monitoring system for the modern universities."
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main
         className={`${inter.className} flex min-h-screen flex-col items-center justify-between bg-gradient-to-b from-neutral-950 to-neutral-900 text-white antialiased selection:bg-violet-600 selection:text-white`}
       >
@@ -64,7 +79,7 @@ function Navbar({ sessionData }: { sessionData: Session | null }) {
 
         {/* WHEN SIGNED OUT */}
         {!sessionData && (
-          <Button variant={"secondary"} onClick={() => signIn()}>
+          <Button variant={"secondary"} onClick={() => signIn("github")}>
             Sign in
           </Button>
         )}
