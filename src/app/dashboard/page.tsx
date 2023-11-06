@@ -1,19 +1,7 @@
-import Link from "next/link";
-
 import { db } from "~/server/db";
 
 import { Card, Metric, Text } from "@tremor/react";
-import {
-  BookCopy,
-  Clock,
-  CopyCheck,
-  Eye,
-  GraduationCap,
-  UserPlus,
-  Users,
-} from "lucide-react";
-
-import { buttonVariants } from "~/components/ui/button";
+import { BookCopy, Clock, CopyCheck, GraduationCap, Users } from "lucide-react";
 
 export default async function Dashboard() {
   const studentCount = await db.student.count();
@@ -22,17 +10,8 @@ export default async function Dashboard() {
   const attendanceCount = await db.attendanceRecord.count();
   const enrollmentCount = await db.enrollment.count();
 
-  // const session = await getServerSession();
-
-  //   console.log("session", session);
-
-  //   if (!session || !session.user) {
-  //     redirect("/");
-  //   }
-
   return (
     <>
-      {/* Content */}
       <div>
         <p className="text-lg font-medium">Quick Stats</p>
         <div className="mt-4 flex flex-1 flex-wrap gap-4 md:flex-nowrap">
