@@ -1,15 +1,13 @@
+import { Analytics } from "@vercel/analytics/react";
 import { type Metadata } from "next";
 import { Inter } from "next/font/google";
 import { headers } from "next/headers";
-
 import { getServerSession } from "next-auth";
-
-import Sidebar from "~/app/dashboard/sidebar";
 import { NextAuthSessionProvider } from "~/components/SessionProvider";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { Toaster } from "~/components/ui/toaster";
-import "~/styles/globals.css";
 import { TRPCReactProvider } from "./trpc/react";
+import "~/styles/globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,6 +38,7 @@ export default async function RootLayout({
           <NextAuthSessionProvider session={session}>
             <main className="mx-auto max-w-7xl">
               {children}
+              <Analytics />
               <Toaster />
               <TailwindIndicator />
             </main>
