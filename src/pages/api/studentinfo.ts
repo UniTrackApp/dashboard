@@ -24,7 +24,7 @@ export const handler = async (
       response.status(404).json({ error: "Necessary field empty" });
     }
   } else {
-    response.status(405).end;
+    response.status(405);
   }
 };
 
