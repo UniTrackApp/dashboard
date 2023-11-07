@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { type Session } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 
-import { History, Home, Settings, UserCog, Users } from "lucide-react";
+import { History, Home, LogOut, Settings, UserCog, Users } from "lucide-react";
 import { cn } from "~/utils/shadcn";
 import {
   Avatar,
@@ -16,6 +16,15 @@ import {
 } from "../../components/ui/avatar";
 import { Badge } from "../../components/ui/badge";
 import { Button, buttonVariants } from "../../components/ui/button";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 
 const links = [
   {
@@ -62,12 +71,50 @@ export default function Sidebar({ session }: { session?: Session | null }) {
       {/* Sidebar */}
       <aside className="hidden h-screen justify-between bg-white px-3 py-4 dark:bg-neutral-900 md:flex md:flex-col">
         <div>
-          {/* Logo */}
+          {/* Top Section: Logo + Account */}
           <div className="flex items-center gap-3 px-2">
             <Image src="/logo.png" width={26} height={26} alt="UniTrack" />
             <p className="text-2xl font-semibold text-neutral-800 dark:text-neutral-100">
               UniTrack
             </p>
+            {/* Account Logo */}
+            {sessionData?.user.image && (
+              <>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="ml-auto">
+                    <Avatar className="ml-auto">
+                      <AvatarImage src={sessionData?.user?.image} />
+                      <AvatarFallback>DP</AvatarFallback>
+                    </Avatar>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-48">
+                    <DropdownMenuLabel>
+                      <div className="flex flex-col">
+                        <p className="truncate text-xs font-normal text-neutral-500">
+                          Welcome back
+                        </p>
+                        <p className="truncate">{sessionData.user?.name}</p>
+                        <p className="truncate font-normal">
+                          {sessionData.user?.email}
+                        </p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Button
+                        className="w-full"
+                        variant={"secondary"}
+                        size={"sm"}
+                        onClick={() => signOut()}
+                      >
+                        <LogOut size={18} className="mr-2" />
+                        Log out
+                      </Button>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            )}
           </div>
 
           {/* Nav Links */}
@@ -95,56 +142,16 @@ export default function Sidebar({ session }: { session?: Session | null }) {
         </div>
 
         {/* Login / Logout Button */}
-        <LoginButton sessionData={sessionData} />
+        {!sessionData && (
+          <Button
+            className="w-full"
+            variant={"secondary"}
+            onClick={() => signIn()}
+          >
+            Sign in
+          </Button>
+        )}
       </aside>
     </>
-  );
-}
-
-function LoginButton({ sessionData }: { sessionData: Session | null }) {
-  return (
-    <div>
-      {/* WHEN SIGNED OUT */}
-      {!sessionData && (
-        <Button
-          className="w-full"
-          variant={"secondary"}
-          onClick={() => signIn()}
-        >
-          Sign in
-        </Button>
-      )}
-
-      {/* WHEN SIGNED IN */}
-      {sessionData && (
-        <div className="flex flex-row justify-between gap-4">
-          <div className="flex flex-col overflow-auto">
-            {sessionData && (
-              <span className="text-md truncate">
-                Hi, {sessionData.user?.name}
-              </span>
-            )}
-
-            <Button
-              className="h-4 justify-start pl-0 text-sm text-neutral-500"
-              variant={"link"}
-              size={"sm"}
-              onClick={() => signOut()}
-            >
-              Sign out
-            </Button>
-          </div>
-
-          <div className="">
-            {sessionData?.user.image && (
-              <Avatar className="ml-auto">
-                <AvatarImage src={sessionData?.user?.image} />
-                <AvatarFallback>DP</AvatarFallback>
-              </Avatar>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
   );
 }
