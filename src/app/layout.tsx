@@ -2,14 +2,11 @@ import { Analytics } from "@vercel/analytics/react";
 import { type Metadata } from "next";
 import { Inter } from "next/font/google";
 import { headers } from "next/headers";
-
 import { getServerSession } from "next-auth";
-
 import { NextAuthSessionProvider } from "~/components/SessionProvider";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { Toaster } from "~/components/ui/toaster";
 import { TRPCReactProvider } from "./trpc/react";
-
 import "~/styles/globals.css";
 
 const inter = Inter({

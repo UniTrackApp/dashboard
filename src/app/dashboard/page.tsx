@@ -1,5 +1,4 @@
 import { db } from "~/server/db";
-
 import { Card, Metric, Text } from "@tremor/react";
 import { BookCopy, Clock, CopyCheck, GraduationCap, Users } from "lucide-react";
 
