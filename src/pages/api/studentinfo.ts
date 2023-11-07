@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { string } from "zod";
 
 import { db } from "~/server/db";
 
