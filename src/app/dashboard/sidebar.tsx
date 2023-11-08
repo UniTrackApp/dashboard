@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { type Session } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 
-import { History, Home, LogOut, Settings, UserCog, Users } from "lucide-react";
+import { BookCheck, CheckCircle, CheckCircle2, History, Home, LibraryBig, LogOut, Presentation, Settings, UserCog, Users } from "lucide-react";
 import { cn } from "~/utils/shadcn";
 import {
   Avatar,
@@ -37,6 +37,30 @@ const links = [
     name: "Students",
     href: "/dashboard/students",
     icon: <Users size={18} />,
+    wipStatus: false,
+  },
+  {
+    name: "Records",
+    href: "/dashboard/records",
+    icon: <CheckCircle size={18} />,
+    wipStatus: false,
+  },
+  {
+    name: "Enrollments",
+    href: "/dashboard/enrollments",
+    icon: <BookCheck size={18} />,
+    wipStatus: false,
+  },
+  {
+    name: "Lectures",
+    href: "/dashboard/lectures",
+    icon: <Presentation size={18} />,
+    wipStatus: false,
+  },
+  {
+    name: "Modules",
+    href: "/dashboard/modules",
+    icon: <LibraryBig size={18} />,
     wipStatus: false,
   },
   {
