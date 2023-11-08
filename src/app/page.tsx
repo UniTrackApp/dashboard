@@ -2,19 +2,20 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ArrowRight } from "lucide-react";
-import { Button, buttonVariants } from "~/components/ui/button";
+import { ModeToggle } from "~/components/theme-toggle";
+import { buttonVariants } from "~/components/ui/button";
 
 export default function Home() {
   return (
     <>
-      <main className="flex min-h-screen w-full flex-col items-center justify-between bg-gradient-to-b from-neutral-950 to-neutral-900 text-white antialiased selection:bg-violet-600 selection:text-white">
+      <main className="flex min-h-screen w-full flex-col items-center justify-between bg-gradient-to-br from-neutral-100 via-purple-100 to-neutral-100 text-black antialiased selection:bg-violet-600 selection:text-white dark:from-neutral-950 dark:to-neutral-900 dark:text-white">
         <Navbar />
         <div className="container flex w-full flex-col items-center justify-center gap-12">
           <div className="flex flex-col gap-4">
             <h1 className="text-center text-3xl font-extrabold tracking-tight sm:text-7xl">
               Welcome to UniTrack
             </h1>
-            <p className="text-center text-lg text-neutral-300 sm:text-xl">
+            <p className="text-center text-lg text-neutral-700 dark:text-neutral-300 sm:text-xl">
               An open-source student monitoring system for modern universities.
             </p>
           </div>
@@ -42,7 +43,15 @@ function Navbar() {
           alt="UniTrack Logo"
         />
 
-        <Button variant={"secondary"}>Sign in</Button>
+        <Link
+          href="/login"
+          className={buttonVariants({
+            variant: "secondary",
+            className: "bg-white dark:bg-neutral-900",
+          })}
+        >
+          Sign in
+        </Link>
       </nav>
     </>
   );
@@ -51,34 +60,39 @@ function Navbar() {
 function Footer() {
   return (
     <>
-      <footer className="mb-4 text-neutral-300">
-        Built with &lt;3 by{" "}
-        <Link
-          referrerPolicy="no-referrer"
-          target="_blank"
-          className="underline-offset-4 hover:underline"
-          href="https://github.com/aryanprince"
-        >
-          Aryan
-        </Link>
-        {", "}
-        <Link
-          referrerPolicy="no-referrer"
-          target="_blank"
-          className="underline-offset-4 hover:underline"
-          href="https://github.com/aryanprince"
-        >
-          Andrea
-        </Link>
-        {" and "}
-        <Link
-          referrerPolicy="no-referrer"
-          target="_blank"
-          className="underline-offset-4 hover:underline"
-          href="https://github.com/aryanprince"
-        >
-          Lewis
-        </Link>
+      <footer className="mb-4 text-neutral-800 dark:text-white">
+        <div>
+          Built with &lt;3 by{" "}
+          <Link
+            referrerPolicy="no-referrer"
+            target="_blank"
+            className="underline-offset-4 hover:underline"
+            href="https://github.com/aryanprince"
+          >
+            Aryan
+          </Link>
+          {", "}
+          <Link
+            referrerPolicy="no-referrer"
+            target="_blank"
+            className="underline-offset-4 hover:underline"
+            href="https://github.com/aryanprince"
+          >
+            Andrea
+          </Link>
+          {" and "}
+          <Link
+            referrerPolicy="no-referrer"
+            target="_blank"
+            className="underline-offset-4 hover:underline"
+            href="https://github.com/aryanprince"
+          >
+            Lewis
+          </Link>
+        </div>
+        <div className="absolute bottom-2 right-2">
+          <ModeToggle />
+        </div>
       </footer>
     </>
   );
