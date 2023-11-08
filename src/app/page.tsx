@@ -8,7 +8,7 @@ import { buttonVariants } from "~/components/ui/button";
 export default function Home() {
   return (
     <>
-      <main className="flex min-h-screen w-full flex-col items-center justify-between bg-gradient-to-br from-neutral-100 via-purple-100 to-neutral-100 text-black antialiased selection:bg-violet-600 selection:text-white dark:from-neutral-950 dark:to-neutral-900 dark:text-white">
+      <main className="flex min-h-screen w-full flex-col items-center justify-between bg-gradient-to-br from-neutral-100 via-purple-100 to-neutral-100 text-neutral-800 antialiased selection:bg-violet-600 selection:text-white dark:from-neutral-950 dark:to-neutral-900 dark:text-white">
         <Navbar />
         <div className="container flex w-full flex-col items-center justify-center gap-12">
           <div className="flex flex-col gap-4">
