@@ -90,26 +90,21 @@ export default function Sidebar({ session }: { session?: Session | null }) {
                   <DropdownMenuContent className="w-48">
                     <DropdownMenuLabel>
                       <div className="flex flex-col">
-                        <p className="truncate text-xs font-normal text-neutral-500">
-                          Welcome back
+                        <p className="truncate text-base">
+                          {sessionData.user?.name}
                         </p>
-                        <p className="truncate">{sessionData.user?.name}</p>
-                        <p className="truncate font-normal">
+                        <p className="truncate font-normal text-neutral-600">
                           {sessionData.user?.email}
                         </p>
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <Button
-                        className="w-full"
-                        variant={"secondary"}
-                        size={"sm"}
-                        onClick={() => signOut()}
-                      >
-                        <LogOut size={18} className="mr-2" />
-                        Log out
-                      </Button>
+                    <DropdownMenuItem
+                      className="w-full cursor-pointer"
+                      onClick={() => signOut()}
+                    >
+                      <LogOut size={18} className="mr-2" />
+                      Log out
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
