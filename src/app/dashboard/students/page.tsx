@@ -151,7 +151,7 @@ export default function Dashboard() {
       </div>
 
       {/* Student List - Cards */}
-      <div className="mt-8 grid grid-cols-1 place-items-center gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-8 flex gap-4 justify-center flex-wrap">
         {getAllStudentInfo?.map((student) => {
           return (
             <div
