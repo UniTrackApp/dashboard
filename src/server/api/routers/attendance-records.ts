@@ -36,42 +36,34 @@ export const attendanceRecordRouter = createTRPCRouter({
       },
     });
 
-    const lectureNames = await ctx.db.lecture.findMany({
-      select: {
-        moduleId: true,
-      },
-    });
-
-    const moduleNames = await ctx.db.module.findMany({
-      select: {
-        moduleId: true,
-        moduleName: true,
-      },
-      where: {
-        moduleId: {
-          in: lectureNames.map((lecture) => lecture.moduleId),
-        },
-      },
-    });
+    // const getModuleNameFromLectureId = await ctx.db.module.findMany({
+    //   select: {
+    //     moduleName: true,
+    //     moduleId: true,
+    //   },
+    //   where: {
+    //     Lectures: {
+    //       some: {
+    //         lectureId: {
+    //           in: attendanceRecords.map(
+    //             (attendanceRecord) => attendanceRecord.lectureId,
+    //           ),
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
 
     return attendanceRecords.map((attendanceRecord) => {
       const studentName = studentNames.find(
         (student) => student.studentId === attendanceRecord.studentId,
       );
 
-      // TODO: This logic is bad, we're looping over twice - but I'm not sure how to fix this
-      const moduleName = moduleNames.find((module) =>
-        lectureNames.find((lecture) => lecture.moduleId === module.moduleId),
-      );
-
-      console.log(moduleName);
-
       return {
         attendanceRecordId: attendanceRecord.attendanceRecordId,
         studentId: attendanceRecord.studentId,
         studentName: `${studentName?.firstName} ${studentName?.lastName}`,
         lectureId: attendanceRecord.lectureId,
-        moduleName: moduleName?.moduleName,
         status: attendanceRecord.status,
         timestamp: attendanceRecord.timestamp,
       };
