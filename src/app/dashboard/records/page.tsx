@@ -2,7 +2,6 @@
 
 import {
   Badge,
-  BadgeDelta,
   Card,
   Flex,
   Table,
@@ -73,60 +72,17 @@ export default function Records() {
 
   return (
     <div className="flex flex-col justify-center">
-      {/* <p className="text-xl font-medium">Add an attendance record</p> */}
-      {/* <div className="flex flex-col gap-4">
-        <div>
-          <Label htmlFor="studentId">Student ID</Label>
-          <Input
-            placeholder="Enter the student ID"
-            onChange={(e) => {
-              setFormData({
-                ...formData,
-                studentId: e.target.value,
-              });
-            }}
-          />
-        </div>
-        <div>
-          <Label htmlFor="lectureId">Lecture ID</Label>
-          <Input
-            placeholder="Enter the lecture ID"
-            onChange={(e) => {
-              setFormData({
-                ...formData,
-                lectureId: e.target.value,
-              });
-            }}
-          />
-        </div>
-        <div>
-          <Label htmlFor="status">Status</Label>
-          <SelectorToggle formData={formData} setFormData={setFormData} />
-        </div>
-        <div>
-          <Button
-            onClick={() => {
-              createNewRecordEntry({
-                studentId: formData.studentId,
-                lectureId: formData.lectureId,
-                status: formData.status,
-              });
-            }}
-          >
-            <Plus size={20} className="mr-2" />
-            Add Record
-          </Button>
-        </div>
-      </div> */}
-
       {/* Table to display attendance records */}
       <div>
         <Card>
+          {/* Card Title - displays table name + item counts */}
           <Flex justifyContent="between">
             <Flex justifyContent="start" className="gap-2">
               <Title>Attendance Records</Title>
               <Badge color="blue">{attendanceCount}</Badge>
             </Flex>
+
+            {/* Dialog - used to create new Attendance Records */}
             <Dialog>
               <DialogTrigger className={buttonVariants({ className: "w-fit" })}>
                 <Plus size={20} className="mr-2" />
@@ -189,6 +145,8 @@ export default function Records() {
               </DialogContent>
             </Dialog>
           </Flex>
+
+          {/* Table - to display Attendance Records */}
           <Table className="mt-4">
             <TableHead>
               <TableRow>
@@ -247,6 +205,7 @@ export default function Records() {
   );
 }
 
+// Used for attendace status selector
 function SelectorToggle({
   formData,
   setFormData,
