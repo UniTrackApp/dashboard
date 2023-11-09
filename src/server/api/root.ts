@@ -5,6 +5,7 @@ import { attendanceRecordRouter } from "./routers/attendance-records";
 import { enrollmentRouter } from "./routers/enrollment";
 import { lectureRouter } from "./routers/lecture";
 import { moduleRouter } from "./routers/module";
+import { uniTrackRouter } from "./routers/unitrack";
 
 /**
  * This is the primary router for your server.
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   module: moduleRouter,
   attendanceRecord: attendanceRecordRouter,
   enrollment: enrollmentRouter,
+  universal: uniTrackRouter,
 });
 
 // export type definition of API
