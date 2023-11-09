@@ -66,8 +66,9 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="mt-8 flex flex-col md:items-center">
-        <div className="flex flex-col gap-8">
+      <div className="mt-8 flex justify-center">
+        {/* Registration Form */}
+        <div className="flex flex-col gap-8 ">
           <p className="text-xl font-semibold">Register a student</p>
           <Label htmlFor="firstName">First Name</Label>
           <Input
@@ -147,51 +148,52 @@ export default function Dashboard() {
             Add Student
           </Button>
         </div>
+      </div>
 
-        <div className="mt-8 grid place-items-center gap-4 sm:grid-cols-2 md:grid-cols-3">
-          {getAllStudentInfo?.map((student) => {
-            return (
-              <div
-                key={student.studentId}
-                className="relative w-72 rounded-md border p-4 bg-white"
+      {/* Student List - Cards */}
+      <div className="mt-8 flex gap-4 justify-center flex-wrap">
+        {getAllStudentInfo?.map((student) => {
+          return (
+            <div
+              key={student.studentId}
+              className="relative w-64 rounded-md border bg-white p-4"
+            >
+              <Button
+                size={"icon"}
+                variant={"destructive"}
+                className="absolute right-2 top-2 h-8 w-8"
+                onClick={() => {
+                  deleteStudentById({
+                    studentId: student.studentId,
+                    firstName: student.firstName,
+                  });
+                  toast({
+                    title: "Student Deleted 🎉",
+                    description: `${student.firstName} has been deleted from the database.`,
+                  });
+                }}
               >
-                <Button
-                  size={"icon"}
-                  variant={"destructive"}
-                  className="absolute right-2 top-2"
-                  onClick={() => {
-                    deleteStudentById({
-                      studentId: student.studentId,
-                      firstName: student.firstName,
-                    });
-                    toast({
-                      title: "Student Deleted 🎉",
-                      description: `${student.firstName} has been deleted from the database.`,
-                    });
-                  }}
-                >
-                  <Trash2 />
-                </Button>
-                <p className="truncate">
-                  <span className="font-medium">First Name: </span>
-                  {student.firstName}
-                </p>
-                <p className="truncate">
-                  <span className="font-medium">Last Name: </span>
-                  {student.lastName}
-                </p>
-                <p>
-                  <span className="font-medium">Student ID: </span>
-                  {student.studentId}
-                </p>
-                <p>
-                  <span className="font-medium">Student ID Card: </span>
-                  {student.studentCardId}
-                </p>
-              </div>
-            );
-          })}
-        </div>
+                <Trash2 size={18} />
+              </Button>
+              <p className="truncate">
+                <span className="font-medium">First Name: </span>
+                {student.firstName}
+              </p>
+              <p className="truncate">
+                <span className="font-medium">Last Name: </span>
+                {student.lastName}
+              </p>
+              <p>
+                <span className="font-medium">Student ID: </span>
+                {student.studentId}
+              </p>
+              <p>
+                <span className="font-medium">Student ID Card: </span>
+                {student.studentCardId}
+              </p>
+            </div>
+          );
+        })}
       </div>
     </>
   );

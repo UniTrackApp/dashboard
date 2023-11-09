@@ -1,15 +1,15 @@
+import { Analytics } from "@vercel/analytics/react";
 import { type Metadata } from "next";
+import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
 import { headers } from "next/headers";
-
-import { getServerSession } from "next-auth";
-
-import Sidebar from "~/app/dashboard/sidebar";
 import { NextAuthSessionProvider } from "~/components/SessionProvider";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { Toaster } from "~/components/ui/toaster";
 import "~/styles/globals.css";
 import { TRPCReactProvider } from "./trpc/react";
+
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -38,11 +38,19 @@ export default async function RootLayout({
       <body className={`font-sans antialiased ${inter.className}`}>
         <TRPCReactProvider headers={headers()}>
           <NextAuthSessionProvider session={session}>
-            <main className="mx-auto max-w-7xl">
-              {children}
-              <Toaster />
-              <TailwindIndicator />
-            </main>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <main className="min-h-screen">
+                {children}
+                <Analytics />
+                <Toaster />
+                <TailwindIndicator />
+              </main>
+            </ThemeProvider>
           </NextAuthSessionProvider>
         </TRPCReactProvider>
       </body>

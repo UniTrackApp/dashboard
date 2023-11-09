@@ -16,7 +16,7 @@ datasource db {
 
 model Student {
     studentId     String @id @default(cuid())
-    studentCardId String
+    studentCardId String @unique
     firstName     String
     lastName      String
 
@@ -95,6 +95,8 @@ model Account {
     id_token          String? // @db.Text
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    refresh_token_expires_in Int?
 
     @@unique([provider, providerAccountId])
 }
