@@ -186,7 +186,7 @@ export default function Sidebar({ session }: { session?: Session | null }) {
         )}
 
         {/* Theme Toggle - Dark & Light Mode */}
-        <div className="flex items-center justify-center gap-4 rounded-lg bg-neutral-50 p-2 text-sm">
+        <div className="flex items-center justify-center gap-4 rounded-lg bg-neutral-50 p-2 text-sm dark:bg-neutral-800">
           <p>Toggle Theme</p>
           <ModeToggle />
         </div>
