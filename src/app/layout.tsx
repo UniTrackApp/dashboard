@@ -23,19 +23,15 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
-  // Layouts must accept a children prop.
-  // This will be populated with nested layouts or pages
   children,
 }: {
   children: React.ReactNode;
 }) {
   const session = await getServerSession();
 
-  // console.log("session", session);
-
   return (
     <html lang="en">
-      <body className={`font-sans antialiased ${inter.className}`}>
+      <body className={`${inter.className} antialiased`}>
         <TRPCReactProvider headers={headers()}>
           <NextAuthSessionProvider session={session}>
             <ThemeProvider
