@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { type Session } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import {
@@ -19,16 +18,11 @@ import {
   UserCog,
   Users,
 } from "lucide-react";
-import { cn } from "~/utils/shadcn";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "../../components/ui/avatar";
-import { Badge } from "../../components/ui/badge";
-import { Button, buttonVariants } from "../../components/ui/button";
 
 import { ModeToggle } from "~/components/theme-toggle";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Badge } from "~/components/ui/badge";
+import { Button, buttonVariants } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,6 +31,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+
+import { cn } from "~/utils/shadcn";
 
 const links = [
   {
@@ -61,19 +57,19 @@ const links = [
     name: "Enrollments",
     href: "/dashboard/enrollments",
     icon: <BookCheck size={18} />,
-    wipStatus: false,
+    wipStatus: true,
   },
   {
     name: "Lectures",
     href: "/dashboard/lectures",
     icon: <Presentation size={18} />,
-    wipStatus: false,
+    wipStatus: true,
   },
   {
     name: "Modules",
     href: "/dashboard/modules",
     icon: <LibraryBig size={18} />,
-    wipStatus: false,
+    wipStatus: true,
   },
   {
     name: "Manage",
@@ -95,102 +91,97 @@ const links = [
   },
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function Sidebar({ session }: { session?: Session | null }) {
-  const pathname = usePathname();
-  const { data: sessionData } = useSession();
-
-  console.log("sessionData", sessionData);
+export default function Sidebar() {
+  const pathname = usePathname(); // used to highlight the current page in the sidebar
+  const { data: sessionData } = useSession(); // used to display auth user info
 
   return (
-    <>
-      {/* Sidebar */}
-      <aside className="hidden h-screen justify-between bg-white px-3 py-4 dark:bg-neutral-900 md:flex md:flex-col">
-        <div>
-          {/* Top Section: Logo + Account */}
-          <div className="flex items-center gap-3 px-2">
-            <Image src="/logo.png" width={26} height={26} alt="UniTrack" />
-            <p className="text-2xl font-semibold text-neutral-800 dark:text-neutral-100">
-              UniTrack
-            </p>
-            {/* Account Logo */}
-            {sessionData?.user.image && (
-              <>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="ml-auto">
-                    <Avatar className="ml-auto">
-                      <AvatarImage src={sessionData?.user?.image} />
-                      <AvatarFallback>DP</AvatarFallback>
-                    </Avatar>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" className="w-48">
-                    <DropdownMenuLabel>
-                      <div className="flex flex-col">
-                        <p className="truncate text-base">
-                          {sessionData.user?.name}
-                        </p>
-                        <p className="truncate font-normal text-neutral-600">
-                          {sessionData.user?.email}
-                        </p>
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="w-full cursor-pointer"
-                      onClick={() => signOut()}
-                    >
-                      <LogOut size={18} className="mr-2" />
-                      Log out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
-            )}
-          </div>
+    <aside className="hidden h-screen justify-between bg-white px-3 py-4 dark:bg-neutral-900 md:flex md:flex-col">
+      <div>
+        {/* Sidebar header - contains logo + account dropdown */}
+        <div className="flex items-center gap-3 px-2">
+          <Image src="/logo.png" width={26} height={26} alt="UniTrack" />
+          <p className="text-2xl font-semibold text-neutral-800 dark:text-neutral-100">
+            UniTrack
+          </p>
 
-          {/* Nav Links */}
-          <div className="mt-8 flex flex-col gap-2">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  buttonVariants({ variant: "secondary" }),
-                  "flex justify-start gap-2 text-base font-normal",
-                  pathname === link.href
-                    ? "bg-neutral-50 dark:bg-neutral-700"
-                    : "bg-transparent",
-                )}
-              >
-                {link.icon}
-                {link.name}
-                {link.wipStatus && (
-                  <Badge variant="warning" className="text-xs">
-                    WIP
-                  </Badge>
-                )}
-              </Link>
-            ))}
-          </div>
+          {/* Account Dropdown - to logout (and manage profile later) */}
+          {sessionData?.user.image && (
+            <>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="ml-auto">
+                  <Avatar className="ml-auto">
+                    <AvatarImage src={sessionData?.user?.image} />
+                    <AvatarFallback>DP</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-48">
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col">
+                      <p className="truncate text-base">
+                        {sessionData.user?.name}
+                      </p>
+                      <p className="truncate font-normal text-neutral-600">
+                        {sessionData.user?.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="w-full cursor-pointer"
+                    onClick={() => signOut()}
+                  >
+                    <LogOut size={18} className="mr-2" />
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          )}
         </div>
 
-        {/* Login / Logout Button */}
-        {!sessionData && (
-          <Button
-            className="w-full"
-            variant={"secondary"}
-            onClick={() => signIn()}
-          >
-            Sign in
-          </Button>
-        )}
-
-        {/* Theme Toggle - Dark & Light Mode */}
-        <div className="flex items-center justify-center gap-4 rounded-lg bg-neutral-50 p-2 text-sm dark:bg-neutral-800">
-          <p>Toggle Theme</p>
-          <ModeToggle />
+        {/* Nav links - with badges for WIP status */}
+        <div className="mt-8 flex flex-col gap-2">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                buttonVariants({ variant: "secondary" }),
+                "flex justify-start gap-2 text-base font-normal",
+                pathname === link.href
+                  ? "bg-neutral-50 dark:bg-neutral-700"
+                  : "bg-transparent",
+              )}
+            >
+              {link.icon}
+              {link.name}
+              {link.wipStatus && (
+                <Badge variant="warning" className="ml-auto text-xs">
+                  WIP
+                </Badge>
+              )}
+            </Link>
+          ))}
         </div>
-      </aside>
-    </>
+      </div>
+
+      {/* Login button - to be removed later once we redirect logged out users automatically */}
+      {!sessionData && (
+        <Button
+          className="w-full"
+          variant={"secondary"}
+          onClick={() => signIn()}
+        >
+          Sign in
+        </Button>
+      )}
+
+      {/* Theme toggle - for dark & light mode */}
+      <div className="flex items-center justify-center gap-4 rounded-lg bg-neutral-50 p-2 text-sm dark:bg-neutral-800">
+        <p>Toggle Theme</p>
+        <ModeToggle />
+      </div>
+    </aside>
   );
 }
