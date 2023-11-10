@@ -1,20 +1,12 @@
-import { Card, Metric, Text } from "@tremor/react";
-import { BookCopy, Clock, CopyCheck, Users } from "lucide-react";
 import { type ReactNode } from "react";
 import Sidebar from "~/app/dashboard/sidebar";
 import MobileNavBar from "~/components/mobile-navbar";
-import { db } from "~/server/db";
 
-export default async function DashboardLayout({
+export default function DashboardLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  const studentCount = await db.student.count();
-  const lectureCount = await db.lecture.count();
-  const moduleCount = await db.module.count();
-  const attendanceRecordCount = await db.attendanceRecord.count();
-
   return (
     <div className="grid w-full grid-cols-4 bg-neutral-100 dark:bg-neutral-800 xl:grid-cols-5">
       <div className="sticky top-0 col-span-1 hidden self-start md:block">
