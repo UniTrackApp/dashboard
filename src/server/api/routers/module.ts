@@ -1,7 +1,11 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const moduleRouter = createTRPCRouter({
-  getModuleCount: protectedProcedure.query(async ({ctx}) => {
+  getModuleCount: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.module.count();
+  }),
+
+  getAllModules: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.module.findMany();
   }),
 });

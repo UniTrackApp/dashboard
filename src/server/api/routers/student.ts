@@ -29,6 +29,14 @@ export const studentRouter = createTRPCRouter({
     return ctx.db.student.findMany();
   }),
 
+  getAllStudentIds: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.student.findMany({
+      select: {
+        studentId: true,
+      },
+    });
+  }),
+
   deleteStudentById: protectedProcedure
     .input(
       z.object({
