@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, type Dispatch, type SetStateAction } from "react";
+
 import {
   Badge,
   Card,
@@ -12,8 +14,16 @@ import {
   TableRow,
   Title,
 } from "@tremor/react";
-import { Plus } from "lucide-react";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import {
+  Check,
+  CheckCheck,
+  Loader2,
+  Pencil,
+  Plus,
+  Trash2,
+  X,
+} from "lucide-react";
+
 import { Button, buttonVariants } from "~/components/ui/button";
 import {
   Dialog,
@@ -25,7 +35,6 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-
 import {
   Select,
   SelectContent,
@@ -34,6 +43,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { toast } from "~/components/ui/use-toast";
+
 import { api } from "~/utils/api";
 
 type FormType = {
@@ -51,7 +61,7 @@ export default function Records() {
 
   const { data: attendanceData, refetch: refetchAttendanceData } =
     api.attendanceRecord.getAttendanceRecordsForTable.useQuery();
-  const { data: attendanceCount } =
+  const { data: attendanceCount, refetch: refetchAttendanceCount } =
     api.attendanceRecord.getAttendanceRecordCount.useQuery();
   const { mutate: createNewRecordEntry } =
     api.attendanceRecord.addAttendanceRecord.useMutation({
@@ -61,6 +71,7 @@ export default function Records() {
           description: `Attendance record added to database successfully.`,
         });
         void refetchAttendanceData();
+        void refetchAttendanceCount();
       },
       onError() {
         toast({
@@ -70,9 +81,30 @@ export default function Records() {
       },
     });
 
+  const { mutate: deleteRecordById, status: deleteRecordStatus } =
+    api.attendanceRecord.deleteAttendanceRecordById.useMutation({
+      onSuccess() {
+        toast({
+          title: "Attendance Record Deleted ✅",
+          description: "Attendance record deleted from database successfully.",
+        });
+        void refetchAttendanceData();
+        void refetchAttendanceCount();
+        setIsBeingDeleted(null);
+      },
+      onError() {
+        toast({
+          title: "Error 😢",
+          description: "Something went wrong, please try again.",
+        });
+      },
+    });
+
+  const [isBeingDeleted, setIsBeingDeleted] = useState<string | null>(null);
+
   return (
     <div className="flex flex-col justify-center">
-      {/* Table to display attendance records */}
+      {/* Card - Contains table and button to add new students */}
       <div>
         <Card>
           {/* Card Title - displays table name + item counts */}
@@ -151,49 +183,74 @@ export default function Records() {
             <TableHead>
               <TableRow>
                 <TableHeaderCell>Attendance Record ID</TableHeaderCell>
-                <TableHeaderCell className="text-right">
-                  Student ID
-                </TableHeaderCell>
-                <TableHeaderCell className="text-right">
-                  Student Name
-                </TableHeaderCell>
-                <TableHeaderCell className="text-right">
-                  Lecture ID
-                </TableHeaderCell>
-                <TableHeaderCell className="text-right">Status</TableHeaderCell>
-                <TableHeaderCell className="text-right">
-                  Timestamp
-                </TableHeaderCell>
+                <TableHeaderCell>Student ID</TableHeaderCell>
+                <TableHeaderCell>Student Name</TableHeaderCell>
+                <TableHeaderCell>Lecture ID</TableHeaderCell>
+                <TableHeaderCell>Module Name</TableHeaderCell>
+                <TableHeaderCell>Status</TableHeaderCell>
+                <TableHeaderCell>Timestamp</TableHeaderCell>
+                <TableHeaderCell>Actions</TableHeaderCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {attendanceData?.map((item) => (
                 <TableRow key={item.attendanceRecordId}>
                   <TableCell>{item.attendanceRecordId}</TableCell>
-                  <TableCell className="text-right">{item.studentId}</TableCell>
-                  <TableCell className="text-right">
-                    {item.studentName}
+                  <TableCell>{item.studentId}</TableCell>
+                  <TableCell>{item.studentFullName}</TableCell>
+                  <TableCell>{item.lectureId}</TableCell>
+                  <TableCell>
+                    <Badge color="neutral" size="xs">
+                      {item.moduleName}
+                    </Badge>
                   </TableCell>
-                  <TableCell className="text-right">{item.lectureId}</TableCell>
-                  <TableCell className="text-right">
+                  <TableCell>
                     {item.status === "PRESENT" && (
-                      <Badge color="green" size="xs">
-                        {item.status}
-                      </Badge>
-                    )}
-                    {item.status === "ABSENT" && (
-                      <Badge color="red" size="xs">
-                        {item.status}
+                      <Badge color="green" size="sm" icon={CheckCheck}>
+                        {item.status.toLowerCase()}
                       </Badge>
                     )}
                     {item.status === "LATE" && (
-                      <Badge color="amber" size="xs">
-                        {item.status}
+                      <Badge color="amber" size="sm" icon={Check}>
+                        {item.status.toLowerCase()}
+                      </Badge>
+                    )}
+                    {item.status === "ABSENT" && (
+                      <Badge color="red" size="sm" icon={X}>
+                        {item.status.toLowerCase()}
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell className="text-right">
-                    {item.timestamp.toUTCString()}
+                  <TableCell>{item.timestamp.toUTCString()}</TableCell>
+                  <TableCell className="flex gap-2">
+                    <Button
+                      size={"icon"}
+                      variant={"default"}
+                      className="h-6 w-6 bg-neutral-500"
+                      onClick={() => alert("Not implemented yet")}
+                    >
+                      <Pencil size={14} />
+                    </Button>
+                    <Button
+                      size={"icon"}
+                      variant={"destructive"}
+                      className="h-6 w-6"
+                      disabled={isBeingDeleted === item.attendanceRecordId}
+                      onClick={() => {
+                        deleteRecordById({
+                          attendanceRecordId: item.attendanceRecordId,
+                        });
+                        setIsBeingDeleted(item.attendanceRecordId);
+                        void refetchAttendanceData();
+                      }}
+                    >
+                      {isBeingDeleted === item.attendanceRecordId && (
+                        <Loader2 className="animate-spin" size={14} />
+                      )}
+                      {isBeingDeleted !== item.attendanceRecordId && (
+                        <Trash2 size={14} />
+                      )}
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
