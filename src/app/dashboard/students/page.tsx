@@ -19,7 +19,7 @@ import {
   Text,
   Title,
 } from "@tremor/react";
-import { Loader2, RefreshCcw, Trash2, UserPlus2 } from "lucide-react";
+import { Loader2, Pencil, RefreshCcw, Trash2, UserPlus2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -37,7 +37,7 @@ type StudentInfo = {
   studentCardId: string;
 };
 
-export default function Dashboard() {
+export default function Students() {
   const { toast } = useToast();
 
   const [formData, setFormData] = useState<StudentInfo>({
@@ -47,19 +47,23 @@ export default function Dashboard() {
     studentCardId: "",
   });
 
-  const { data: getAllStudentInfo, refetch: refetchLatestStudents } =
+  const [isBeingDeleted, setIsBeingDeleted] = useState<string | null>(null);
+
+  const { data: allStudentsInfo, refetch: refetchAllStudents } =
     api.student.getAllStudents.useQuery();
 
-  const { data: studentCount } = api.student.getStudentCount.useQuery();
+  const { data: studentCount, refetch: refetchStudentCount } =
+    api.student.getStudentCount.useQuery();
 
-  const { mutate: createNewStudentEntry, status } =
+  const { mutate: createStudent, status: createStudentStatus } =
     api.student.createStudent.useMutation({
       onSuccess({ firstName, studentId }) {
         toast({
           title: "Student Added ✅",
           description: `${firstName} (${studentId}) has been added to the database.`,
         });
-        void refetchLatestStudents();
+        void refetchAllStudents();
+        void refetchStudentCount();
       },
       onError() {
         toast({
@@ -76,7 +80,9 @@ export default function Dashboard() {
           title: "Student Deleted ❌",
           description: `${firstName} has been deleted from the database.`,
         });
-        void refetchLatestStudents();
+        void refetchAllStudents();
+        void refetchStudentCount();
+        setIsBeingDeleted(null);
       },
       onError() {
         toast({
@@ -88,13 +94,16 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* Student List - Table */}
+      {/* Card - Contains table and button to add new students */}
       <Card>
+        {/* Card Title - displays table name + item counts */}
         <div className="flex justify-between">
           <div className="flex items-center gap-2">
             <Title>Students</Title>
             <Badge color="blue">{studentCount}</Badge>
           </div>
+
+          {/* Button - to add new students */}
           <Dialog>
             <DialogTrigger
               className={buttonVariants({
@@ -178,17 +187,16 @@ export default function Dashboard() {
                         </Button>
                       </div>
                     </div>
-
                     <Button
                       className="mx-auto w-fit"
                       onClick={() => {
-                        createNewStudentEntry(formData);
+                        createStudent(formData);
                       }}
-                      disabled={status === "loading"}
+                      disabled={createStudentStatus === "loading"}
                       variant={"default"}
                       size={"lg"}
                     >
-                      {status === "loading" && (
+                      {createStudentStatus === "loading" && (
                         <Loader2 className="mr-2 animate-spin" size={24} />
                       )}
                       <UserPlus2 className="mr-2" />
@@ -200,6 +208,8 @@ export default function Dashboard() {
             </DialogContent>
           </Dialog>
         </div>
+
+        {/* Table - to view all students data */}
         <Table className="mt-5">
           <TableHead>
             <TableRow>
@@ -210,8 +220,10 @@ export default function Dashboard() {
               <TableHeaderCell>Actions</TableHeaderCell>
             </TableRow>
           </TableHead>
+
+          {/* Table Body - renders dynamic data from our tRPC endpoint we fetched in beginning */}
           <TableBody>
-            {getAllStudentInfo?.map((student) => (
+            {allStudentsInfo?.map((student) => (
               <TableRow key={student.studentId}>
                 <TableCell>{student.studentId}</TableCell>
                 <TableCell>
@@ -223,19 +235,34 @@ export default function Dashboard() {
                 <TableCell>
                   <Text>{student.lastName}</Text>
                 </TableCell>
-                <TableCell className="flex justify-center">
+                <TableCell className="flex gap-2">
+                  <Button
+                    size={"icon"}
+                    variant={"default"}
+                    className="h-6 w-6 bg-neutral-500"
+                    onClick={() => alert("Not implemented yet")}
+                  >
+                    <Pencil size={14} />
+                  </Button>
                   <Button
                     size={"icon"}
                     variant={"destructive"}
                     className="h-6 w-6"
+                    disabled={isBeingDeleted === student.studentId}
                     onClick={() => {
                       deleteStudentById({
                         studentId: student.studentId,
                         firstName: student.firstName,
                       });
+                      setIsBeingDeleted(student.studentId);
                     }}
                   >
-                    <Trash2 size={14} />
+                    {isBeingDeleted === student.studentId && (
+                      <Loader2 className="animate-spin" size={14} />
+                    )}
+                    {isBeingDeleted !== student.studentId && (
+                      <Trash2 size={14} />
+                    )}
                   </Button>
                 </TableCell>
               </TableRow>
