@@ -33,8 +33,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -45,6 +43,10 @@ import {
 import { toast } from "~/components/ui/use-toast";
 
 import { api } from "~/utils/api";
+
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+// import { AddAttendanceRecordForm } from "./add-record-form";
 
 type FormType = {
   studentId: string;
@@ -59,10 +61,13 @@ export default function Records() {
     status: "PRESENT",
   });
 
+  const [isBeingDeleted, setIsBeingDeleted] = useState<string | null>(null);
+
   const { data: attendanceData, refetch: refetchAttendanceData } =
     api.attendanceRecord.getAttendanceRecordsForTable.useQuery();
   const { data: attendanceCount, refetch: refetchAttendanceCount } =
     api.attendanceRecord.getAttendanceRecordCount.useQuery();
+
   const { mutate: createNewRecordEntry } =
     api.attendanceRecord.addAttendanceRecord.useMutation({
       onSuccess() {
@@ -81,7 +86,7 @@ export default function Records() {
       },
     });
 
-  const { mutate: deleteRecordById, status: deleteRecordStatus } =
+  const { mutate: deleteRecordById } =
     api.attendanceRecord.deleteAttendanceRecordById.useMutation({
       onSuccess() {
         toast({
@@ -99,8 +104,6 @@ export default function Records() {
         });
       },
     });
-
-  const [isBeingDeleted, setIsBeingDeleted] = useState<string | null>(null);
 
   return (
     <div className="flex flex-col justify-center">
@@ -151,11 +154,12 @@ export default function Records() {
                       </div>
                       <div className="flex flex-col gap-2">
                         <Label htmlFor="status">Status</Label>
-                        <SelectorToggle
+                        <StatusSelector
                           formData={formData}
                           setFormData={setFormData}
                         />
                       </div>
+                      {/* <AddAttendanceRecordForm /> */}
                       <div>
                         <Button
                           onClick={() => {
@@ -193,35 +197,35 @@ export default function Records() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {attendanceData?.map((item) => (
-                <TableRow key={item.attendanceRecordId}>
-                  <TableCell>{item.attendanceRecordId}</TableCell>
-                  <TableCell>{item.studentId}</TableCell>
-                  <TableCell>{item.studentFullName}</TableCell>
-                  <TableCell>{item.lectureId}</TableCell>
+              {attendanceData?.map((record) => (
+                <TableRow key={record.attendanceRecordId}>
+                  <TableCell>{record.attendanceRecordId}</TableCell>
+                  <TableCell>{record.studentId}</TableCell>
+                  <TableCell>{record.studentFullName}</TableCell>
+                  <TableCell>{record.lectureId}</TableCell>
                   <TableCell>
                     <Badge color="neutral" size="xs">
-                      {item.moduleName}
+                      {record.moduleName}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    {item.status === "PRESENT" && (
+                    {record.status === "PRESENT" && (
                       <Badge color="green" size="sm" icon={CheckCheck}>
-                        {item.status.toLowerCase()}
+                        {record.status.toLowerCase()}
                       </Badge>
                     )}
-                    {item.status === "LATE" && (
+                    {record.status === "LATE" && (
                       <Badge color="amber" size="sm" icon={Check}>
-                        {item.status.toLowerCase()}
+                        {record.status.toLowerCase()}
                       </Badge>
                     )}
-                    {item.status === "ABSENT" && (
+                    {record.status === "ABSENT" && (
                       <Badge color="red" size="sm" icon={X}>
-                        {item.status.toLowerCase()}
+                        {record.status.toLowerCase()}
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell>{item.timestamp.toUTCString()}</TableCell>
+                  <TableCell>{record.timestamp.toUTCString()}</TableCell>
                   <TableCell className="flex gap-2">
                     <Button
                       size={"icon"}
@@ -235,19 +239,18 @@ export default function Records() {
                       size={"icon"}
                       variant={"destructive"}
                       className="h-6 w-6"
-                      disabled={isBeingDeleted === item.attendanceRecordId}
+                      disabled={isBeingDeleted === record.attendanceRecordId}
                       onClick={() => {
                         deleteRecordById({
-                          attendanceRecordId: item.attendanceRecordId,
+                          attendanceRecordId: record.attendanceRecordId,
                         });
-                        setIsBeingDeleted(item.attendanceRecordId);
-                        void refetchAttendanceData();
+                        setIsBeingDeleted(record.attendanceRecordId);
                       }}
                     >
-                      {isBeingDeleted === item.attendanceRecordId && (
+                      {isBeingDeleted === record.attendanceRecordId && (
                         <Loader2 className="animate-spin" size={14} />
                       )}
-                      {isBeingDeleted !== item.attendanceRecordId && (
+                      {isBeingDeleted !== record.attendanceRecordId && (
                         <Trash2 size={14} />
                       )}
                     </Button>
@@ -263,7 +266,7 @@ export default function Records() {
 }
 
 // Used for attendace status selector
-function SelectorToggle({
+export function StatusSelector({
   formData,
   setFormData,
 }: {
