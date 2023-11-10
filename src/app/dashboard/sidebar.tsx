@@ -7,7 +7,18 @@ import { usePathname } from "next/navigation";
 import { type Session } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 
-import { BookCheck, CheckCircle, CheckCircle2, History, Home, LibraryBig, LogOut, Presentation, Settings, UserCog, Users } from "lucide-react";
+import {
+  BookCheck,
+  CheckCircle,
+  History,
+  Home,
+  LibraryBig,
+  LogOut,
+  Presentation,
+  Settings,
+  UserCog,
+  Users,
+} from "lucide-react";
 import { cn } from "~/utils/shadcn";
 import {
   Avatar,
@@ -17,6 +28,7 @@ import {
 import { Badge } from "../../components/ui/badge";
 import { Button, buttonVariants } from "../../components/ui/button";
 
+import { ModeToggle } from "~/components/theme-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -111,7 +123,7 @@ export default function Sidebar({ session }: { session?: Session | null }) {
                       <AvatarFallback>DP</AvatarFallback>
                     </Avatar>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-48">
+                  <DropdownMenuContent align="start" className="w-48">
                     <DropdownMenuLabel>
                       <div className="flex flex-col">
                         <p className="truncate text-base">
@@ -145,7 +157,9 @@ export default function Sidebar({ session }: { session?: Session | null }) {
                 className={cn(
                   buttonVariants({ variant: "secondary" }),
                   "flex justify-start gap-2 text-base font-normal",
-                  pathname === link.href ? "bg-neutral-50" : "bg-transparent",
+                  pathname === link.href
+                    ? "bg-neutral-50 dark:bg-neutral-700"
+                    : "bg-transparent",
                 )}
               >
                 {link.icon}
@@ -170,6 +184,12 @@ export default function Sidebar({ session }: { session?: Session | null }) {
             Sign in
           </Button>
         )}
+
+        {/* Theme Toggle - Dark & Light Mode */}
+        <div className="flex items-center justify-center gap-4 rounded-lg bg-neutral-50 p-2 text-sm">
+          <p>Toggle Theme</p>
+          <ModeToggle />
+        </div>
       </aside>
     </>
   );
