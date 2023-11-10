@@ -18,57 +18,48 @@ export const attendanceRecordRouter = createTRPCRouter({
         lectureId: true,
         status: true,
         timestamp: true,
-      },
-    });
-
-    const studentNames = await ctx.db.student.findMany({
-      select: {
-        studentId: true,
-        firstName: true,
-        lastName: true,
-      },
-      where: {
-        studentId: {
-          in: attendanceRecords.map(
-            (attendanceRecord) => attendanceRecord.studentId,
-          ),
+        Student: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+        Lecture: {
+          select: {
+            Module: {
+              select: {
+                moduleName: true,
+              },
+            },
+          },
         },
       },
     });
 
-    // const getModuleNameFromLectureId = await ctx.db.module.findMany({
-    //   select: {
-    //     moduleName: true,
-    //     moduleId: true,
-    //   },
-    //   where: {
-    //     Lectures: {
-    //       some: {
-    //         lectureId: {
-    //           in: attendanceRecords.map(
-    //             (attendanceRecord) => attendanceRecord.lectureId,
-    //           ),
-    //         },
-    //       },
-    //     },
-    //   },
-    // });
-
-    return attendanceRecords.map((attendanceRecord) => {
-      const studentName = studentNames.find(
-        (student) => student.studentId === attendanceRecord.studentId,
-      );
-
-      return {
-        attendanceRecordId: attendanceRecord.attendanceRecordId,
-        studentId: attendanceRecord.studentId,
-        studentName: `${studentName?.firstName} ${studentName?.lastName}`,
-        lectureId: attendanceRecord.lectureId,
-        status: attendanceRecord.status,
-        timestamp: attendanceRecord.timestamp,
-      };
-    });
+    return attendanceRecords.map((attendanceRecord) => ({
+      attendanceRecordId: attendanceRecord.attendanceRecordId,
+      studentId: attendanceRecord.studentId,
+      lectureId: attendanceRecord.lectureId,
+      status: attendanceRecord.status,
+      timestamp: attendanceRecord.timestamp,
+      studentFullName: `${attendanceRecord.Student.firstName} ${attendanceRecord.Student.lastName}`,
+      moduleName: attendanceRecord.Lecture.Module.moduleName,
+    }));
   }),
+
+  deleteAttendanceRecordById: protectedProcedure
+    .input(
+      z.object({
+        attendanceRecordId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.attendanceRecord.delete({
+        where: {
+          attendanceRecordId: input.attendanceRecordId,
+        },
+      });
+    }),
 
   addAttendanceRecord: protectedProcedure
     .input(
