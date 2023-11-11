@@ -185,7 +185,7 @@ export default function AddAttendanceRecordForm({
                         ? allLectures?.find(
                             (lecture) => lecture.lectureId === field.value,
                           )?.lectureId
-                        : "Select student ID"}
+                        : "Select lecture ID"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
