@@ -1,30 +1,12 @@
 "use client";
 
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { Badge, Card, Flex, Title } from "@tremor/react";
+import { Plus } from "lucide-react";
+import { useState } from "react";
 
-import {
-  Badge,
-  Card,
-  Flex,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRow,
-  Title,
-} from "@tremor/react";
-import {
-  Check,
-  CheckCheck,
-  Loader2,
-  Pencil,
-  Plus,
-  Trash2,
-  X,
-} from "lucide-react";
-
-import { Button, buttonVariants } from "~/components/ui/button";
+import AddAttendanceRecordForm from "~/app/dashboard/records/add-record-form";
+import RecordTable from "~/app/dashboard/records/record-table";
+import { buttonVariants } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -33,58 +15,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
 import { toast } from "~/components/ui/use-toast";
 
 import { api } from "~/utils/api";
 
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-// import { AddAttendanceRecordForm } from "./add-record-form";
-
-type FormType = {
-  studentId: string;
-  lectureId: string;
-  status: "PRESENT" | "LATE" | "ABSENT";
-};
-
 export default function Records() {
-  const [formData, setFormData] = useState<FormType>({
-    studentId: "",
-    lectureId: "",
-    status: "PRESENT",
-  });
-
   const [isBeingDeleted, setIsBeingDeleted] = useState<string | null>(null);
 
-  const { data: attendanceData, refetch: refetchAttendanceData } =
+  const { data: allAttendanceRecords, refetch: refetchAllAttendanceRecords } =
     api.attendanceRecord.getAttendanceRecordsForTable.useQuery();
   const { data: attendanceCount, refetch: refetchAttendanceCount } =
     api.attendanceRecord.getAttendanceRecordCount.useQuery();
-
-  const { mutate: createNewRecordEntry } =
-    api.attendanceRecord.addAttendanceRecord.useMutation({
-      onSuccess() {
-        toast({
-          title: "Attendance Record Added ✅",
-          description: `Attendance record added to database successfully.`,
-        });
-        void refetchAttendanceData();
-        void refetchAttendanceCount();
-      },
-      onError() {
-        toast({
-          title: "Error 😢",
-          description: "Something went wrong, please try again.",
-        });
-      },
-    });
 
   const { mutate: deleteRecordById } =
     api.attendanceRecord.deleteAttendanceRecordById.useMutation({
@@ -93,7 +34,7 @@ export default function Records() {
           title: "Attendance Record Deleted ✅",
           description: "Attendance record deleted from database successfully.",
         });
-        void refetchAttendanceData();
+        void refetchAllAttendanceRecords();
         void refetchAttendanceCount();
         setIsBeingDeleted(null);
       },
@@ -128,53 +69,10 @@ export default function Records() {
                   <DialogTitle>Add an attendance record</DialogTitle>
                   <DialogDescription>
                     <div className="mt-4 flex flex-col gap-4">
-                      <div className="flex flex-col gap-2">
-                        <Label htmlFor="studentId">Student ID</Label>
-                        <Input
-                          placeholder="Enter the student ID"
-                          onChange={(e) => {
-                            setFormData({
-                              ...formData,
-                              studentId: e.target.value,
-                            });
-                          }}
-                        />
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <Label htmlFor="lectureId">Lecture ID</Label>
-                        <Input
-                          placeholder="Enter the lecture ID"
-                          onChange={(e) => {
-                            setFormData({
-                              ...formData,
-                              lectureId: e.target.value,
-                            });
-                          }}
-                        />
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <Label htmlFor="status">Status</Label>
-                        <StatusSelector
-                          formData={formData}
-                          setFormData={setFormData}
-                        />
-                      </div>
-                      {/* <AddAttendanceRecordForm /> */}
-                      <div>
-                        <Button
-                          onClick={() => {
-                            createNewRecordEntry({
-                              studentId: formData.studentId,
-                              lectureId: formData.lectureId,
-                              status: formData.status,
-                            });
-                          }}
-                          className="mt-4"
-                        >
-                          <Plus size={20} className="mr-2" />
-                          Add Record
-                        </Button>
-                      </div>
+                      <AddAttendanceRecordForm
+                        refetchAttendanceData={refetchAllAttendanceRecords}
+                        refetchAttendanceCount={refetchAttendanceCount}
+                      />
                     </div>
                   </DialogDescription>
                 </DialogHeader>
@@ -183,125 +81,14 @@ export default function Records() {
           </Flex>
 
           {/* Table - to display Attendance Records */}
-          <Table className="mt-4">
-            <TableHead>
-              <TableRow>
-                <TableHeaderCell>Attendance Record ID</TableHeaderCell>
-                <TableHeaderCell>Student ID</TableHeaderCell>
-                <TableHeaderCell>Student Name</TableHeaderCell>
-                <TableHeaderCell>Lecture ID</TableHeaderCell>
-                <TableHeaderCell>Module Name</TableHeaderCell>
-                <TableHeaderCell>Status</TableHeaderCell>
-                <TableHeaderCell>Timestamp</TableHeaderCell>
-                <TableHeaderCell>Actions</TableHeaderCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {attendanceData?.map((record) => (
-                <TableRow key={record.attendanceRecordId}>
-                  <TableCell>{record.attendanceRecordId}</TableCell>
-                  <TableCell>{record.studentId}</TableCell>
-                  <TableCell>{record.studentFullName}</TableCell>
-                  <TableCell>{record.lectureId}</TableCell>
-                  <TableCell>
-                    <Badge color="neutral" size="xs">
-                      {record.moduleName}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {record.status === "PRESENT" && (
-                      <Badge color="green" size="sm" icon={CheckCheck}>
-                        {record.status.toLowerCase()}
-                      </Badge>
-                    )}
-                    {record.status === "LATE" && (
-                      <Badge color="amber" size="sm" icon={Check}>
-                        {record.status.toLowerCase()}
-                      </Badge>
-                    )}
-                    {record.status === "ABSENT" && (
-                      <Badge color="red" size="sm" icon={X}>
-                        {record.status.toLowerCase()}
-                      </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>{record.timestamp.toUTCString()}</TableCell>
-                  <TableCell className="flex gap-2">
-                    <Button
-                      size={"icon"}
-                      variant={"default"}
-                      className="h-6 w-6 bg-neutral-500"
-                      onClick={() => alert("Not implemented yet")}
-                    >
-                      <Pencil size={14} />
-                    </Button>
-                    <Button
-                      size={"icon"}
-                      variant={"destructive"}
-                      className="h-6 w-6"
-                      disabled={isBeingDeleted === record.attendanceRecordId}
-                      onClick={() => {
-                        deleteRecordById({
-                          attendanceRecordId: record.attendanceRecordId,
-                        });
-                        setIsBeingDeleted(record.attendanceRecordId);
-                      }}
-                    >
-                      {isBeingDeleted === record.attendanceRecordId && (
-                        <Loader2 className="animate-spin" size={14} />
-                      )}
-                      {isBeingDeleted !== record.attendanceRecordId && (
-                        <Trash2 size={14} />
-                      )}
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <RecordTable
+            attendanceData={allAttendanceRecords}
+            isBeingDeleted={isBeingDeleted}
+            setIsBeingDeleted={setIsBeingDeleted}
+            deleteRecordById={deleteRecordById}
+          />
         </Card>
       </div>
     </div>
-  );
-}
-
-// Used for attendace status selector
-function StatusSelector({
-  formData,
-  setFormData,
-}: {
-  formData: FormType;
-  setFormData: Dispatch<SetStateAction<FormType>>;
-}) {
-  return (
-    <Select
-      onValueChange={(value) => {
-        if (value === "present") {
-          setFormData({
-            ...formData,
-            status: "PRESENT",
-          });
-        } else if (value === "late") {
-          setFormData({
-            ...formData,
-            status: "LATE",
-          });
-        } else if (value === "absent") {
-          setFormData({
-            ...formData,
-            status: "ABSENT",
-          });
-        }
-      }}
-    >
-      <SelectTrigger className="w-48">
-        <SelectValue placeholder="Attendance Status" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="present">Present</SelectItem>
-        <SelectItem value="late">Late</SelectItem>
-        <SelectItem value="absent">Absent</SelectItem>
-      </SelectContent>
-    </Select>
   );
 }

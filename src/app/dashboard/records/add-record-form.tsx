@@ -3,17 +3,19 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2, Plus } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "~/components/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command";
+} from "~/components/ui/command";
 import {
   Form,
   FormControl,
@@ -22,24 +24,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "~/components/ui/form";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { toast } from "@/components/ui/use-toast";
-import * as z from "zod";
-import { api } from "~/utils/api";
-import { cn } from "~/utils/shadcn";
-
+} from "~/components/ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "~/components/ui/select";
+import { toast } from "~/components/ui/use-toast";
+
+import { api } from "~/utils/api";
+import { cn } from "~/utils/shadcn";
 
 const FormSchema = z.object({
   studentId: z.string(),
@@ -51,21 +52,21 @@ const FormSchema = z.object({
   ]),
 });
 
-export function AddAttendanceRecordForm() {
+export default function AddAttendanceRecordForm({
+  refetchAttendanceData,
+  refetchAttendanceCount,
+}: {
+  refetchAttendanceData: () => void;
+  refetchAttendanceCount: () => void;
+}) {
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-
+    setIsLoading(true);
     createNewRecordEntry({
       studentId: data.studentId,
       lectureId: data.lectureId,
@@ -73,8 +74,8 @@ export function AddAttendanceRecordForm() {
     });
   }
 
-  const { data: allStudentIds } = api.student.getAllStudentIds.useQuery();
-  const { data: allLectureIds } = api.lecture.getAllLectureIds.useQuery();
+  const { data: allStudents } = api.student.getAllStudents.useQuery();
+  const { data: allLectures } = api.lecture.getAllLectures.useQuery();
 
   const { mutate: createNewRecordEntry } =
     api.attendanceRecord.addAttendanceRecord.useMutation({
@@ -83,8 +84,9 @@ export function AddAttendanceRecordForm() {
           title: "Attendance Record Added ✅",
           description: `Attendance record added to database successfully.`,
         });
-        // void refetchAttendanceData();
-        // void refetchAttendanceCount();
+        void refetchAttendanceData();
+        void refetchAttendanceCount();
+        setIsLoading(false);
       },
       onError() {
         toast({
@@ -111,12 +113,12 @@ export function AddAttendanceRecordForm() {
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        "w-[250px] justify-between",
+                        "w-[300px] justify-between",
                         !field.value && "text-muted-foreground",
                       )}
                     >
                       {field.value
-                        ? allStudentIds?.find(
+                        ? allStudents?.find(
                             (student) => student.studentId === field.value,
                           )?.studentId
                         : "Select student ID"}
@@ -124,12 +126,12 @@ export function AddAttendanceRecordForm() {
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-[250px] p-0">
+                <PopoverContent className="w-[300px] p-0">
                   <Command>
                     <CommandInput placeholder="Search student IDs..." />
                     <CommandEmpty>No student ID found.</CommandEmpty>
                     <CommandGroup>
-                      {allStudentIds?.map((student) => (
+                      {allStudents?.map((student) => (
                         <CommandItem
                           value={student.studentId}
                           key={student.studentId}
@@ -145,7 +147,10 @@ export function AddAttendanceRecordForm() {
                                 : "opacity-0",
                             )}
                           />
-                          {student.studentId}
+                          <span className="truncate tabular-nums">
+                            {student.studentId} - {student.firstName}{" "}
+                            {student.lastName}
+                          </span>
                         </CommandItem>
                       ))}
                     </CommandGroup>
@@ -172,12 +177,12 @@ export function AddAttendanceRecordForm() {
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        "w-[250px] justify-between",
+                        "w-[300px] justify-between",
                         !field.value && "text-muted-foreground",
                       )}
                     >
                       {field.value
-                        ? allLectureIds?.find(
+                        ? allLectures?.find(
                             (lecture) => lecture.lectureId === field.value,
                           )?.lectureId
                         : "Select student ID"}
@@ -185,12 +190,12 @@ export function AddAttendanceRecordForm() {
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-[250px] p-0">
+                <PopoverContent className="w-[300px] p-0">
                   <Command>
                     <CommandInput placeholder="Search lecture IDs..." />
                     <CommandEmpty>No lecture ID found.</CommandEmpty>
                     <CommandGroup>
-                      {allLectureIds?.map((lecture) => (
+                      {allLectures?.map((lecture) => (
                         <CommandItem
                           value={lecture.lectureId}
                           key={lecture.lectureId}
@@ -206,7 +211,9 @@ export function AddAttendanceRecordForm() {
                                 : "opacity-0",
                             )}
                           />
-                          <span className="truncate">{lecture.lectureId}</span>
+                          <span className="truncate tabular-nums">
+                            {lecture.lectureId} - {lecture.Module.moduleName}
+                          </span>
                         </CommandItem>
                       ))}
                     </CommandGroup>
@@ -227,12 +234,12 @@ export function AddAttendanceRecordForm() {
             <FormItem className="flex flex-col">
               <FormLabel>Status</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl className="w-[250px]">
+                <FormControl className="w-[300px]">
                   <SelectTrigger>
                     <SelectValue placeholder="Select a status" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent className="w-[250px]">
+                <SelectContent className="w-[300px]">
                   <SelectItem value="PRESENT">PRESENT</SelectItem>
                   <SelectItem value="LATE">LATE</SelectItem>
                   <SelectItem value="ABSENT">ABSENT</SelectItem>
@@ -243,7 +250,21 @@ export function AddAttendanceRecordForm() {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading && (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <span>Adding...</span>
+            </>
+          )}
+
+          {!isLoading && (
+            <>
+              <Plus className="mr-2 h-4 w-4" />
+              <span>Add Record </span>
+            </>
+          )}
+        </Button>
       </form>
     </Form>
   );
