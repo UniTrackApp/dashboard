@@ -266,7 +266,7 @@ export default function Records() {
 }
 
 // Used for attendace status selector
-export function StatusSelector({
+function StatusSelector({
   formData,
   setFormData,
 }: {
