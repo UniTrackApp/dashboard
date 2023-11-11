@@ -46,7 +46,7 @@ export default function Modules() {
   );
 }
 
-export function StudentIDSelector() {
+function StudentIDSelector() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
