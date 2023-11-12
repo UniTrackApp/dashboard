@@ -66,7 +66,7 @@ export default function RecordTable({
               )}
               {record.status === "LATE" && (
                 <Badge color="amber" size="sm" icon={Check}>
-                  {record.status.toLowerCase()}
+                  {record.status.toUpperCase()}
                 </Badge>
               )}
               {record.status === "ABSENT" && (
