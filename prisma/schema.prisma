@@ -15,8 +15,8 @@ datasource db {
 }
 
 model Student {
-    studentId     String @id @default(cuid())
-    studentCardId String @unique
+    studentId     String  @id @default(cuid())
+    studentCardId String  @unique
     firstName     String
     lastName      String
 
