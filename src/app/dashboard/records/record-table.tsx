@@ -71,7 +71,7 @@ export default function RecordTable({
               )}
               {record.status === "ABSENT" && (
                 <Badge color="red" size="sm" icon={X}>
-                  {record.status.toLowerCase()}
+                  {record.status.toUpperCase()}
                 </Badge>
               )}
             </TableCell>
