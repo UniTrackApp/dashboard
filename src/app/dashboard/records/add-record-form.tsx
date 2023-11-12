@@ -40,15 +40,16 @@ import {
 import { toast } from "~/components/ui/use-toast";
 
 import { api } from "~/utils/api";
+import { AttendanceStatus } from "~/utils/constants";
 import { cn } from "~/utils/shadcn";
 
 const FormSchema = z.object({
   studentId: z.string(),
   lectureId: z.string(),
   attendanceStatus: z.union([
-    z.literal("PRESENT"),
-    z.literal("LATE"),
-    z.literal("ABSENT"),
+    z.literal(AttendanceStatus.PRESENT),
+    z.literal(AttendanceStatus.LATE),
+    z.literal(AttendanceStatus.ABSENT),
   ]),
 });
 
@@ -240,9 +241,15 @@ export default function AddAttendanceRecordForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="w-[300px]">
-                  <SelectItem value="PRESENT">PRESENT</SelectItem>
-                  <SelectItem value="LATE">LATE</SelectItem>
-                  <SelectItem value="ABSENT">ABSENT</SelectItem>
+                  <SelectItem value={AttendanceStatus.PRESENT}>
+                    {AttendanceStatus.PRESENT}
+                  </SelectItem>
+                  <SelectItem value={AttendanceStatus.LATE}>
+                    {AttendanceStatus.LATE}
+                  </SelectItem>
+                  <SelectItem value={AttendanceStatus.ABSENT}>
+                    {AttendanceStatus.ABSENT}
+                  </SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />

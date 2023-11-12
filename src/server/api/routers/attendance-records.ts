@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { AttendanceStatus } from "~/utils/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const attendanceRecordRouter = createTRPCRouter({
@@ -67,9 +68,9 @@ export const attendanceRecordRouter = createTRPCRouter({
         studentId: z.string(),
         lectureId: z.string(),
         status: z.union([
-          z.literal("PRESENT"),
-          z.literal("ABSENT"),
-          z.literal("LATE"),
+          z.literal(AttendanceStatus.PRESENT),
+          z.literal(AttendanceStatus.LATE),
+          z.literal(AttendanceStatus.ABSENT),
         ]),
       }),
     )

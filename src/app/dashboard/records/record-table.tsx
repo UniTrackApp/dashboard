@@ -10,6 +10,7 @@ import {
 } from "@tremor/react";
 import { Check, CheckCheck, Loader2, Pencil, Trash2, X } from "lucide-react";
 import { Button } from "~/components/ui/button";
+import { AttendanceStatus } from "~/utils/constants";
 
 type AttendanceRecord = {
   attendanceRecordId: string;
@@ -59,17 +60,18 @@ export default function RecordTable({
               </Badge>
             </TableCell>
             <TableCell>
-              {record.status === "PRESENT" && (
+              {record.status === AttendanceStatus.PRESENT && (
                 <Badge color="green" size="sm" icon={CheckCheck}>
                   {record.status.toUpperCase()}
                 </Badge>
               )}
-              {record.status === "LATE" && (
+              {record.status === AttendanceStatus.LATE && (
                 <Badge color="amber" size="sm" icon={Check}>
                   {record.status.toUpperCase()}
                 </Badge>
               )}
-              {record.status === "ABSENT" && (
+              {record.status === AttendanceStatus.ABSENT
+               && (
                 <Badge color="red" size="sm" icon={X}>
                   {record.status.toUpperCase()}
                 </Badge>
