@@ -19,7 +19,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "UniTrack",
   description: "Welcome to UniTrack",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: { icon: "/favicon.ico" },
 };
 
 export default async function RootLayout({

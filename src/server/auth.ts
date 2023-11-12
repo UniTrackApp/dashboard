@@ -57,12 +57,11 @@ export const authOptions: NextAuthOptions = {
 
     session({ token, session }) {
       if (token) {
-        // session.user.id = token.id // This is not working for some reason
+        session.user.id = token.id as string;
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.image = token.picture;
       }
-
       return session;
     },
     async jwt({ token, user }) {
