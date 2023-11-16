@@ -26,7 +26,7 @@ export const moduleRouter = createTRPCRouter({
       z.object({
         moduleId: z.string().min(1),
         moduleName: z.string().min(1),
-        moduleDescription: z.string().min(1),
+        moduleDesc: z.string().min(1).nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -34,7 +34,7 @@ export const moduleRouter = createTRPCRouter({
         data: {
           moduleId: input.moduleId,
           moduleName: input.moduleName,
-          moduleDesc: input.moduleDescription,
+          moduleDesc: input.moduleDesc,
         },
       });
     }),

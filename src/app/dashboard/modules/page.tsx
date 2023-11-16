@@ -7,20 +7,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { api } from "@/utils/api";
 
-type FormData = {
-  moduleId: string;
-  moduleName: string;
-  moduleDescription: string;
-};
+import { type Module } from "@prisma/client";
 
 export default function Modules() {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<Module>({
     moduleId: "",
     moduleName: "",
-    moduleDescription: "",
+    moduleDesc: "",
   });
-  const { data, refetch } = api.module.getAllModules.useQuery();
-  const { mutate } = api.module.createNewModule.useMutation();
+  const { data: allModules, refetch: refetchAllModules } =
+    api.module.getAllModules.useQuery();
+  const { mutate: createNewModule } = api.module.createNewModule.useMutation();
 
   return (
     <>
@@ -51,14 +48,14 @@ export default function Modules() {
           onChange={(e) =>
             setFormData({
               ...formData,
-              moduleDescription: e.target.value,
+              moduleDesc: e.target.value,
             })
           }
         />
         <Button
           onClick={() => {
-            mutate(formData);
-            void refetch();
+            createNewModule(formData);
+            void refetchAllModules();
           }}
         >
           Submit
@@ -66,11 +63,11 @@ export default function Modules() {
       </div>
 
       {/* DISPLAYING DATA */}
-      {data?.map((item) => (
-        <div key={item.moduleId}>
-          {item.moduleId}
-          {item.moduleName}
-          {item.moduleDesc}
+      {allModules?.map((module) => (
+        <div key={module.moduleId}>
+          {module.moduleId}
+          {module.moduleName}
+          {module.moduleDesc}
         </div>
       ))}
     </>
