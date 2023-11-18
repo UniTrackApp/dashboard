@@ -24,13 +24,13 @@ type AttendanceRecord = {
 
 export default function RecordTable({
   attendanceData,
-  isBeingDeleted,
-  setIsBeingDeleted,
+  idBeingDeleted,
+  setIdBeingDeleted,
   deleteRecordById,
 }: {
   attendanceData: AttendanceRecord[] | undefined;
-  isBeingDeleted: string | null;
-  setIsBeingDeleted: (id: string | null) => void;
+  idBeingDeleted: string | null;
+  setIdBeingDeleted: (id: string | null) => void;
   deleteRecordById: (id: { attendanceRecordId: string }) => void;
 }) {
   return (
@@ -70,8 +70,7 @@ export default function RecordTable({
                   {record.status.toUpperCase()}
                 </Badge>
               )}
-              {record.status === AttendanceStatus.ABSENT
-               && (
+              {record.status === AttendanceStatus.ABSENT && (
                 <Badge color="red" size="sm" icon={X}>
                   {record.status.toUpperCase()}
                 </Badge>
@@ -91,18 +90,18 @@ export default function RecordTable({
                 size={"icon"}
                 variant={"destructive"}
                 className="h-6 w-6"
-                disabled={isBeingDeleted === record.attendanceRecordId}
+                disabled={idBeingDeleted === record.attendanceRecordId}
                 onClick={() => {
                   deleteRecordById({
                     attendanceRecordId: record.attendanceRecordId,
                   });
-                  setIsBeingDeleted(record.attendanceRecordId);
+                  setIdBeingDeleted(record.attendanceRecordId);
                 }}
               >
-                {isBeingDeleted === record.attendanceRecordId && (
+                {idBeingDeleted === record.attendanceRecordId && (
                   <Loader2 className="animate-spin" size={14} />
                 )}
-                {isBeingDeleted !== record.attendanceRecordId && (
+                {idBeingDeleted !== record.attendanceRecordId && (
                   <Trash2 size={14} />
                 )}
               </Button>

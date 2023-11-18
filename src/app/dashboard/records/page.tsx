@@ -20,7 +20,9 @@ import { toast } from "~/components/ui/use-toast";
 import { api } from "~/utils/api";
 
 export default function Records() {
-  const [isBeingDeleted, setIsBeingDeleted] = useState<string | null>(null);
+  const [idBeingDeleted, setIdBeingDeleted] = useState<string | null>(null);
+  const [isBeingAdded, setIsBeingAdded] = useState(false);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   const { data: allAttendanceRecords, refetch: refetchAllAttendanceRecords } =
     api.attendanceRecord.getAttendanceRecordsForTable.useQuery();
@@ -36,7 +38,27 @@ export default function Records() {
         });
         void refetchAllAttendanceRecords();
         void refetchAttendanceCount();
-        setIsBeingDeleted(null);
+        setIdBeingDeleted(null);
+      },
+      onError() {
+        toast({
+          title: "Error 😢",
+          description: "Something went wrong, please try again.",
+        });
+      },
+    });
+
+  const { mutate: createNewRecordEntry } =
+    api.attendanceRecord.addAttendanceRecord.useMutation({
+      onSuccess() {
+        toast({
+          title: "Attendance Record Added ✅",
+          description: `Attendance record added to database successfully.`,
+        });
+        void refetchAllAttendanceRecords();
+        void refetchAttendanceCount();
+        setIsBeingAdded(false);
+        setDialogIsOpen(false);
       },
       onError() {
         toast({
@@ -59,7 +81,7 @@ export default function Records() {
             </Flex>
 
             {/* Dialog - used to create new Attendance Records */}
-            <Dialog>
+            <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
               <DialogTrigger className={buttonVariants({ className: "w-fit" })}>
                 <Plus size={20} className="mr-2" />
                 Add New Record
@@ -70,8 +92,9 @@ export default function Records() {
                   <DialogDescription>
                     <div className="mt-4 flex flex-col gap-4">
                       <AddAttendanceRecordForm
-                        refetchAttendanceData={refetchAllAttendanceRecords}
-                        refetchAttendanceCount={refetchAttendanceCount}
+                        createNewRecordEntry={createNewRecordEntry}
+                        isBeingAdded={isBeingAdded}
+                        setIsBeingAdded={setIsBeingAdded}
                       />
                     </div>
                   </DialogDescription>
@@ -83,9 +106,9 @@ export default function Records() {
           {/* Table - to display Attendance Records */}
           <RecordTable
             attendanceData={allAttendanceRecords}
-            isBeingDeleted={isBeingDeleted}
-            setIsBeingDeleted={setIsBeingDeleted}
             deleteRecordById={deleteRecordById}
+            idBeingDeleted={idBeingDeleted}
+            setIdBeingDeleted={setIdBeingDeleted}
           />
         </Card>
       </div>

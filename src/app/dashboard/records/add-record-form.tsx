@@ -4,7 +4,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown, Loader2, Plus } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -37,7 +36,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { toast } from "~/components/ui/use-toast";
 
 import { api } from "~/utils/api";
 import { AttendanceStatus } from "~/utils/constants";
@@ -46,7 +44,7 @@ import { cn } from "~/utils/shadcn";
 const FormSchema = z.object({
   studentId: z.string(),
   lectureId: z.string(),
-  attendanceStatus: z.union([
+  status: z.union([
     z.literal(AttendanceStatus.PRESENT),
     z.literal(AttendanceStatus.LATE),
     z.literal(AttendanceStatus.ABSENT),
@@ -54,48 +52,29 @@ const FormSchema = z.object({
 });
 
 export default function AddAttendanceRecordForm({
-  refetchAttendanceData,
-  refetchAttendanceCount,
+  createNewRecordEntry,
+  isBeingAdded,
+  setIsBeingAdded,
 }: {
-  refetchAttendanceData: () => void;
-  refetchAttendanceCount: () => void;
+  createNewRecordEntry: (entry: z.infer<typeof FormSchema>) => void;
+  isBeingAdded: boolean;
+  setIsBeingAdded: (value: boolean) => void;
 }) {
-  const [isLoading, setIsLoading] = useState(false);
-
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    setIsLoading(true);
+    setIsBeingAdded(true);
     createNewRecordEntry({
       studentId: data.studentId,
       lectureId: data.lectureId,
-      status: data.attendanceStatus,
+      status: data.status,
     });
   }
 
   const { data: allStudents } = api.student.getAllStudents.useQuery();
   const { data: allLectures } = api.lecture.getAllLectures.useQuery();
-
-  const { mutate: createNewRecordEntry } =
-    api.attendanceRecord.addAttendanceRecord.useMutation({
-      onSuccess() {
-        toast({
-          title: "Attendance Record Added ✅",
-          description: `Attendance record added to database successfully.`,
-        });
-        void refetchAttendanceData();
-        void refetchAttendanceCount();
-        setIsLoading(false);
-      },
-      onError() {
-        toast({
-          title: "Error 😢",
-          description: "Something went wrong, please try again.",
-        });
-      },
-    });
 
   return (
     <Form {...form}>
@@ -230,7 +209,7 @@ export default function AddAttendanceRecordForm({
         {/* Select - status */}
         <FormField
           control={form.control}
-          name="attendanceStatus"
+          name="status"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Status</FormLabel>
@@ -257,15 +236,15 @@ export default function AddAttendanceRecordForm({
           )}
         />
 
-        <Button type="submit" disabled={isLoading}>
-          {isLoading && (
+        <Button type="submit" disabled={isBeingAdded}>
+          {isBeingAdded && (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               <span>Adding...</span>
             </>
           )}
 
-          {!isLoading && (
+          {!isBeingAdded && (
             <>
               <Plus className="mr-2 h-4 w-4" />
               <span>Add Record </span>
