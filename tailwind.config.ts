@@ -65,22 +65,22 @@ module.exports = {
             inverted: "#ffffff", // white
           },
           background: {
-            muted: "#f9fafb", // gray-50
-            subtle: "#f3f4f6", // gray-100
+            muted: "#fafafa", // neutral-50
+            subtle: "#f5f5f5", // neutral-100
             DEFAULT: "#ffffff", // white
-            emphasis: "#374151", // gray-700
+            emphasis: "#404040", // neutral-700
           },
           border: {
-            DEFAULT: "#e5e7eb", // gray-200
+            DEFAULT: "#e5e5e5", // neutral-200
           },
           ring: {
-            DEFAULT: "#e5e7eb", // gray-200
+            DEFAULT: "#e5e5e5", // neutral-200
           },
           content: {
-            subtle: "#9ca3af", // gray-400
-            DEFAULT: "#6b7280", // gray-500
-            emphasis: "#374151", // gray-700
-            strong: "#111827", // gray-900
+            subtle: "#a3a3a3", // neutral-400
+            DEFAULT: "#737373", // neutral-500
+            emphasis: "#404040", // neutral-700
+            strong: "#171717", // neutral-900
             inverted: "#ffffff", // white
           },
         },
@@ -92,13 +92,13 @@ module.exports = {
             subtle: "#1e40af", // blue-800
             DEFAULT: "#3b82f6", // blue-500
             emphasis: "#60a5fa", // blue-400
-            inverted: "#030712", // gray-950
+            inverted: "#0a0a0a", // neutral-950
           },
           background: {
             muted: "#131A2B", // custom
             subtle: "#262626", // neutral-800
             DEFAULT: "#171717", // neutral-900
-            emphasis: "#d1d5db", // gray-300
+            emphasis: "#d4d4d4", // neutral-300
           },
           border: {
             DEFAULT: "#262626", // neutral-800
@@ -107,10 +107,10 @@ module.exports = {
             DEFAULT: "#262626", // neutral-800
           },
           content: {
-            subtle: "#4b5563", // gray-600
-            DEFAULT: "#6b7280", // gray-500
-            emphasis: "#e5e7eb", // gray-200
-            strong: "#f9fafb", // gray-50
+            subtle: "#525252", // neutral-600
+            DEFAULT: "#737373", // neutral-500
+            emphasis: "#e5e5e5", // neutral-200
+            strong: "#fafafa", // neutral-50
             inverted: "#000000", // black
           },
         },
