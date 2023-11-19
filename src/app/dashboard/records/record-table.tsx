@@ -23,18 +23,19 @@ type AttendanceRecord = {
 };
 
 export default function RecordTable({
-  attendanceData,
+  allAttendanceRecords,
+  deleteAttendanceRecordById,
   idBeingDeleted,
   setIdBeingDeleted,
-  deleteRecordById,
 }: {
-  attendanceData: AttendanceRecord[] | undefined;
+  allAttendanceRecords: AttendanceRecord[];
+  deleteAttendanceRecordById: (id: { attendanceRecordId: string }) => void;
   idBeingDeleted: string | null;
   setIdBeingDeleted: (id: string | null) => void;
-  deleteRecordById: (id: { attendanceRecordId: string }) => void;
 }) {
   return (
     <Table className="mt-4">
+      \{/* Table Header - header values for columns */}
       <TableHead>
         <TableRow>
           <TableHeaderCell className="text-foreground dark:text-foreground">
@@ -63,8 +64,10 @@ export default function RecordTable({
           </TableHeaderCell>
         </TableRow>
       </TableHead>
+      
+      {/* Table Body - contains all dynamic data */}
       <TableBody>
-        {attendanceData?.map((record) => (
+        {allAttendanceRecords?.map((record) => (
           <TableRow key={record.attendanceRecordId}>
             <TableCell className="text-muted-foreground dark:text-muted-foreground">
               {record.attendanceRecordId}
@@ -103,6 +106,8 @@ export default function RecordTable({
             <TableCell className="text-muted-foreground dark:text-muted-foreground">
               {record.timestamp.toUTCString()}
             </TableCell>
+
+            {/* Buttons to update or delete data */}
             <TableCell className="flex gap-2">
               <Button
                 size={"icon"}
@@ -118,7 +123,7 @@ export default function RecordTable({
                 className="h-6 w-6"
                 disabled={idBeingDeleted === record.attendanceRecordId}
                 onClick={() => {
-                  deleteRecordById({
+                  deleteAttendanceRecordById({
                     attendanceRecordId: record.attendanceRecordId,
                   });
                   setIdBeingDeleted(record.attendanceRecordId);
