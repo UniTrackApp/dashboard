@@ -13,20 +13,15 @@ export const moduleRouter = createTRPCRouter({
   // Now we could have this EXACT SAME code in /pages/api like we do for the client
   // Benefit of using tRPC is that the frontend and backend can share datatypes using power of TypeScript
   // As we'll see soon, we'll need to do more work to parse request body etc for the 'create' endpoint we're creating in /pages/api for the client rn
-  getModuleCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.module.count();
-  }),
-
-  getAllModules: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.module.findMany();
-  }),
-
-  createNewModule: protectedProcedure
+  createModule: protectedProcedure
     .input(
       z.object({
-        moduleId: z.string().min(1),
+        moduleId: z
+          .string()
+          .min(1)
+          .startsWith("COMP", `Module ID must start with "COMP"`),
         moduleName: z.string().min(1),
-        moduleDesc: z.string().min(1).nullable(),
+        moduleDesc: z.string().min(1).nullish(), // nullish means it can be null or undefined
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -35,6 +30,28 @@ export const moduleRouter = createTRPCRouter({
           moduleId: input.moduleId,
           moduleName: input.moduleName,
           moduleDesc: input.moduleDesc,
+        },
+      });
+    }),
+
+  getModuleCount: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.module.count();
+  }),
+
+  getAllModules: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.module.findMany();
+  }),
+
+  deleteModuleById: protectedProcedure
+    .input(
+      z.object({
+        moduleId: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.module.delete({
+        where: {
+          moduleId: input.moduleId,
         },
       });
     }),
