@@ -64,7 +64,7 @@ export default function RecordTable({
           </TableHeaderCell>
         </TableRow>
       </TableHead>
-      
+
       {/* Table Body - contains all dynamic data */}
       <TableBody>
         {allAttendanceRecords?.map((record) => (
