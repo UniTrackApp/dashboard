@@ -35,7 +35,7 @@ export default function RecordTable({
 }) {
   return (
     <Table className="mt-4">
-      \{/* Table Header - header values for columns */}
+      {/* Table Header - header values for columns */}
       <TableHead>
         <TableRow>
           <TableHeaderCell className="text-foreground dark:text-foreground">
