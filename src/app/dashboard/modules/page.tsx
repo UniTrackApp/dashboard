@@ -96,7 +96,7 @@ export default function Modules() {
           <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
             <DialogTrigger className={buttonVariants({ className: "w-fit" })}>
               <Plus size={20} className="mr-2" />
-              Add New Record
+              Create Module
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
