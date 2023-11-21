@@ -29,16 +29,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
 
 import { api } from "~/utils/api";
-import { AttendanceStatus } from "~/utils/constants";
 import { cn } from "~/utils/shadcn";
 
 // Schema for form validation (using Zod)
