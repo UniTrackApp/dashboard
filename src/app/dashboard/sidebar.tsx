@@ -57,7 +57,7 @@ const links = [
     name: "Enrollments",
     href: "/dashboard/enrollments",
     icon: <BookCheck size={18} />,
-    wipStatus: true,
+    wipStatus: false,
   },
   {
     name: "Lectures",
@@ -69,7 +69,7 @@ const links = [
     name: "Modules",
     href: "/dashboard/modules",
     icon: <LibraryBig size={18} />,
-    wipStatus: true,
+    wipStatus: false,
   },
   {
     name: "Manage",
