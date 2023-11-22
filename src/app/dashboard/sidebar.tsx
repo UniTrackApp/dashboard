@@ -57,7 +57,7 @@ const links = [
     name: "Enrollments",
     href: "/dashboard/enrollments",
     icon: <BookCheck size={18} />,
-    wipStatus: true,
+    wipStatus: false,
   },
   {
     name: "Lectures",
@@ -69,7 +69,7 @@ const links = [
     name: "Modules",
     href: "/dashboard/modules",
     icon: <LibraryBig size={18} />,
-    wipStatus: true,
+    wipStatus: false,
   },
   {
     name: "Manage",
@@ -115,13 +115,16 @@ export default function Sidebar() {
                     <AvatarFallback>DP</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-48">
+                <DropdownMenuContent
+                  align="start"
+                  className="w-48 bg-neutral-900"
+                >
                   <DropdownMenuLabel>
                     <div className="flex flex-col">
-                      <p className="truncate text-base">
+                      <p className="truncate text-base text-foreground">
                         {sessionData.user?.name}
                       </p>
-                      <p className="truncate font-normal text-neutral-600">
+                      <p className="truncate font-normal text-muted-foreground">
                         {sessionData.user?.email}
                       </p>
                     </div>
@@ -157,7 +160,10 @@ export default function Sidebar() {
               {link.icon}
               {link.name}
               {link.wipStatus && (
-                <Badge variant="warning" className="ml-auto text-xs">
+                <Badge
+                  variant="warning"
+                  className="ml-auto text-xs dark:bg-yellow-300 dark:text-yellow-900"
+                >
                   WIP
                 </Badge>
               )}
@@ -178,8 +184,8 @@ export default function Sidebar() {
       )}
 
       {/* Theme toggle - for dark & light mode */}
-      <div className="flex items-center justify-center gap-4 rounded-lg bg-neutral-50 p-2 text-sm dark:bg-neutral-800">
-        <p>Toggle Theme</p>
+      <div className="flex items-center justify-center gap-4 rounded-lg bg-neutral-50 p-2 text-sm dark:bg-neutral-800/50">
+        <p className="font-medium">Toggle Theme</p>
         <ModeToggle />
       </div>
     </aside>

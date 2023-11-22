@@ -6,7 +6,9 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 
+// This is a tRPC router used to manage API calls to the Post table
 export const postRouter = createTRPCRouter({
+  // Sample procedure to test if tRPC is working (public means it doesn't require authentication)
   hello: publicProcedure
     .input(z.object({ text: z.string() }))
     .query(({ input }) => {
@@ -15,6 +17,7 @@ export const postRouter = createTRPCRouter({
       };
     }),
 
+  // Sample procedure to test if tRPC mutation is working
   create: protectedProcedure
     .input(z.object({ name: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
@@ -28,29 +31,4 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
-
-  getLatest: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.post.findFirst({
-      orderBy: { createdAt: "desc" },
-      where: { createdBy: { id: ctx.session.user.id } },
-    });
-  }),
-
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
-
-  fetchLatestMessage: publicProcedure.query(() => {
-    const apiUrl = "http://127.0.0.1:5000/message";
-
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data: { message: string }) => {
-        console.log("Data from API:", data);
-        return data.message;
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }),
 });

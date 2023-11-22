@@ -20,24 +20,60 @@ import { toast } from "~/components/ui/use-toast";
 import { api } from "~/utils/api";
 
 export default function Records() {
-  const [isBeingDeleted, setIsBeingDeleted] = useState<string | null>(null);
+  // State - used for button loading spinners during attendance record creation and deletion
+  const [idBeingDeleted, setIdBeingDeleted] = useState<string | null>(null);
+  const [isBeingAdded, setIsBeingAdded] = useState(false);
 
+  // State - used to close dialog after an attendance record is added
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+
+  // Fetches all attendance records, and refetches when createNewRecord is called
   const { data: allAttendanceRecords, refetch: refetchAllAttendanceRecords } =
     api.attendanceRecord.getAttendanceRecordsForTable.useQuery();
-  const { data: attendanceCount, refetch: refetchAttendanceCount } =
+
+  // Fetches attendance record count, and refetches when createNewRecord is called
+  const { data: attendanceRecordCount, refetch: refetchAttendanceRecordCount } =
     api.attendanceRecord.getAttendanceRecordCount.useQuery();
 
-  const { mutate: deleteRecordById } =
+  // Creates a new attendance record entry
+  const { mutate: createAttendanceRecord } =
+    api.attendanceRecord.createAttendanceRecord.useMutation({
+      // Displays a toast notification when the mutation is successful
+      onSuccess() {
+        toast({
+          title: "Attendance Record Added ✅",
+          description: `Attendance record added to database successfully.`,
+        });
+        void refetchAllAttendanceRecords();
+        void refetchAttendanceRecordCount();
+        setIsBeingAdded(false);
+        setDialogIsOpen(false);
+      },
+      // Displays a toast notification when the mutation fails
+      // TODO: Fetch error message from server and display it in the toast description
+      onError() {
+        toast({
+          title: "Error 😢",
+          description: "Something went wrong, please try again.",
+        });
+      },
+    });
+
+  // Deletes an attendance record entry
+  const { mutate: deleteAttendanceRecordById } =
     api.attendanceRecord.deleteAttendanceRecordById.useMutation({
+      // Displays a toast notification when the mutation is successful
       onSuccess() {
         toast({
           title: "Attendance Record Deleted ✅",
           description: "Attendance record deleted from database successfully.",
         });
         void refetchAllAttendanceRecords();
-        void refetchAttendanceCount();
-        setIsBeingDeleted(null);
+        void refetchAttendanceRecordCount();
+        setIdBeingDeleted(null);
       },
+      // Displays a toast notification when the mutation fails
+      // TODO: Fetch error message from server and display it in the toast description
       onError() {
         toast({
           title: "Error 😢",
@@ -55,11 +91,11 @@ export default function Records() {
           <Flex justifyContent="between">
             <Flex justifyContent="start" className="gap-2">
               <Title>Attendance Records</Title>
-              <Badge color="blue">{attendanceCount}</Badge>
+              <Badge color="blue">{attendanceRecordCount}</Badge>
             </Flex>
 
             {/* Dialog - used to create new Attendance Records */}
-            <Dialog>
+            <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
               <DialogTrigger className={buttonVariants({ className: "w-fit" })}>
                 <Plus size={20} className="mr-2" />
                 Add New Record
@@ -70,8 +106,9 @@ export default function Records() {
                   <DialogDescription>
                     <div className="mt-4 flex flex-col gap-4">
                       <AddAttendanceRecordForm
-                        refetchAttendanceData={refetchAllAttendanceRecords}
-                        refetchAttendanceCount={refetchAttendanceCount}
+                        createNewRecordEntry={createAttendanceRecord}
+                        isBeingAdded={isBeingAdded}
+                        setIsBeingAdded={setIsBeingAdded}
                       />
                     </div>
                   </DialogDescription>
@@ -81,12 +118,14 @@ export default function Records() {
           </Flex>
 
           {/* Table - to display Attendance Records */}
-          <RecordTable
-            attendanceData={allAttendanceRecords}
-            isBeingDeleted={isBeingDeleted}
-            setIsBeingDeleted={setIsBeingDeleted}
-            deleteRecordById={deleteRecordById}
-          />
+          {allAttendanceRecords && (
+            <RecordTable
+              allAttendanceRecords={allAttendanceRecords}
+              deleteAttendanceRecordById={deleteAttendanceRecordById}
+              idBeingDeleted={idBeingDeleted}
+              setIdBeingDeleted={setIdBeingDeleted}
+            />
+          )}
         </Card>
       </div>
     </div>

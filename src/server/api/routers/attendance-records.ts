@@ -3,6 +3,28 @@ import { AttendanceStatus } from "~/utils/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const attendanceRecordRouter = createTRPCRouter({
+  createAttendanceRecord: protectedProcedure
+    .input(
+      z.object({
+        studentId: z.string(),
+        lectureId: z.string(),
+        status: z.union([
+          z.literal(AttendanceStatus.PRESENT),
+          z.literal(AttendanceStatus.LATE),
+          z.literal(AttendanceStatus.ABSENT),
+        ]),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.attendanceRecord.create({
+        data: {
+          studentId: input.studentId,
+          lectureId: input.lectureId,
+          status: input.status,
+        },
+      });
+    }),
+
   getAttendanceRecordCount: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.attendanceRecord.count();
   }),
@@ -58,28 +80,6 @@ export const attendanceRecordRouter = createTRPCRouter({
       return await ctx.db.attendanceRecord.delete({
         where: {
           attendanceRecordId: input.attendanceRecordId,
-        },
-      });
-    }),
-
-  addAttendanceRecord: protectedProcedure
-    .input(
-      z.object({
-        studentId: z.string(),
-        lectureId: z.string(),
-        status: z.union([
-          z.literal(AttendanceStatus.PRESENT),
-          z.literal(AttendanceStatus.LATE),
-          z.literal(AttendanceStatus.ABSENT),
-        ]),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      return await ctx.db.attendanceRecord.create({
-        data: {
-          studentId: input.studentId,
-          lectureId: input.lectureId,
-          status: input.status,
         },
       });
     }),

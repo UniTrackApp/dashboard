@@ -23,43 +23,70 @@ type AttendanceRecord = {
 };
 
 export default function RecordTable({
-  attendanceData,
-  isBeingDeleted,
-  setIsBeingDeleted,
-  deleteRecordById,
+  allAttendanceRecords,
+  deleteAttendanceRecordById,
+  idBeingDeleted,
+  setIdBeingDeleted,
 }: {
-  attendanceData: AttendanceRecord[] | undefined;
-  isBeingDeleted: string | null;
-  setIsBeingDeleted: (id: string | null) => void;
-  deleteRecordById: (id: { attendanceRecordId: string }) => void;
+  allAttendanceRecords: AttendanceRecord[];
+  deleteAttendanceRecordById: (id: { attendanceRecordId: string }) => void;
+  idBeingDeleted: string | null;
+  setIdBeingDeleted: (id: string | null) => void;
 }) {
   return (
     <Table className="mt-4">
+      {/* Table Header - header values for columns */}
       <TableHead>
         <TableRow>
-          <TableHeaderCell>Attendance Record ID</TableHeaderCell>
-          <TableHeaderCell>Student ID</TableHeaderCell>
-          <TableHeaderCell>Student Name</TableHeaderCell>
-          <TableHeaderCell>Lecture ID</TableHeaderCell>
-          <TableHeaderCell>Module Name</TableHeaderCell>
-          <TableHeaderCell>Status</TableHeaderCell>
-          <TableHeaderCell>Timestamp</TableHeaderCell>
-          <TableHeaderCell>Actions</TableHeaderCell>
+          <TableHeaderCell className="text-foreground dark:text-foreground">
+            Attendance Record ID
+          </TableHeaderCell>
+          <TableHeaderCell className="text-foreground dark:text-foreground">
+            Student ID
+          </TableHeaderCell>
+          <TableHeaderCell className="text-foreground dark:text-foreground">
+            Student Name
+          </TableHeaderCell>
+          <TableHeaderCell className="text-foreground dark:text-foreground">
+            Lecture ID
+          </TableHeaderCell>
+          <TableHeaderCell className="text-foreground dark:text-foreground">
+            Module Name
+          </TableHeaderCell>
+          <TableHeaderCell className="text-foreground dark:text-foreground">
+            Status
+          </TableHeaderCell>
+          <TableHeaderCell className="text-foreground dark:text-foreground">
+            Timestamp
+          </TableHeaderCell>
+          <TableHeaderCell className="text-foreground dark:text-foreground">
+            Actions
+          </TableHeaderCell>
         </TableRow>
       </TableHead>
+
+      {/* Table Body - contains all dynamic data */}
       <TableBody>
-        {attendanceData?.map((record) => (
+        {allAttendanceRecords?.map((record) => (
           <TableRow key={record.attendanceRecordId}>
-            <TableCell>{record.attendanceRecordId}</TableCell>
-            <TableCell>{record.studentId}</TableCell>
-            <TableCell>{record.studentFullName}</TableCell>
-            <TableCell>{record.lectureId}</TableCell>
-            <TableCell>
+            <TableCell className="text-muted-foreground dark:text-muted-foreground">
+              {record.attendanceRecordId}
+            </TableCell>
+            <TableCell className="text-muted-foreground dark:text-muted-foreground">
+              {record.studentId}
+            </TableCell>
+            <TableCell className="text-muted-foreground dark:text-muted-foreground">
+              {record.studentFullName}
+            </TableCell>
+            <TableCell className="text-muted-foreground dark:text-muted-foreground">
+              {record.lectureId}
+            </TableCell>
+            <TableCell className="text-muted-foreground dark:text-muted-foreground">
               <Badge color="neutral" size="xs">
                 {record.moduleName}
               </Badge>
             </TableCell>
-            <TableCell>
+            <TableCell className="text-muted-foreground dark:text-muted-foreground">
               {record.status === AttendanceStatus.PRESENT && (
                 <Badge color="green" size="sm" icon={CheckCheck}>
                   {record.status.toUpperCase()}
@@ -70,19 +97,22 @@ export default function RecordTable({
                   {record.status.toUpperCase()}
                 </Badge>
               )}
-              {record.status === AttendanceStatus.ABSENT
-               && (
+              {record.status === AttendanceStatus.ABSENT && (
                 <Badge color="red" size="sm" icon={X}>
                   {record.status.toUpperCase()}
                 </Badge>
               )}
             </TableCell>
-            <TableCell>{record.timestamp.toUTCString()}</TableCell>
+            <TableCell className="text-muted-foreground dark:text-muted-foreground">
+              {record.timestamp.toUTCString()}
+            </TableCell>
+
+            {/* Buttons to update or delete data */}
             <TableCell className="flex gap-2">
               <Button
                 size={"icon"}
                 variant={"default"}
-                className="h-6 w-6 bg-neutral-500"
+                className="h-6 w-6 bg-neutral-500 dark:bg-neutral-600 dark:text-white"
                 onClick={() => alert("Not implemented yet")}
               >
                 <Pencil size={14} />
@@ -91,18 +121,18 @@ export default function RecordTable({
                 size={"icon"}
                 variant={"destructive"}
                 className="h-6 w-6"
-                disabled={isBeingDeleted === record.attendanceRecordId}
+                disabled={idBeingDeleted === record.attendanceRecordId}
                 onClick={() => {
-                  deleteRecordById({
+                  deleteAttendanceRecordById({
                     attendanceRecordId: record.attendanceRecordId,
                   });
-                  setIsBeingDeleted(record.attendanceRecordId);
+                  setIdBeingDeleted(record.attendanceRecordId);
                 }}
               >
-                {isBeingDeleted === record.attendanceRecordId && (
+                {idBeingDeleted === record.attendanceRecordId && (
                   <Loader2 className="animate-spin" size={14} />
                 )}
-                {isBeingDeleted !== record.attendanceRecordId && (
+                {idBeingDeleted !== record.attendanceRecordId && (
                   <Trash2 size={14} />
                 )}
               </Button>

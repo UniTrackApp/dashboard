@@ -29,35 +29,22 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
 
 import { api } from "~/utils/api";
-import { AttendanceStatus } from "~/utils/constants";
 import { cn } from "~/utils/shadcn";
 
 // Schema for form validation (using Zod)
 const FormSchema = z.object({
   studentId: z.string(),
-  lectureId: z.string(),
-  status: z.union([
-    z.literal(AttendanceStatus.PRESENT),
-    z.literal(AttendanceStatus.LATE),
-    z.literal(AttendanceStatus.ABSENT),
-  ]),
+  moduleId: z.string(),
 });
 
-export default function AddAttendanceRecordForm({
-  createNewRecordEntry,
+export default function AddEnrollmentForm({
+  createEnrollment,
   isBeingAdded,
   setIsBeingAdded,
 }: {
-  createNewRecordEntry: (entry: z.infer<typeof FormSchema>) => void;
+  createEnrollment: (entry: z.infer<typeof FormSchema>) => void;
   isBeingAdded: boolean;
   setIsBeingAdded: (value: boolean) => void;
 }) {
@@ -69,16 +56,15 @@ export default function AddAttendanceRecordForm({
   // Form submission function - called when the form is submitted (using react-hook-form)
   function onSubmit(formData: z.infer<typeof FormSchema>) {
     setIsBeingAdded(true);
-    createNewRecordEntry({
+    createEnrollment({
       studentId: formData.studentId,
-      lectureId: formData.lectureId,
-      status: formData.status,
+      moduleId: formData.moduleId,
     });
   }
 
   // Used to fetch all students and lectures for the comboboxes
   const { data: allStudents } = api.student.getAllStudents.useQuery();
-  const { data: allLectures } = api.lecture.getAllLectures.useQuery();
+  const { data: getAllModules } = api.module.getAllModules.useQuery();
 
   return (
     <Form {...form}>
@@ -149,13 +135,13 @@ export default function AddAttendanceRecordForm({
           )}
         />
 
-        {/* Combobox field - for Lecture ID */}
+        {/* Combobox field - for Module ID */}
         <FormField
           control={form.control}
-          name="lectureId"
+          name="moduleId"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Lecture ID</FormLabel>
+              <FormLabel>Module ID</FormLabel>
               <FormControl>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -169,37 +155,37 @@ export default function AddAttendanceRecordForm({
                         )}
                       >
                         {field.value
-                          ? allLectures?.find(
-                              (lecture) => lecture.lectureId === field.value,
-                            )?.lectureId
-                          : "Select lecture ID"}
+                          ? getAllModules?.find(
+                              (module) => module.moduleId === field.value,
+                            )?.moduleId
+                          : "Select module ID"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="w-[300px] p-0">
                     <Command>
-                      <CommandInput placeholder="Search lecture IDs..." />
-                      <CommandEmpty>No lecture ID found.</CommandEmpty>
+                      <CommandInput placeholder="Search module IDs..." />
+                      <CommandEmpty>No module ID found.</CommandEmpty>
                       <CommandGroup>
-                        {allLectures?.map((lecture) => (
+                        {getAllModules?.map((module) => (
                           <CommandItem
-                            value={lecture.lectureId}
-                            key={lecture.lectureId}
+                            value={module.moduleId}
+                            key={module.moduleId}
                             onSelect={() => {
-                              form.setValue("lectureId", lecture.lectureId);
+                              form.setValue("moduleId", module.moduleId);
                             }}
                           >
                             <Check
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                lecture.lectureId === field.value
+                                module.moduleId === field.value
                                   ? "opacity-100"
                                   : "opacity-0",
                               )}
                             />
                             <span className="truncate tabular-nums">
-                              {lecture.lectureId} - {lecture.Module.moduleName}
+                              {module.moduleId} - {module.moduleName}
                             </span>
                           </CommandItem>
                         ))}
@@ -209,41 +195,6 @@ export default function AddAttendanceRecordForm({
                 </Popover>
               </FormControl>
               <FormDescription>Open to view autocompletions...</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Select selector - for attendance status */}
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Status</FormLabel>
-              <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl className="w-[300px]">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a status" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="w-[300px]">
-                    <SelectItem value={AttendanceStatus.PRESENT}>
-                      {AttendanceStatus.PRESENT}
-                    </SelectItem>
-                    <SelectItem value={AttendanceStatus.LATE}>
-                      {AttendanceStatus.LATE}
-                    </SelectItem>
-                    <SelectItem value={AttendanceStatus.ABSENT}>
-                      {AttendanceStatus.ABSENT}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -261,7 +212,7 @@ export default function AddAttendanceRecordForm({
           {!isBeingAdded && (
             <>
               <Plus className="mr-2 h-4 w-4" />
-              <span>Add Record </span>
+              <span>Create enrollment</span>
             </>
           )}
         </Button>
