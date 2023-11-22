@@ -82,7 +82,6 @@ export default function Modules() {
 
   return (
     <>
-      <p>Add a new module</p>
       {/* Card - Contains table and button to add new modules */}
       <Card>
         {/* Card Title - displays table name + item counts */}
