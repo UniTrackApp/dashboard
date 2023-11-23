@@ -63,7 +63,7 @@ const links = [
     name: "Lectures",
     href: "/dashboard/lectures",
     icon: <Presentation size={18} />,
-    wipStatus: true,
+    wipStatus: false,
   },
   {
     name: "Modules",
