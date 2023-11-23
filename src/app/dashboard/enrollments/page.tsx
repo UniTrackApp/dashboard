@@ -16,7 +16,7 @@ import {
 import { toast } from "~/components/ui/use-toast";
 
 import AddEnrollmentForm from "./add-enrollment-form";
-import EnrollmentTable from "./record-table";
+import EnrollmentTable from "./enrollment-table";
 
 import { api } from "~/utils/api";
 
@@ -99,7 +99,7 @@ export default function Enrollments() {
             <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
               <DialogTrigger className={buttonVariants({ className: "w-fit" })}>
                 <Plus size={20} className="mr-2" />
-                Add New Enrollment
+                Add Enrollment
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
