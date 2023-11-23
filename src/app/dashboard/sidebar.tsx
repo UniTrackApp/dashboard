@@ -115,10 +115,7 @@ export default function Sidebar() {
                     <AvatarFallback>DP</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="start"
-                  className="w-48 bg-neutral-900"
-                >
+                <DropdownMenuContent align="start" className="w-48">
                   <DropdownMenuLabel>
                     <div className="flex flex-col">
                       <p className="truncate text-base text-foreground">
