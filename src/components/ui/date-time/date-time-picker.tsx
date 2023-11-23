@@ -75,7 +75,7 @@ const DateTimePicker = React.forwardRef<
         </PopoverTrigger>
         <PopoverContent ref={contentRef} className="w-full">
           <div {...dialogProps} className="space-y-3">
-            <Calendar {...calendarProps} />
+            {/* <Calendar {...calendarProps} /> */}
             {!!state.hasTime && (
               <TimeField
                 value={state.timeValue}
