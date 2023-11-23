@@ -27,7 +27,18 @@ export const lectureRouter = createTRPCRouter({
     });
   }),
 
-  createLectureRecord: protectedProcedure
+  getLectureIdsWithModuleNames: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.lecture.findMany({
+      select: {
+        lectureId: true,
+        Module: {
+          select: {
+            moduleName: true,
+          },
+        },
+      },
+    });
+  }),
     .input(
       z.object({
         lectureId: z.string(),

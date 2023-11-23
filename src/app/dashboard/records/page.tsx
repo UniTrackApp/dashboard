@@ -98,7 +98,7 @@ export default function Records() {
             <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
               <DialogTrigger className={buttonVariants({ className: "w-fit" })}>
                 <Plus size={20} className="mr-2" />
-                Add New Record
+                Add Record
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
