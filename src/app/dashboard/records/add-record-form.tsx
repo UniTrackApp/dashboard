@@ -78,7 +78,8 @@ export default function AddAttendanceRecordForm({
 
   // Used to fetch all students and lectures for the comboboxes
   const { data: allStudents } = api.student.getAllStudents.useQuery();
-  const { data: allLectures } = api.lecture.getAllLectures.useQuery();
+  const { data: allLectures } =
+    api.lecture.getLectureIdsWithModuleNames.useQuery();
 
   return (
     <Form {...form}>

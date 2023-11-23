@@ -1,3 +1,133 @@
+"use client";
+
+import { useState } from "react";
+
+import { buttonVariants } from "@/components/ui/button";
+
+import { Badge, Card, Flex, Title } from "@tremor/react";
+import { Plus } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
+import { toast } from "~/components/ui/use-toast";
+import { api } from "~/utils/api";
+
+import AddLectureForm from "./add-lecture-form";
+import LectureTable from "./lecture-table";
+
 export default function Lectures() {
-  return <div>Lectures</div>;
+  // State - used for button loading spinners during lecture creation and deletion
+  const [idBeingDeleted, setIdBeingDeleted] = useState<string | null>(null);
+  const [isBeingAdded, setIsBeingAdded] = useState(false);
+
+  // State - used to close dialog after a lecture is added
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+
+  // Fetches all lectures, and refetches when createNewLecture is called
+  const { data: allLectures, refetch: refetchAllLectures } =
+    api.lecture.getAllLecturesWithModuleNames.useQuery();
+
+  // Fetches lecture count and refetches when createNewLecture is called
+  const { data: lectureCount, refetch: refetchLectureCount } =
+    api.lecture.getLectureCount.useQuery();
+
+  // Creates a new lecture entry
+  const { mutate: createNewLecture } = api.lecture.createNewLecture.useMutation(
+    {
+      // Displays a toast notification when the mutation is successful
+      onSuccess() {
+        toast({
+          title: "Lecture Added ✅",
+          description: `Lecture added to database successfully.`,
+        });
+        void refetchAllLectures();
+        void refetchLectureCount();
+        setIsBeingAdded(false);
+        setDialogIsOpen(false);
+      },
+      // Displays a toast notification when the mutation fails
+      // TODO: Fetch error message from server and display it in the toast description
+      onError() {
+        toast({
+          title: "Error 😢",
+          description: "Something went wrong, please try again.",
+        });
+      },
+    },
+  );
+
+  // Deletes a lecture by ID
+  const { mutate: deleteLectureById } =
+    api.lecture.deleteLectureRecordById.useMutation({
+      // Displays a toast notification when the mutation is successful
+      onSuccess() {
+        toast({
+          title: "Lecture Deleted ✅",
+          description: "Lecture deleted from database successfully.",
+        });
+        void refetchAllLectures();
+        void refetchLectureCount();
+        setIdBeingDeleted(null);
+      },
+      // Displays a toast notification when the mutation fails
+      // TODO: Fetch error message from server and display it in the toast description
+      onError() {
+        toast({
+          title: "Error 😢",
+          description: "Something went wrong, please try again.",
+        });
+      },
+    });
+
+  return (
+    <>
+      {/* Card - Contains table and button to add new lectures */}
+      <Card>
+        {/* Card Title - displays table name + item counts */}
+        <Flex justifyContent="between">
+          <Flex justifyContent="start" className="gap-2">
+            <Title>Lectures</Title>
+            <Badge color="blue">{lectureCount}</Badge>
+          </Flex>
+
+          {/* Dialog - used to create new lectures */}
+          <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
+            <DialogTrigger className={buttonVariants({ className: "w-fit" })}>
+              <Plus size={20} className="mr-2" />
+              Create Lecture
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add a new lecture</DialogTitle>
+                <DialogDescription>
+                  <div className="mt-4 flex flex-col gap-4">
+                    <AddLectureForm
+                      createNewLecture={createNewLecture}
+                      isBeingAdded={isBeingAdded}
+                      setIsBeingAdded={setIsBeingAdded}
+                    />
+                  </div>
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        </Flex>
+
+        {/* Table - to display all lectures */}
+        {allLectures && (
+          <LectureTable
+            allLectures={allLectures}
+            deleteLectureById={deleteLectureById}
+            idBeingDeleted={idBeingDeleted}
+            setIdBeingDeleted={setIdBeingDeleted}
+          />
+        )}
+      </Card>
+    </>
+  );
 }

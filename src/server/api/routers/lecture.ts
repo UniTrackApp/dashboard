@@ -2,11 +2,35 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const lectureRouter = createTRPCRouter({
+  getAllLectures: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.lecture.findMany();
+  }),
+
+  getAllLecturesWithModuleNames: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.lecture.findMany({
+      include: {
+        Module: {
+          select: {
+            moduleName: true,
+          },
+        },
+      },
+    });
+  }),
+
   getLectureCount: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.lecture.count();
   }),
 
-  getAllLectures: protectedProcedure.query(async ({ ctx }) => {
+  getAllLectureIds: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.lecture.findMany({
+      select: {
+        lectureId: true,
+      },
+    });
+  }),
+
+  getLectureIdsWithModuleNames: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.lecture.findMany({
       select: {
         lectureId: true,
@@ -19,15 +43,7 @@ export const lectureRouter = createTRPCRouter({
     });
   }),
 
-  getAllLectureIds: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.lecture.findMany({
-      select: {
-        lectureId: true,
-      },
-    });
-  }),
-
-  createLectureRecord: protectedProcedure
+  createNewLecture: protectedProcedure
     .input(
       z.object({
         lectureId: z.string(),
@@ -55,19 +71,17 @@ export const lectureRouter = createTRPCRouter({
       }
     }),
 
-
   deleteLectureRecordById: protectedProcedure
-  .input(
-    z.object({
-      lectureId: z.string(),
+    .input(
+      z.object({
+        lectureId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.lecture.delete({
+        where: {
+          lectureId: input.lectureId,
+        },
+      });
     }),
-  )
-  .mutation(async ({ ctx, input }) => {
-    return await ctx.db.lecture.delete({
-      where: {
-        lectureId: input.lectureId,
-      },
-    });
-  }),
 });
-
