@@ -2,14 +2,13 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const lectureRouter = createTRPCRouter({
-  getLectureCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.lecture.count();
+  getAllLectures: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.lecture.findMany();
   }),
 
-  getAllLectures: protectedProcedure.query(async ({ ctx }) => {
+  getAllLecturesWithModuleNames: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.lecture.findMany({
-      select: {
-        lectureId: true,
+      include: {
         Module: {
           select: {
             moduleName: true,
@@ -17,6 +16,10 @@ export const lectureRouter = createTRPCRouter({
         },
       },
     });
+  }),
+
+  getLectureCount: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.lecture.count();
   }),
 
   getAllLectureIds: protectedProcedure.query(async ({ ctx }) => {
@@ -39,6 +42,8 @@ export const lectureRouter = createTRPCRouter({
       },
     });
   }),
+
+  createNewLecture: protectedProcedure
     .input(
       z.object({
         lectureId: z.string(),
@@ -66,19 +71,17 @@ export const lectureRouter = createTRPCRouter({
       }
     }),
 
-
   deleteLectureRecordById: protectedProcedure
-  .input(
-    z.object({
-      lectureId: z.string(),
+    .input(
+      z.object({
+        lectureId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.lecture.delete({
+        where: {
+          lectureId: input.lectureId,
+        },
+      });
     }),
-  )
-  .mutation(async ({ ctx, input }) => {
-    return await ctx.db.lecture.delete({
-      where: {
-        lectureId: input.lectureId,
-      },
-    });
-  }),
 });
-
