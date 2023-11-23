@@ -1,8 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { z } from 'zod';
-import { db } from '~/server/db';
-
-
+import { db } from '~/server/db';ß
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
