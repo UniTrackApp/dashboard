@@ -63,8 +63,8 @@ export default function Modules() {
     // Displays a toast notification when the mutation is successful
     onSuccess() {
       toast({
-        title: "Attendance Record Deleted ✅",
-        description: "Attendance record deleted from database successfully.",
+        title: "Module Deleted ✅",
+        description: "Module deleted from database successfully.",
       });
       void refetchAllModules();
       void refetchModuleCount();
