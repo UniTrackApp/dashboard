@@ -97,7 +97,7 @@ module.exports = {
           background: {
             muted: "#131A2B", // custom
             subtle: "#262626", // neutral-800
-            DEFAULT: "#171717", // neutral-900
+            DEFAULT: "#0a0a0a", // neutral-900
             emphasis: "#d4d4d4", // neutral-300
           },
           border: {
