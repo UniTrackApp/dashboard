@@ -2,22 +2,17 @@ import { type ReactNode } from "react";
 import Sidebar from "~/app/dashboard/sidebar";
 import MobileNavBar from "~/components/mobile-navbar";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="grid w-full grid-cols-4 bg-neutral-100 dark:bg-neutral-800 xl:grid-cols-5">
-      <div className="sticky top-0 col-span-1 hidden self-start md:block">
+    <div className="max-w-screen flex">
+      <div className="fixed hidden w-[275px] shrink-0 md:block">
         <Sidebar />
       </div>
       <div className="absolute right-0 top-0 md:hidden">
         <MobileNavBar />
       </div>
-      <div className="col-span-full md:col-span-3 xl:col-span-4">
-        <div className="mx-8 flex flex-col gap-4 pt-4">
-          <p className="text-2xl font-semibold">Dashboard</p>
+      <div className="ml-[275px] flex-1 overflow-auto h-screen">
+        <div className="mx-8 flex flex-col pt-4">
           {children}
         </div>
       </div>
