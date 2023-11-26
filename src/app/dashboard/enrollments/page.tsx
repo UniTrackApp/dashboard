@@ -18,6 +18,7 @@ import { toast } from "~/components/ui/use-toast";
 import AddEnrollmentForm from "./add-enrollment-form";
 import EnrollmentTable from "./enrollment-table";
 
+import { Separator } from "~/components/ui/separator";
 import { api } from "~/utils/api";
 
 export default function Enrollments() {
@@ -87,6 +88,15 @@ export default function Enrollments() {
     <div className="flex flex-col justify-center">
       {/* Card - Contains table and button to add new students */}
       <div>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Enrollments</h1>
+          <p className="mt-1 text-muted-foreground">
+            Manage student enrollments here. Only students enrolled in a module
+            will be able to have attendance records created for them.
+          </p>
+          <Separator className="my-6" />
+        </div>
+
         <Card>
           {/* Card Title - displays table name + item counts */}
           <Flex justifyContent="between">

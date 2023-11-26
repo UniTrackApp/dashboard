@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
+import { Separator } from "~/components/ui/separator";
 import { toast } from "~/components/ui/use-toast";
 
 import { api } from "~/utils/api";
@@ -84,6 +85,17 @@ export default function Records() {
 
   return (
     <div className="flex flex-col justify-center">
+      <div>
+        <h1 className="text-2xl font-bold text-foreground">
+          Attendance Records
+        </h1>
+        <p className="mt-1 text-muted-foreground">
+          Manage attendance records for your students here. Including adding new
+          records, and deleting existing ones.
+        </p>
+        <Separator className="my-6" />
+      </div>
+
       {/* Card - Contains table and button to add new students */}
       <div>
         <Card>

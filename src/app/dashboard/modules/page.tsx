@@ -16,6 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
+import { Separator } from "~/components/ui/separator";
 import { toast } from "~/components/ui/use-toast";
 import AddModuleForm from "./add-module-form";
 
@@ -82,6 +83,14 @@ export default function Modules() {
 
   return (
     <>
+      <div>
+        <h1 className="text-2xl font-bold text-foreground">Modules</h1>
+        <p className="mt-1 text-base text-muted-foreground">
+          Manage all modules here. A module can have multiple lectures.
+        </p>
+        <Separator className="my-6" />
+      </div>
+
       {/* Card - Contains table and button to add new modules */}
       <Card>
         {/* Card Title - displays table name + item counts */}
