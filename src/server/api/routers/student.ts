@@ -34,9 +34,20 @@ export const studentRouter = createTRPCRouter({
     return ctx.db.student.findMany();
   }),
 
-  // GET: Gets a specific student entry by its ID (primary key)
+  // GET: Gets a specific student entry by their ID (primary key)
   getStudentById: protectedProcedure
-    .input(z.string().min(1).max(8))
+    .input(z.string().min(1))
+    .query(async (props) => {
+      return props.ctx.db.student.findFirst({
+        where: {
+          studentId: props.input,
+        },
+      });
+    }),
+
+  // GET: Gets a specific student entry by their card ID
+  getStudentByCardId: protectedProcedure
+    .input(z.string().min(1))
     .query(async (props) => {
       return props.ctx.db.student.findFirst({
         where: {
