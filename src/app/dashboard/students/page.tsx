@@ -1,12 +1,26 @@
 "use client";
 
+import {
+  ExternalLink,
+  Loader2,
+  MoreHorizontal,
+  Pencil,
+  RefreshCcw,
+  Trash2,
+  UserPlus2,
+} from "lucide-react";
 import { useState } from "react";
-import { Button, buttonVariants } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-
+import { useToast } from "~/components/ui/use-toast";
 import { api } from "~/utils/api";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Badge,
   Card,
@@ -19,7 +33,8 @@ import {
   Text,
   Title,
 } from "@tremor/react";
-import { Loader2, Pencil, RefreshCcw, Trash2, UserPlus2 } from "lucide-react";
+import Link from "next/link";
+import { Button, buttonVariants } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -28,7 +43,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { useToast } from "~/components/ui/use-toast";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { Separator } from "~/components/ui/separator";
 
 type StudentInfo = {
   firstName: string;
@@ -94,6 +111,15 @@ export default function Students() {
 
   return (
     <>
+      <div>
+        <h1 className="text-2xl font-bold text-foreground">Students</h1>
+        <p className="mt-1 text-muted-foreground">
+          Manage your student data here. Only students enrolled in a module will
+          be able to have attendance records.
+        </p>
+        <Separator className="my-6" />
+      </div>
+
       {/* Card - Contains table and button to add new students */}
       <Card>
         {/* Card Title - displays table name + item counts */}
@@ -212,58 +238,80 @@ export default function Students() {
         {/* Table - to view all students data */}
         <Table className="mt-5">
           <TableHead>
-            <TableRow>
+            <TableRow className="[&>*]:text-muted-foreground">
               <TableHeaderCell>Student ID</TableHeaderCell>
               <TableHeaderCell>Student Card ID</TableHeaderCell>
               <TableHeaderCell>First Name</TableHeaderCell>
               <TableHeaderCell>Last Name</TableHeaderCell>
-              <TableHeaderCell>Actions</TableHeaderCell>
+              <TableHeaderCell></TableHeaderCell>
             </TableRow>
           </TableHead>
 
           {/* Table Body - renders dynamic data from our tRPC endpoint we fetched in beginning */}
           <TableBody>
             {allStudentsInfo?.map((student) => (
-              <TableRow key={student.studentId}>
+              <TableRow
+                key={student.studentId}
+                className="[&>*]:text-foreground"
+              >
                 <TableCell>{student.studentId}</TableCell>
-                <TableCell>
-                  <Text>{student.studentCardId}</Text>
-                </TableCell>
-                <TableCell>
-                  <Text>{student.firstName}</Text>
-                </TableCell>
-                <TableCell>
-                  <Text>{student.lastName}</Text>
-                </TableCell>
+                <TableCell>{student.studentCardId}</TableCell>
+                <TableCell>{student.firstName}</TableCell>
+                <TableCell>{student.lastName}</TableCell>
                 <TableCell className="flex gap-2">
-                  <Button
-                    size={"icon"}
-                    variant={"default"}
-                    className="h-6 w-6 bg-neutral-500"
-                    onClick={() => alert("Not implemented yet")}
-                  >
-                    <Pencil size={14} />
-                  </Button>
-                  <Button
-                    size={"icon"}
-                    variant={"destructive"}
-                    className="h-6 w-6"
-                    disabled={isBeingDeleted === student.studentId}
-                    onClick={() => {
-                      deleteStudentById({
-                        studentId: student.studentId,
-                        firstName: student.firstName,
-                      });
-                      setIsBeingDeleted(student.studentId);
-                    }}
-                  >
-                    {isBeingDeleted === student.studentId && (
-                      <Loader2 className="animate-spin" size={14} />
-                    )}
-                    {isBeingDeleted !== student.studentId && (
-                      <Trash2 size={14} />
-                    )}
-                  </Button>
+                  {/* Dropdown Menu - contains actions for each student */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <Button
+                        size={"icon"}
+                        variant={"ghost"}
+                        className="h-8 w-8"
+                      >
+                        <MoreHorizontal className="h-5 w-5" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <Link
+                          href={`/dashboard/students/${student.studentId}`}
+                          className="flex"
+                        >
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          View info
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => alert("Not implemented yet")}
+                      >
+                        <Pencil className="mr-2 h-4 w-4" />
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        className="text-destructive"
+                        onClick={() => {
+                          deleteStudentById({
+                            studentId: student.studentId,
+                            firstName: student.firstName,
+                          });
+                          setIsBeingDeleted(student.studentId);
+                        }}
+                      >
+                        {isBeingDeleted === student.studentId && (
+                          <Loader2
+                            className="mr-2 h-4 w-4 animate-spin"
+                            size={14}
+                          />
+                        )}
+                        {isBeingDeleted !== student.studentId && (
+                          <Trash2 className="mr-2 h-4 w-4" />
+                        )}
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </TableCell>
               </TableRow>
             ))}
