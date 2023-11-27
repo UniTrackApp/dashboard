@@ -46,10 +46,18 @@ export const lectureRouter = createTRPCRouter({
   createNewLecture: protectedProcedure
     .input(
       z.object({
-        lectureId: z.string(),
+        lectureId: z
+          .string()
+          .min(1, "Required field")
+          .max(20, "Must be 20 characters or less")
+          .startsWith("COMP", `Lecture ID must start with "COMP"`),
+        moduleId: z
+          .string()
+          .min(1, "Required field")
+          .max(10, "Must be 15 characters or less")
+          .startsWith("COMP", `Module ID must start with "COMP"`),
         startTime: z.date(),
         endTime: z.date(),
-        moduleId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -74,7 +82,11 @@ export const lectureRouter = createTRPCRouter({
   deleteLectureRecordById: protectedProcedure
     .input(
       z.object({
-        lectureId: z.string(),
+        lectureId: z
+          .string()
+          .min(1, "Required field")
+          .max(20, "Must be 20 characters or less")
+          .startsWith("COMP", `Lecture ID must start with "COMP"`),
       }),
     )
     .mutation(async ({ ctx, input }) => {

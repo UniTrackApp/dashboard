@@ -31,12 +31,12 @@ import {
 const FormSchema = z.object({
   lectureId: z
     .string()
-    .min(1, "Must be at least 1 character")
+    .min(1, "Required field")
     .max(20, "Must be 20 characters or less")
     .startsWith("COMP", `Lecture ID must start with "COMP"`),
   moduleId: z
     .string()
-    .min(1, "Must be at least 1 character")
+    .min(1, "Required field")
     .max(10, "Must be 15 characters or less")
     .startsWith("COMP", `Module ID must start with "COMP"`),
   startTime: z.date(),

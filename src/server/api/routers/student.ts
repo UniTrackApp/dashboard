@@ -8,13 +8,24 @@ export const studentRouter = createTRPCRouter({
     // Takes in an input object that is validated using zod
     .input(
       z.object({
-        firstName: z.string().min(1),
-        lastName: z.string().min(1),
+        firstName: z
+          .string()
+          .min(1, "Required field")
+          .max(50, "Must be 50 characters or less"),
+        lastName: z
+          .string()
+          .min(1, "Required field")
+          .max(50, "Must be 50 characters or less"),
         studentId: z
           .string()
-          .min(1)
-          .max(8, "Student ID must be 8 characters max"),
-        studentCardId: z.string().min(1),
+          .min(1, "Required field")
+          .max(10, "Must be 10 characters or less")
+          .regex(/^[0-9]+$/, "Must be a number"),
+        studentCardId: z
+          .string()
+          .toUpperCase()
+          .min(1, "Required field")
+          .max(50, "Must be 50 characters or less"),
       }),
     )
     // This mutation function takes in the input object and creates a new entry in the database
@@ -36,7 +47,13 @@ export const studentRouter = createTRPCRouter({
 
   // GET: Gets a specific student entry by their ID (primary key)
   getStudentById: protectedProcedure
-    .input(z.string().min(1))
+    .input(
+      z
+        .string()
+        .min(1, "Required field")
+        .max(10, "Must be 10 characters or less")
+        .regex(/^[0-9]+$/, "Must be a number"),
+    )
     .query(async (props) => {
       return props.ctx.prisma.student.findFirst({
         where: {
@@ -47,7 +64,13 @@ export const studentRouter = createTRPCRouter({
 
   // GET: Gets a specific student entry by their card ID
   getStudentByCardId: protectedProcedure
-    .input(z.string().min(1))
+    .input(
+      z
+        .string()
+        .min(1, "Required field")
+        .max(10, "Must be 10 characters or less")
+        .regex(/^[0-9]+$/, "Must be a number"),
+    )
     .query(async (props) => {
       return props.ctx.prisma.student.findFirst({
         where: {
@@ -75,7 +98,11 @@ export const studentRouter = createTRPCRouter({
     // Takes in an input object that is validated using zod
     .input(
       z.object({
-        studentId: z.string().min(1),
+        studentId: z
+          .string()
+          .min(1, "Required field")
+          .max(10, "Must be 10 characters or less")
+          .regex(/^[0-9]+$/, "Must be a number"),
       }),
     )
     // This mutation function takes in the input object and deletes the entry in the database

@@ -32,6 +32,7 @@ const FormSchema = z.object({
     .regex(/^[0-9]+$/, "Must be a number"),
   studentCardId: z
     .string()
+    .toUpperCase()
     .min(1, "Required field")
     .max(50, "Must be 50 characters or less"),
 });

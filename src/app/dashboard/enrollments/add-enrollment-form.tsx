@@ -35,8 +35,16 @@ import { cn } from "~/lib/utils";
 
 // Schema for form validation (using Zod)
 const FormSchema = z.object({
-  studentId: z.string(),
-  moduleId: z.string(),
+  studentId: z
+    .string()
+    .min(1, "Required field")
+    .max(10, "Must be 10 characters or less")
+    .regex(/^[0-9]+$/, "Must be a number"),
+  moduleId: z
+    .string()
+    .min(1, "Required field")
+    .max(10, "Must be 15 characters or less")
+    .startsWith("COMP", `Module ID must start with "COMP"`),
 });
 
 export default function AddEnrollmentForm({

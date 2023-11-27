@@ -23,10 +23,10 @@ import { Input } from "~/components/ui/input";
 const FormSchema = z.object({
   moduleId: z
     .string()
-    .min(1, "Must be at least 1 character")
+    .min(1, "Required field")
     .max(10, "Must be 15 characters or less")
     .startsWith("COMP", `Module ID must start with "COMP"`),
-  moduleName: z.string().min(1),
+  moduleName: z.string().min(1, "Required field"),
   moduleDesc: z
     .string()
     .max(60, "Description must be less than 60 characters")

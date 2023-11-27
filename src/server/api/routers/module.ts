@@ -10,10 +10,14 @@ export const moduleRouter = createTRPCRouter({
       z.object({
         moduleId: z
           .string()
-          .min(1)
+          .min(1, "Required field")
+          .max(10, "Must be 15 characters or less")
           .startsWith("COMP", `Module ID must start with "COMP"`),
         moduleName: z.string().min(1),
-        moduleDesc: z.string().min(1).nullish(), // nullish means it can be null or undefined
+        moduleDesc: z
+          .string()
+          .max(60, "Description must be less than 60 characters")
+          .nullish(), // nullish means it can be null or undefined
       }),
     )
     // This mutation function takes in the input object and creates a new entry in the database
@@ -42,7 +46,11 @@ export const moduleRouter = createTRPCRouter({
     // Takes in an input object that is validated using zod
     .input(
       z.object({
-        moduleId: z.string().min(1),
+        moduleId: z
+          .string()
+          .min(1, "Required field")
+          .max(10, "Must be 15 characters or less")
+          .startsWith("COMP", `Module ID must start with "COMP"`),
       }),
     )
     // This mutation function takes in the input object and deletes the entry in the database

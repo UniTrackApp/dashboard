@@ -6,8 +6,16 @@ export const attendanceRecordRouter = createTRPCRouter({
   createAttendanceRecord: protectedProcedure
     .input(
       z.object({
-        studentId: z.string(),
-        lectureId: z.string(),
+        studentId: z
+          .string()
+          .min(1, "Required field")
+          .max(10, "Must be 10 characters or less")
+          .regex(/^[0-9]+$/, "Must be a number"),
+        lectureId: z
+          .string()
+          .min(1, "Required field")
+          .max(20, "Must be 20 characters or less")
+          .startsWith("COMP", `Lecture ID must start with "COMP"`),
         status: z.union([
           z.literal(AttendanceStatus.PRESENT),
           z.literal(AttendanceStatus.LATE),
@@ -73,7 +81,7 @@ export const attendanceRecordRouter = createTRPCRouter({
   deleteAttendanceRecordById: protectedProcedure
     .input(
       z.object({
-        attendanceRecordId: z.string(),
+        attendanceRecordId: z.string().cuid(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
