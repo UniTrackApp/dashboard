@@ -24,7 +24,7 @@ export const postRouter = createTRPCRouter({
       // simulate a slow db call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      return ctx.db.post.create({
+      return ctx.prisma.post.create({
         data: {
           name: input.name,
           createdBy: { connect: { id: ctx.session.user.id } },

@@ -1,4 +1,4 @@
-import { db } from "~/server/db";
+import { prisma } from "~/server/prisma";
 
 import { Card, Metric, Text } from "@tremor/react";
 import { BookCopy, Clock, CopyCheck, Users } from "lucide-react";
@@ -8,10 +8,10 @@ import { getFirstName } from "~/lib/utils";
 import { authOptions } from "~/server/auth";
 
 export default async function Dashboard() {
-  const studentCount = await db.student.count();
-  const lectureCount = await db.lecture.count();
-  const moduleCount = await db.module.count();
-  const attendanceRecordCount = await db.attendanceRecord.count();
+  const studentCount = await prisma.student.count();
+  const lectureCount = await prisma.lecture.count();
+  const moduleCount = await prisma.module.count();
+  const attendanceRecordCount = await prisma.attendanceRecord.count();
   const user = await getServerSession(authOptions);
 
   return (

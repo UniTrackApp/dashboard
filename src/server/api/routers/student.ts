@@ -19,7 +19,7 @@ export const studentRouter = createTRPCRouter({
     )
     // This mutation function takes in the input object and creates a new entry in the database
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.student.create({
+      return ctx.prisma.student.create({
         data: {
           firstName: input.firstName,
           lastName: input.lastName,
@@ -31,14 +31,14 @@ export const studentRouter = createTRPCRouter({
 
   // GET: Gets all rows and columns from the student table
   getAllStudents: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.student.findMany();
+    return ctx.prisma.student.findMany();
   }),
 
   // GET: Gets a specific student entry by their ID (primary key)
   getStudentById: protectedProcedure
     .input(z.string().min(1))
     .query(async (props) => {
-      return props.ctx.db.student.findFirst({
+      return props.ctx.prisma.student.findFirst({
         where: {
           studentId: props.input,
         },
@@ -49,7 +49,7 @@ export const studentRouter = createTRPCRouter({
   getStudentByCardId: protectedProcedure
     .input(z.string().min(1))
     .query(async (props) => {
-      return props.ctx.db.student.findFirst({
+      return props.ctx.prisma.student.findFirst({
         where: {
           studentCardId: props.input,
         },
@@ -58,12 +58,12 @@ export const studentRouter = createTRPCRouter({
 
   // GET: Gets the number of student entries
   getStudentCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.student.count();
+    return await ctx.prisma.student.count();
   }),
 
   // GET: Gets all student IDs from the student table
   getAllStudentIds: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.student.findMany({
+    return await ctx.prisma.student.findMany({
       select: {
         studentId: true,
       },
@@ -80,7 +80,7 @@ export const studentRouter = createTRPCRouter({
     )
     // This mutation function takes in the input object and deletes the entry in the database
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.student.delete({
+      return ctx.prisma.student.delete({
         where: {
           studentId: input.studentId,
         },

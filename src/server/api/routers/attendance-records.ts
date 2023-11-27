@@ -16,7 +16,7 @@ export const attendanceRecordRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.attendanceRecord.create({
+      return await ctx.prisma.attendanceRecord.create({
         data: {
           studentId: input.studentId,
           lectureId: input.lectureId,
@@ -26,15 +26,15 @@ export const attendanceRecordRouter = createTRPCRouter({
     }),
 
   getAttendanceRecordCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.attendanceRecord.count();
+    return await ctx.prisma.attendanceRecord.count();
   }),
 
   getAttendanceRecords: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.attendanceRecord.findMany();
+    return await ctx.prisma.attendanceRecord.findMany();
   }),
 
   getAttendanceRecordsForTable: protectedProcedure.query(async ({ ctx }) => {
-    const attendanceRecords = await ctx.db.attendanceRecord.findMany({
+    const attendanceRecords = await ctx.prisma.attendanceRecord.findMany({
       select: {
         attendanceRecordId: true,
         studentId: true,
@@ -77,7 +77,7 @@ export const attendanceRecordRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.attendanceRecord.delete({
+      return await ctx.prisma.attendanceRecord.delete({
         where: {
           attendanceRecordId: input.attendanceRecordId,
         },

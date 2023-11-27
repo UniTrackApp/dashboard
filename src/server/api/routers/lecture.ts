@@ -3,11 +3,11 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const lectureRouter = createTRPCRouter({
   getAllLectures: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.lecture.findMany();
+    return await ctx.prisma.lecture.findMany();
   }),
 
   getAllLecturesWithModuleNames: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.lecture.findMany({
+    return await ctx.prisma.lecture.findMany({
       include: {
         Module: {
           select: {
@@ -19,11 +19,11 @@ export const lectureRouter = createTRPCRouter({
   }),
 
   getLectureCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.lecture.count();
+    return await ctx.prisma.lecture.count();
   }),
 
   getAllLectureIds: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.lecture.findMany({
+    return await ctx.prisma.lecture.findMany({
       select: {
         lectureId: true,
       },
@@ -31,7 +31,7 @@ export const lectureRouter = createTRPCRouter({
   }),
 
   getLectureIdsWithModuleNames: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.lecture.findMany({
+    return await ctx.prisma.lecture.findMany({
       select: {
         lectureId: true,
         Module: {
@@ -54,7 +54,7 @@ export const lectureRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const newLectureRecord = await ctx.db.lecture.create({
+        const newLectureRecord = await ctx.prisma.lecture.create({
           data: {
             lectureId: input.lectureId,
             startTime: input.startTime,
@@ -78,7 +78,7 @@ export const lectureRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.lecture.delete({
+      return await ctx.prisma.lecture.delete({
         where: {
           lectureId: input.lectureId,
         },

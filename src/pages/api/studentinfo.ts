@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { db } from "~/server/db";
+import { prisma } from "~/server/prisma";
 
 export const handler = async (
   request: NextApiRequest,
@@ -24,7 +24,7 @@ export const handler = async (
 
     // Checking if the student is in database
     try {
-      const result = await db.student.findUnique({
+      const result = await prisma.student.findUnique({
         where: {
           // Sanitizing the UID
           studentCardId: uid.toUpperCase().trim(),

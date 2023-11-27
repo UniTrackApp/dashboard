@@ -18,7 +18,7 @@ export const moduleRouter = createTRPCRouter({
     )
     // This mutation function takes in the input object and creates a new entry in the database
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.module.create({
+      return await ctx.prisma.module.create({
         data: {
           moduleId: input.moduleId,
           moduleName: input.moduleName,
@@ -29,12 +29,12 @@ export const moduleRouter = createTRPCRouter({
 
   // GET: Gets only the number of module entries
   getModuleCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.module.count();
+    return await ctx.prisma.module.count();
   }),
 
   // GET: Gets all rows and columns from the module table
   getAllModules: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.module.findMany();
+    return await ctx.prisma.module.findMany();
   }),
 
   // DELETE: Deletes a module entry by its ID (primary key)
@@ -47,7 +47,7 @@ export const moduleRouter = createTRPCRouter({
     )
     // This mutation function takes in the input object and deletes the entry in the database
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.module.delete({
+      return await ctx.prisma.module.delete({
         where: {
           moduleId: input.moduleId,
         },

@@ -10,7 +10,7 @@ export const enrollmentRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.enrollment.create({
+      return await ctx.prisma.enrollment.create({
         data: {
           studentId: input.studentId,
           moduleId: input.moduleId,
@@ -19,11 +19,11 @@ export const enrollmentRouter = createTRPCRouter({
     }),
 
   getAllEnrollments: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.enrollment.findMany();
+    return await ctx.prisma.enrollment.findMany();
   }),
 
   getEnrollmentCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.enrollment.count();
+    return await ctx.prisma.enrollment.count();
   }),
 
   deleteEnrollmentById: protectedProcedure
@@ -33,7 +33,7 @@ export const enrollmentRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.enrollment.delete({
+      return await ctx.prisma.enrollment.delete({
         where: {
           enrollmentId: input.enrollmentId,
         },
