@@ -15,10 +15,13 @@ datasource db {
 }
 
 model Student {
-    studentId     String  @id @default(cuid())
-    studentCardId String  @unique
+    studentId     String @id @default(cuid())
+    studentCardId String @unique
     firstName     String
     lastName      String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     // Prisma relations
     AttendanceRecords AttendanceRecord[]
@@ -26,9 +29,12 @@ model Student {
 }
 
 model Module {
-    moduleId   String  @id @default(cuid())
+    moduleId   String  @id
     moduleName String
     moduleDesc String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     // Prisma relations
     Lectures    Lecture[]
@@ -36,9 +42,12 @@ model Module {
 }
 
 model Lecture {
-    lectureId String   @id @default(cuid())
+    lectureId String   @id
     startTime DateTime
     endTime   DateTime
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     // Foreign keys
     moduleId String
@@ -53,6 +62,9 @@ model AttendanceRecord {
     status             Status
     timestamp          DateTime @default(now())
 
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
     // Foreign keys
     studentId String
     lectureId String
@@ -64,6 +76,9 @@ model AttendanceRecord {
 
 model Enrollment {
     enrollmentId String @id @default(cuid())
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     // Foreign keys
     studentId String
@@ -115,9 +130,18 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
+    role          Role      @default(GUEST)
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+}
+
+enum Role {
+    SUPERADMIN
+    ADMIN
+    TEACHER
+    STUDENT
+    GUEST
 }
 
 model VerificationToken {

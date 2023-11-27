@@ -21,9 +21,16 @@ import { Input } from "~/components/ui/input";
 
 // Schema for form validation (using Zod)
 const FormSchema = z.object({
-  moduleId: z.string().startsWith("COMP", `Module ID must start with "COMP"`),
-  moduleName: z.string().min(1),
-  moduleDesc: z.string().min(1).optional(), // Optional field
+  moduleId: z
+    .string()
+    .min(1, "Required field")
+    .max(10, "Must be 15 characters or less")
+    .startsWith("COMP", `Module ID must start with "COMP"`),
+  moduleName: z.string().min(1, "Required field"),
+  moduleDesc: z
+    .string()
+    .max(60, "Description must be less than 60 characters")
+    .optional(), // Optional field
 });
 
 export default function AddModuleForm({

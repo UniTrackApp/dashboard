@@ -2,6 +2,9 @@
   "name": "server",
   "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "scripts": {
     "build": "next build",
     "db:push": "prisma db push",
@@ -22,6 +25,7 @@
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
     "@t3-oss/env-nextjs": "^0.7.0",
@@ -35,16 +39,21 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
+    "date-fns": "^2.30.0",
     "lucide-react": "^0.292.0",
     "next": "^14.0.3",
     "next-auth": "^4.24.5",
     "next-themes": "^0.2.1",
     "react": "18.2.0",
+    "react-aria": "^3.30.0",
+    "react-day-picker": "^8.9.1",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.48.2",
+    "react-stately": "^3.28.0",
     "superjson": "^1.13.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
+    "ts-node": "^10.9.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {

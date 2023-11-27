@@ -1,4 +1,6 @@
-import { type $Enums } from "@prisma/client";
+import { Status } from "@prisma/client";
+import Link from "next/link";
+
 import {
   Badge,
   Table,
@@ -8,15 +10,32 @@ import {
   TableHeaderCell,
   TableRow,
 } from "@tremor/react";
-import { Check, CheckCheck, Loader2, Pencil, Trash2, X } from "lucide-react";
+import { format } from "date-fns";
+import {
+  Check,
+  CheckCheck,
+  ExternalLink,
+  Loader2,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+  X,
+} from "lucide-react";
 import { Button } from "~/components/ui/button";
-import { AttendanceStatus } from "~/utils/constants";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 
 type AttendanceRecord = {
   attendanceRecordId: string;
   studentId: string;
   lectureId: string;
-  status: $Enums.Status;
+  status: Status;
   timestamp: Date;
   studentFullName: string;
   moduleName: string;
@@ -38,104 +57,101 @@ export default function RecordTable({
       {/* Table Header - header values for columns */}
       <TableHead>
         <TableRow>
-          <TableHeaderCell className="text-foreground dark:text-foreground">
-            Attendance Record ID
-          </TableHeaderCell>
-          <TableHeaderCell className="text-foreground dark:text-foreground">
-            Student ID
-          </TableHeaderCell>
-          <TableHeaderCell className="text-foreground dark:text-foreground">
-            Student Name
-          </TableHeaderCell>
-          <TableHeaderCell className="text-foreground dark:text-foreground">
-            Lecture ID
-          </TableHeaderCell>
-          <TableHeaderCell className="text-foreground dark:text-foreground">
-            Module Name
-          </TableHeaderCell>
-          <TableHeaderCell className="text-foreground dark:text-foreground">
-            Status
-          </TableHeaderCell>
-          <TableHeaderCell className="text-foreground dark:text-foreground">
-            Timestamp
-          </TableHeaderCell>
-          <TableHeaderCell className="text-foreground dark:text-foreground">
-            Actions
-          </TableHeaderCell>
+          <TableHeaderCell>Attendance Record ID</TableHeaderCell>
+          <TableHeaderCell>Student ID</TableHeaderCell>
+          <TableHeaderCell>Student Name</TableHeaderCell>
+          <TableHeaderCell>Lecture ID</TableHeaderCell>
+          <TableHeaderCell>Module Name</TableHeaderCell>
+          <TableHeaderCell>Status</TableHeaderCell>
+          <TableHeaderCell>Timestamp</TableHeaderCell>
+          <TableHeaderCell></TableHeaderCell>
         </TableRow>
       </TableHead>
 
       {/* Table Body - contains all dynamic data */}
       <TableBody>
         {allAttendanceRecords?.map((record) => (
-          <TableRow key={record.attendanceRecordId}>
-            <TableCell className="text-muted-foreground dark:text-muted-foreground">
-              {record.attendanceRecordId}
-            </TableCell>
-            <TableCell className="text-muted-foreground dark:text-muted-foreground">
-              {record.studentId}
-            </TableCell>
-            <TableCell className="text-muted-foreground dark:text-muted-foreground">
-              {record.studentFullName}
-            </TableCell>
-            <TableCell className="text-muted-foreground dark:text-muted-foreground">
-              {record.lectureId}
-            </TableCell>
-            <TableCell className="text-muted-foreground dark:text-muted-foreground">
+          <TableRow
+            key={record.attendanceRecordId}
+            className="[&>*]:text-foreground"
+          >
+            <TableCell className="">{record.attendanceRecordId}</TableCell>
+            <TableCell className="">{record.studentId}</TableCell>
+            <TableCell className="">{record.studentFullName}</TableCell>
+            <TableCell className="">{record.lectureId}</TableCell>
+            <TableCell className="">
               <Badge color="neutral" size="xs">
                 {record.moduleName}
               </Badge>
             </TableCell>
-            <TableCell className="text-muted-foreground dark:text-muted-foreground">
-              {record.status === AttendanceStatus.PRESENT && (
+            <TableCell className="">
+              {record.status === Status.PRESENT && (
                 <Badge color="green" size="sm" icon={CheckCheck}>
                   {record.status.toUpperCase()}
                 </Badge>
               )}
-              {record.status === AttendanceStatus.LATE && (
+              {record.status === Status.LATE && (
                 <Badge color="amber" size="sm" icon={Check}>
                   {record.status.toUpperCase()}
                 </Badge>
               )}
-              {record.status === AttendanceStatus.ABSENT && (
+              {record.status === Status.ABSENT && (
                 <Badge color="red" size="sm" icon={X}>
                   {record.status.toUpperCase()}
                 </Badge>
               )}
             </TableCell>
-            <TableCell className="text-muted-foreground dark:text-muted-foreground">
-              {record.timestamp.toUTCString()}
+            <TableCell className="">
+              {format(record.timestamp, "dd-MMM-yyyy HH:mm:ss")}
             </TableCell>
 
             {/* Buttons to update or delete data */}
             <TableCell className="flex gap-2">
-              <Button
-                size={"icon"}
-                variant={"default"}
-                className="h-6 w-6 bg-neutral-500 dark:bg-neutral-600 dark:text-white"
-                onClick={() => alert("Not implemented yet")}
-              >
-                <Pencil size={14} />
-              </Button>
-              <Button
-                size={"icon"}
-                variant={"destructive"}
-                className="h-6 w-6"
-                disabled={idBeingDeleted === record.attendanceRecordId}
-                onClick={() => {
-                  deleteAttendanceRecordById({
-                    attendanceRecordId: record.attendanceRecordId,
-                  });
-                  setIdBeingDeleted(record.attendanceRecordId);
-                }}
-              >
-                {idBeingDeleted === record.attendanceRecordId && (
-                  <Loader2 className="animate-spin" size={14} />
-                )}
-                {idBeingDeleted !== record.attendanceRecordId && (
-                  <Trash2 size={14} />
-                )}
-              </Button>
+              {/* Dropdown Menu - contains actions for each student */}
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button size={"icon"} variant={"ghost"} className="h-8 w-8">
+                    <MoreHorizontal className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Link href="#" className="flex">
+                      <ExternalLink className="mr-2 h-4 w-4" />
+                      View info
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => alert("Not implemented yet")}
+                  >
+                    <Pencil className="mr-2 h-4 w-4" />
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-destructive"
+                    onClick={() => {
+                      deleteAttendanceRecordById({
+                        attendanceRecordId: record.attendanceRecordId,
+                      });
+                      setIdBeingDeleted(record.attendanceRecordId);
+                    }}
+                  >
+                    {idBeingDeleted === record.attendanceRecordId && (
+                      <Loader2
+                        className="mr-2 h-4 w-4 animate-spin"
+                        size={14}
+                      />
+                    )}
+                    {idBeingDeleted !== record.attendanceRecordId && (
+                      <Trash2 className="mr-2 h-4 w-4" />
+                    )}
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </TableCell>
           </TableRow>
         ))}

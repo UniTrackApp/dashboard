@@ -8,7 +8,7 @@ import {
 import GitHubProvider from "next-auth/providers/github";
 
 import { env } from "~/env.mjs";
-import { db } from "~/server/db";
+import { prisma } from "~/server/prisma";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -37,7 +37,7 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(db),
+  adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
   },
@@ -65,7 +65,7 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async jwt({ token, user }) {
-      const dbUser = await db.user.findFirst({
+      const dbUser = await prisma.user.findFirst({
         where: {
           email: token.email,
         },

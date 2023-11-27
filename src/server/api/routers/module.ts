@@ -10,15 +10,19 @@ export const moduleRouter = createTRPCRouter({
       z.object({
         moduleId: z
           .string()
-          .min(1)
+          .min(1, "Required field")
+          .max(10, "Must be 15 characters or less")
           .startsWith("COMP", `Module ID must start with "COMP"`),
         moduleName: z.string().min(1),
-        moduleDesc: z.string().min(1).nullish(), // nullish means it can be null or undefined
+        moduleDesc: z
+          .string()
+          .max(60, "Description must be less than 60 characters")
+          .nullish(), // nullish means it can be null or undefined
       }),
     )
     // This mutation function takes in the input object and creates a new entry in the database
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.module.create({
+      return await ctx.prisma.module.create({
         data: {
           moduleId: input.moduleId,
           moduleName: input.moduleName,
@@ -29,12 +33,12 @@ export const moduleRouter = createTRPCRouter({
 
   // GET: Gets only the number of module entries
   getModuleCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.module.count();
+    return await ctx.prisma.module.count();
   }),
 
   // GET: Gets all rows and columns from the module table
   getAllModules: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.module.findMany();
+    return await ctx.prisma.module.findMany();
   }),
 
   // DELETE: Deletes a module entry by its ID (primary key)
@@ -42,24 +46,19 @@ export const moduleRouter = createTRPCRouter({
     // Takes in an input object that is validated using zod
     .input(
       z.object({
-        moduleId: z.string().min(1),
+        moduleId: z
+          .string()
+          .min(1, "Required field")
+          .max(10, "Must be 15 characters or less")
+          .startsWith("COMP", `Module ID must start with "COMP"`),
       }),
     )
     // This mutation function takes in the input object and deletes the entry in the database
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.module.delete({
+      return await ctx.prisma.module.delete({
         where: {
           moduleId: input.moduleId,
         },
       });
     }),
 });
-
-// TODO: Remove or restrucure these comments later
-// This is a tRPC router. A router is a collection of various tRPC endpoints or 'procedures' as they call it.
-// We could technically have all our tRPC endpoints/procedures in a single router, but we use multiple routers for seperation of concerns.
-// So one router to manage API calls to Module table while another router manages the API calls to Attendance Record table
-// A procedure can be used to do 2 main things, either query some data or mutate some data somewhere
-
-// This here is a procedure used to query the database and return some data
-// The frontend can 'call' this API endpoint/procedure to fetch this data from backend

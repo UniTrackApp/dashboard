@@ -1,22 +1,30 @@
+import { Status } from "@prisma/client";
 import { z } from "zod";
-import { AttendanceStatus } from "~/utils/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const attendanceRecordRouter = createTRPCRouter({
   createAttendanceRecord: protectedProcedure
     .input(
       z.object({
-        studentId: z.string(),
-        lectureId: z.string(),
+        studentId: z
+          .string()
+          .min(1, "Required field")
+          .max(10, "Must be 10 characters or less")
+          .regex(/^[0-9]+$/, "Must be a number"),
+        lectureId: z
+          .string()
+          .min(1, "Required field")
+          .max(20, "Must be 20 characters or less")
+          .startsWith("COMP", `Lecture ID must start with "COMP"`),
         status: z.union([
-          z.literal(AttendanceStatus.PRESENT),
-          z.literal(AttendanceStatus.LATE),
-          z.literal(AttendanceStatus.ABSENT),
+          z.literal(Status.PRESENT),
+          z.literal(Status.LATE),
+          z.literal(Status.ABSENT),
         ]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.attendanceRecord.create({
+      return await ctx.prisma.attendanceRecord.create({
         data: {
           studentId: input.studentId,
           lectureId: input.lectureId,
@@ -26,15 +34,15 @@ export const attendanceRecordRouter = createTRPCRouter({
     }),
 
   getAttendanceRecordCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.attendanceRecord.count();
+    return await ctx.prisma.attendanceRecord.count();
   }),
 
   getAttendanceRecords: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.attendanceRecord.findMany();
+    return await ctx.prisma.attendanceRecord.findMany();
   }),
 
   getAttendanceRecordsForTable: protectedProcedure.query(async ({ ctx }) => {
-    const attendanceRecords = await ctx.db.attendanceRecord.findMany({
+    const attendanceRecords = await ctx.prisma.attendanceRecord.findMany({
       select: {
         attendanceRecordId: true,
         studentId: true,
@@ -73,11 +81,11 @@ export const attendanceRecordRouter = createTRPCRouter({
   deleteAttendanceRecordById: protectedProcedure
     .input(
       z.object({
-        attendanceRecordId: z.string(),
+        attendanceRecordId: z.string().cuid(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.attendanceRecord.delete({
+      return await ctx.prisma.attendanceRecord.delete({
         where: {
           attendanceRecordId: input.attendanceRecordId,
         },

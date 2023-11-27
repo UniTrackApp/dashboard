@@ -1,17 +1,32 @@
-import { db } from "~/server/db";
+import { prisma } from "~/server/prisma";
 
 import { Card, Metric, Text } from "@tremor/react";
 import { BookCopy, Clock, CopyCheck, Users } from "lucide-react";
+import { getServerSession } from "next-auth";
+import { Separator } from "~/components/ui/separator";
+import { getFirstName } from "~/lib/utils";
+import { authOptions } from "~/server/auth";
 
 export default async function Dashboard() {
-  const studentCount = await db.student.count();
-  const lectureCount = await db.lecture.count();
-  const moduleCount = await db.module.count();
-  const attendanceRecordCount = await db.attendanceRecord.count();
+  const studentCount = await prisma.student.count();
+  const lectureCount = await prisma.lecture.count();
+  const moduleCount = await prisma.module.count();
+  const attendanceRecordCount = await prisma.attendanceRecord.count();
+  const user = await getServerSession(authOptions);
 
   return (
     <div>
-      <p className="text-lg font-medium">Quick Stats</p>
+      <div>
+        <h1 className="text-2xl font-bold text-foreground">
+          👋 Welcome, {getFirstName(user?.user.name)}
+        </h1>
+        <p className="mt-1 text-muted-foreground">
+          This is your dashboard. You can get an overview of all UniTrack data
+          here.
+        </p>
+        <Separator className="my-6" />
+      </div>
+      <p className="text-2xl font-semibold">Quick Stats</p>
       <div className="mt-4 flex flex-1 flex-wrap gap-4 md:flex-nowrap">
         <Card decoration="top" decorationColor="indigo">
           <Text className="mb-2 flex items-center">

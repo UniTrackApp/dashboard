@@ -15,9 +15,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
 import { toast } from "~/components/ui/use-toast";
 
-import { api } from "~/utils/api";
+import { api } from "~/lib/api";
 
 export default function Records() {
   // State - used for button loading spinners during attendance record creation and deletion
@@ -28,12 +30,18 @@ export default function Records() {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   // Fetches all attendance records, and refetches when createNewRecord is called
-  const { data: allAttendanceRecords, refetch: refetchAllAttendanceRecords } =
-    api.attendanceRecord.getAttendanceRecordsForTable.useQuery();
+  const {
+    data: allAttendanceRecords,
+    refetch: refetchAllAttendanceRecords,
+    isLoading: isLoadingAllAttendanceRecords,
+  } = api.attendanceRecord.getAttendanceRecordsForTable.useQuery();
 
   // Fetches attendance record count, and refetches when createNewRecord is called
-  const { data: attendanceRecordCount, refetch: refetchAttendanceRecordCount } =
-    api.attendanceRecord.getAttendanceRecordCount.useQuery();
+  const {
+    data: attendanceRecordCount,
+    refetch: refetchAttendanceRecordCount,
+    isLoading: isLoadingAttendanceRecordCount,
+  } = api.attendanceRecord.getAttendanceRecordCount.useQuery();
 
   // Creates a new attendance record entry
   const { mutate: createAttendanceRecord } =
@@ -84,6 +92,17 @@ export default function Records() {
 
   return (
     <div className="flex flex-col justify-center">
+      <div>
+        <h1 className="text-2xl font-bold text-foreground">
+          Attendance Records
+        </h1>
+        <p className="mt-1 text-muted-foreground">
+          Manage attendance records for your students here. Including adding new
+          records, and deleting existing ones.
+        </p>
+        <Separator className="my-6" />
+      </div>
+
       {/* Card - Contains table and button to add new students */}
       <div>
         <Card>
@@ -91,14 +110,19 @@ export default function Records() {
           <Flex justifyContent="between">
             <Flex justifyContent="start" className="gap-2">
               <Title>Attendance Records</Title>
-              <Badge color="blue">{attendanceRecordCount}</Badge>
+              {isLoadingAttendanceRecordCount && (
+                <Skeleton className="h-[25px] w-[35px] rounded-full" />
+              )}
+              {attendanceRecordCount && (
+                <Badge color="blue">{attendanceRecordCount}</Badge>
+              )}
             </Flex>
 
             {/* Dialog - used to create new Attendance Records */}
             <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
               <DialogTrigger className={buttonVariants({ className: "w-fit" })}>
                 <Plus size={20} className="mr-2" />
-                Add New Record
+                Add Record
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -118,6 +142,12 @@ export default function Records() {
           </Flex>
 
           {/* Table - to display Attendance Records */}
+          {isLoadingAllAttendanceRecords && (
+            <div className="mt-4 flex flex-col gap-4">
+              <Skeleton className="h-[35px] w-full" />
+              <Skeleton className="h-[500px] w-full" />
+            </div>
+          )}
           {allAttendanceRecords && (
             <RecordTable
               allAttendanceRecords={allAttendanceRecords}

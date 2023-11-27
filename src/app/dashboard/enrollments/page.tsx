@@ -16,9 +16,11 @@ import {
 import { toast } from "~/components/ui/use-toast";
 
 import AddEnrollmentForm from "./add-enrollment-form";
-import EnrollmentTable from "./record-table";
+import EnrollmentTable from "./enrollment-table";
 
-import { api } from "~/utils/api";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
+import { api } from "~/lib/api";
 
 export default function Enrollments() {
   // State - used for button loading spinners during attendance record creation and deletion
@@ -29,12 +31,18 @@ export default function Enrollments() {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   // Fetches all enrollments, and refetches when createNewEnrollment is called
-  const { data: allEnrollments, refetch: refetchAllEnrollments } =
-    api.enrollment.getAllEnrollments.useQuery();
+  const {
+    data: allEnrollments,
+    refetch: refetchAllEnrollments,
+    isLoading: isLoadingAllEnrollments,
+  } = api.enrollment.getAllEnrollments.useQuery();
 
   // Fetches enrollment count, and refetches when createNewEnrollment is called
-  const { data: enrollmentCount, refetch: refetchEnrollmentCount } =
-    api.enrollment.getEnrollmentCount.useQuery();
+  const {
+    data: enrollmentCount,
+    refetch: refetchEnrollmentCount,
+    isLoading: isLoadingEnrollmentCount,
+  } = api.enrollment.getEnrollmentCount.useQuery();
 
   // Creates a new enrollment entry
   const { mutate: createEnrollment } =
@@ -87,19 +95,31 @@ export default function Enrollments() {
     <div className="flex flex-col justify-center">
       {/* Card - Contains table and button to add new students */}
       <div>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Enrollments</h1>
+          <p className="mt-1 text-muted-foreground">
+            Manage student enrollments here. Only students enrolled in a module
+            will be able to have attendance records created for them.
+          </p>
+          <Separator className="my-6" />
+        </div>
+
         <Card>
           {/* Card Title - displays table name + item counts */}
           <Flex justifyContent="between">
             <Flex justifyContent="start" className="gap-2">
               <Title>Enrollments</Title>
-              <Badge color="blue">{enrollmentCount}</Badge>
+              {isLoadingEnrollmentCount && (
+                <Skeleton className="h-[25px] w-[35px] rounded-full" />
+              )}
+              {enrollmentCount && <Badge color="blue">{enrollmentCount}</Badge>}
             </Flex>
 
             {/* Dialog - used to create new Attendance Records */}
             <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
               <DialogTrigger className={buttonVariants({ className: "w-fit" })}>
                 <Plus size={20} className="mr-2" />
-                Add New Enrollment
+                Add Enrollment
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -119,6 +139,12 @@ export default function Enrollments() {
           </Flex>
 
           {/* Table - to display Attendance Records */}
+          {isLoadingAllEnrollments && (
+            <div className="mt-4 flex flex-col gap-4">
+              <Skeleton className="h-[35px] w-full" />
+              <Skeleton className="h-[500px] w-full" />
+            </div>
+          )}
           {allEnrollments && (
             <EnrollmentTable
               allEnrollments={allEnrollments}
