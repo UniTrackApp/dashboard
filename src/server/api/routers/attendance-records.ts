@@ -1,5 +1,5 @@
+import { Status } from "@prisma/client";
 import { z } from "zod";
-import { AttendanceStatus } from "~/lib/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const attendanceRecordRouter = createTRPCRouter({
@@ -17,9 +17,9 @@ export const attendanceRecordRouter = createTRPCRouter({
           .max(20, "Must be 20 characters or less")
           .startsWith("COMP", `Lecture ID must start with "COMP"`),
         status: z.union([
-          z.literal(AttendanceStatus.PRESENT),
-          z.literal(AttendanceStatus.LATE),
-          z.literal(AttendanceStatus.ABSENT),
+          z.literal(Status.PRESENT),
+          z.literal(Status.LATE),
+          z.literal(Status.ABSENT),
         ]),
       }),
     )

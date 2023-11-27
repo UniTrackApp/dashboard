@@ -1,4 +1,4 @@
-import type { Status } from "@prisma/client";
+import { Status } from "@prisma/client";
 import Link from "next/link";
 
 import {
@@ -30,7 +30,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { AttendanceStatus } from "~/lib/constants";
 
 type AttendanceRecord = {
   attendanceRecordId: string;
@@ -86,17 +85,17 @@ export default function RecordTable({
               </Badge>
             </TableCell>
             <TableCell className="">
-              {record.status === AttendanceStatus.PRESENT && (
+              {record.status === Status.PRESENT && (
                 <Badge color="green" size="sm" icon={CheckCheck}>
                   {record.status.toUpperCase()}
                 </Badge>
               )}
-              {record.status === AttendanceStatus.LATE && (
+              {record.status === Status.LATE && (
                 <Badge color="amber" size="sm" icon={Check}>
                   {record.status.toUpperCase()}
                 </Badge>
               )}
-              {record.status === AttendanceStatus.ABSENT && (
+              {record.status === Status.ABSENT && (
                 <Badge color="red" size="sm" icon={X}>
                   {record.status.toUpperCase()}
                 </Badge>

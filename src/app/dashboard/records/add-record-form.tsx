@@ -3,6 +3,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Status } from "@prisma/client";
 import { Check, ChevronsUpDown, Loader2, Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -38,7 +39,6 @@ import {
 } from "~/components/ui/select";
 
 import { api } from "~/lib/api";
-import { AttendanceStatus } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 
 // Schema for form validation (using Zod)
@@ -50,9 +50,9 @@ const FormSchema = z.object({
     .max(20, "Must be 20 characters or less")
     .startsWith("COMP", `Lecture ID must start with "COMP"`),
   status: z.union([
-    z.literal(AttendanceStatus.PRESENT),
-    z.literal(AttendanceStatus.LATE),
-    z.literal(AttendanceStatus.ABSENT),
+    z.literal(Status.PRESENT),
+    z.literal(Status.LATE),
+    z.literal(Status.ABSENT),
   ]),
 });
 
@@ -237,14 +237,12 @@ export default function AddAttendanceRecordForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className="w-[300px]">
-                    <SelectItem value={AttendanceStatus.PRESENT}>
-                      {AttendanceStatus.PRESENT}
+                    <SelectItem value={Status.PRESENT}>
+                      {Status.PRESENT}
                     </SelectItem>
-                    <SelectItem value={AttendanceStatus.LATE}>
-                      {AttendanceStatus.LATE}
-                    </SelectItem>
-                    <SelectItem value={AttendanceStatus.ABSENT}>
-                      {AttendanceStatus.ABSENT}
+                    <SelectItem value={Status.LATE}>{Status.LATE}</SelectItem>
+                    <SelectItem value={Status.ABSENT}>
+                      {Status.ABSENT}
                     </SelectItem>
                   </SelectContent>
                 </Select>
