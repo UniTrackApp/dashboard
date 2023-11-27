@@ -20,6 +20,9 @@ model Student {
     firstName     String
     lastName      String
 
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
     // Prisma relations
     AttendanceRecords AttendanceRecord[]
     Enrollments       Enrollment[]
@@ -30,6 +33,9 @@ model Module {
     moduleName String
     moduleDesc String?
 
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
     // Prisma relations
     Lectures    Lecture[]
     Enrollments Enrollment[]
@@ -39,6 +45,9 @@ model Lecture {
     lectureId String   @id @default(cuid())
     startTime DateTime
     endTime   DateTime
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     // Foreign keys
     moduleId String
@@ -53,6 +62,9 @@ model AttendanceRecord {
     status             Status
     timestamp          DateTime @default(now())
 
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
     // Foreign keys
     studentId String
     lectureId String
@@ -64,6 +76,9 @@ model AttendanceRecord {
 
 model Enrollment {
     enrollmentId String @id @default(cuid())
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     // Foreign keys
     studentId String
