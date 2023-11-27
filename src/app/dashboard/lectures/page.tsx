@@ -17,6 +17,7 @@ import {
 import { toast } from "~/components/ui/use-toast";
 import { api } from "~/utils/api";
 
+import { Separator } from "~/components/ui/separator";
 import AddLectureForm from "./add-lecture-form";
 import LectureTable from "./lecture-table";
 
@@ -86,6 +87,15 @@ export default function Lectures() {
 
   return (
     <>
+      <div>
+        <h1 className="text-2xl font-bold text-foreground">Lectures</h1>
+        <p className="mt-1 text-muted-foreground">
+          Manage all lectures here. Lectures will always belong to a module and
+          will need to be enrolled to students.
+        </p>
+        <Separator className="my-6" />
+      </div>
+
       {/* Card - Contains table and button to add new lectures */}
       <Card>
         {/* Card Title - displays table name + item counts */}

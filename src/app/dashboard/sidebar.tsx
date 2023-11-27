@@ -15,6 +15,7 @@ import {
   LogOut,
   Presentation,
   Settings,
+  User,
   UserCog,
   Users,
 } from "lucide-react";
@@ -96,21 +97,19 @@ export default function Sidebar() {
   const { data: sessionData } = useSession(); // used to display auth user info
 
   return (
-    <aside className="hidden h-screen justify-between bg-white px-3 py-4 dark:bg-neutral-900 md:flex md:flex-col">
+    <aside className="hidden h-screen justify-between border-r-[1px] border-border bg-background px-3 py-4 md:flex md:flex-col">
       <div>
         {/* Sidebar header - contains logo + account dropdown */}
         <div className="flex items-center gap-3 px-2">
           <Image src="/logo.png" width={26} height={26} alt="UniTrack" />
-          <p className="text-2xl font-semibold text-neutral-800 dark:text-neutral-100">
-            UniTrack
-          </p>
+          <p className="text-2xl font-semibold text-foreground">UniTrack</p>
 
           {/* Account Dropdown - to logout (and manage profile later) */}
           {sessionData?.user.image && (
             <>
               <DropdownMenu>
                 <DropdownMenuTrigger className="ml-auto">
-                  <Avatar className="ml-auto">
+                  <Avatar className="ml-auto h-9 w-9">
                     <AvatarImage src={sessionData?.user?.image} />
                     <AvatarFallback>DP</AvatarFallback>
                   </Avatar>
@@ -127,8 +126,21 @@ export default function Sidebar() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Link href="/dashboard/settings" className="flex">
+                      <User size={18} className="mr-2" />
+                      View profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href="/dashboard/settings" className="flex">
+                      <Settings size={18} className="mr-2" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    className="w-full cursor-pointer"
+                    className="w-full cursor-pointer text-destructive"
                     onClick={() => signOut()}
                   >
                     <LogOut size={18} className="mr-2" />
@@ -181,8 +193,7 @@ export default function Sidebar() {
       )}
 
       {/* Theme toggle - for dark & light mode */}
-      <div className="flex items-center justify-center gap-4 rounded-lg bg-neutral-50 p-2 text-sm dark:bg-neutral-800/50">
-        <p className="font-medium">Toggle Theme</p>
+      <div className="flex items-center justify-center gap-4 rounded-lg p-2 text-sm">
         <ModeToggle />
       </div>
     </aside>
