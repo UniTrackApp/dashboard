@@ -16,6 +16,7 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
 import { toast } from "~/components/ui/use-toast";
 
 import { api } from "~/utils/api";
@@ -29,12 +30,18 @@ export default function Records() {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   // Fetches all attendance records, and refetches when createNewRecord is called
-  const { data: allAttendanceRecords, refetch: refetchAllAttendanceRecords } =
-    api.attendanceRecord.getAttendanceRecordsForTable.useQuery();
+  const {
+    data: allAttendanceRecords,
+    refetch: refetchAllAttendanceRecords,
+    isLoading: isLoadingAllAttendanceRecords,
+  } = api.attendanceRecord.getAttendanceRecordsForTable.useQuery();
 
   // Fetches attendance record count, and refetches when createNewRecord is called
-  const { data: attendanceRecordCount, refetch: refetchAttendanceRecordCount } =
-    api.attendanceRecord.getAttendanceRecordCount.useQuery();
+  const {
+    data: attendanceRecordCount,
+    refetch: refetchAttendanceRecordCount,
+    isLoading: isLoadingAttendanceRecordCount,
+  } = api.attendanceRecord.getAttendanceRecordCount.useQuery();
 
   // Creates a new attendance record entry
   const { mutate: createAttendanceRecord } =
@@ -103,7 +110,12 @@ export default function Records() {
           <Flex justifyContent="between">
             <Flex justifyContent="start" className="gap-2">
               <Title>Attendance Records</Title>
-              <Badge color="blue">{attendanceRecordCount}</Badge>
+              {isLoadingAttendanceRecordCount && (
+                <Skeleton className="h-[25px] w-[35px] rounded-full" />
+              )}
+              {attendanceRecordCount && (
+                <Badge color="blue">{attendanceRecordCount}</Badge>
+              )}
             </Flex>
 
             {/* Dialog - used to create new Attendance Records */}
@@ -130,6 +142,12 @@ export default function Records() {
           </Flex>
 
           {/* Table - to display Attendance Records */}
+          {isLoadingAllAttendanceRecords && (
+            <div className="mt-4 flex flex-col gap-4">
+              <Skeleton className="h-[35px] w-full" />
+              <Skeleton className="h-[500px] w-full" />
+            </div>
+          )}
           {allAttendanceRecords && (
             <RecordTable
               allAttendanceRecords={allAttendanceRecords}

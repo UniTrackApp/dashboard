@@ -1,4 +1,6 @@
-import { AttendanceRecord } from "@prisma/client";
+import { Status } from "@prisma/client";
+import Link from "next/link";
+
 import {
   Badge,
   Table,
@@ -30,9 +32,12 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { AttendanceStatus } from "~/utils/constants";
 
-import Link from "next/link";
-
-type AttendanceRecordWithExtraInfo = AttendanceRecord & {
+type AttendanceRecord = {
+  attendanceRecordId: string;
+  studentId: string;
+  lectureId: string;
+  status: Status;
+  timestamp: Date;
   studentFullName: string;
   moduleName: string;
 };
@@ -43,7 +48,7 @@ export default function RecordTable({
   idBeingDeleted,
   setIdBeingDeleted,
 }: {
-  allAttendanceRecords: AttendanceRecordWithExtraInfo[];
+  allAttendanceRecords: AttendanceRecord[];
   deleteAttendanceRecordById: (id: { attendanceRecordId: string }) => void;
   idBeingDeleted: string | null;
   setIdBeingDeleted: (id: string | null) => void;

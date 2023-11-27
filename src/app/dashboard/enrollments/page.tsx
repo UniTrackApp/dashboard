@@ -19,6 +19,7 @@ import AddEnrollmentForm from "./add-enrollment-form";
 import EnrollmentTable from "./enrollment-table";
 
 import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
 import { api } from "~/utils/api";
 
 export default function Enrollments() {
@@ -30,12 +31,18 @@ export default function Enrollments() {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   // Fetches all enrollments, and refetches when createNewEnrollment is called
-  const { data: allEnrollments, refetch: refetchAllEnrollments } =
-    api.enrollment.getAllEnrollments.useQuery();
+  const {
+    data: allEnrollments,
+    refetch: refetchAllEnrollments,
+    isLoading: isLoadingAllEnrollments,
+  } = api.enrollment.getAllEnrollments.useQuery();
 
   // Fetches enrollment count, and refetches when createNewEnrollment is called
-  const { data: enrollmentCount, refetch: refetchEnrollmentCount } =
-    api.enrollment.getEnrollmentCount.useQuery();
+  const {
+    data: enrollmentCount,
+    refetch: refetchEnrollmentCount,
+    isLoading: isLoadingEnrollmentCount,
+  } = api.enrollment.getEnrollmentCount.useQuery();
 
   // Creates a new enrollment entry
   const { mutate: createEnrollment } =
@@ -102,7 +109,10 @@ export default function Enrollments() {
           <Flex justifyContent="between">
             <Flex justifyContent="start" className="gap-2">
               <Title>Enrollments</Title>
-              <Badge color="blue">{enrollmentCount}</Badge>
+              {isLoadingEnrollmentCount && (
+                <Skeleton className="h-[25px] w-[35px] rounded-full" />
+              )}
+              {enrollmentCount && <Badge color="blue">{enrollmentCount}</Badge>}
             </Flex>
 
             {/* Dialog - used to create new Attendance Records */}
@@ -129,6 +139,12 @@ export default function Enrollments() {
           </Flex>
 
           {/* Table - to display Attendance Records */}
+          {isLoadingAllEnrollments && (
+            <div className="mt-4 flex flex-col gap-4">
+              <Skeleton className="h-[35px] w-full" />
+              <Skeleton className="h-[500px] w-full" />
+            </div>
+          )}
           {allEnrollments && (
             <EnrollmentTable
               allEnrollments={allEnrollments}

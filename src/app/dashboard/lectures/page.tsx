@@ -18,6 +18,7 @@ import { toast } from "~/components/ui/use-toast";
 import { api } from "~/utils/api";
 
 import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
 import AddLectureForm from "./add-lecture-form";
 import LectureTable from "./lecture-table";
 
@@ -30,12 +31,18 @@ export default function Lectures() {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   // Fetches all lectures, and refetches when createNewLecture is called
-  const { data: allLectures, refetch: refetchAllLectures } =
-    api.lecture.getAllLecturesWithModuleNames.useQuery();
+  const {
+    data: allLectures,
+    refetch: refetchAllLectures,
+    isLoading: isLoadingAllLectures,
+  } = api.lecture.getAllLecturesWithModuleNames.useQuery();
 
   // Fetches lecture count and refetches when createNewLecture is called
-  const { data: lectureCount, refetch: refetchLectureCount } =
-    api.lecture.getLectureCount.useQuery();
+  const {
+    data: lectureCount,
+    refetch: refetchLectureCount,
+    isLoading: isLoadingLectureCount,
+  } = api.lecture.getLectureCount.useQuery();
 
   // Creates a new lecture entry
   const { mutate: createNewLecture } = api.lecture.createNewLecture.useMutation(
@@ -102,7 +109,10 @@ export default function Lectures() {
         <Flex justifyContent="between">
           <Flex justifyContent="start" className="gap-2">
             <Title>Lectures</Title>
-            <Badge color="blue">{lectureCount}</Badge>
+            {isLoadingLectureCount && (
+              <Skeleton className="h-[25px] w-[35px] rounded-full" />
+            )}
+            {lectureCount && <Badge color="blue">{lectureCount}</Badge>}
           </Flex>
 
           {/* Dialog - used to create new lectures */}
@@ -129,6 +139,12 @@ export default function Lectures() {
         </Flex>
 
         {/* Table - to display all lectures */}
+        {isLoadingAllLectures && (
+          <div className="mt-4 flex flex-col gap-4">
+            <Skeleton className="h-[35px] w-full" />
+            <Skeleton className="h-[500px] w-full" />
+          </div>
+        )}
         {allLectures && (
           <LectureTable
             allLectures={allLectures}
