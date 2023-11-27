@@ -15,8 +15,8 @@ datasource db {
 }
 
 model Student {
-    studentId     String  @id @default(cuid())
-    studentCardId String  @unique
+    studentId     String @id @default(cuid())
+    studentCardId String @unique
     firstName     String
     lastName      String
 
@@ -115,9 +115,18 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
+    role          Role      @default(GUEST)
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+}
+
+enum Role {
+    SUPERADMIN
+    ADMIN
+    TEACHER
+    STUDENT
+    GUEST
 }
 
 model VerificationToken {
