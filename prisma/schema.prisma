@@ -29,7 +29,7 @@ model Student {
 }
 
 model Module {
-    moduleId   String  @id @default(cuid())
+    moduleId   String  @id
     moduleName String
     moduleDesc String?
 
@@ -42,7 +42,7 @@ model Module {
 }
 
 model Lecture {
-    lectureId String   @id @default(cuid())
+    lectureId String   @id
     startTime DateTime
     endTime   DateTime
 

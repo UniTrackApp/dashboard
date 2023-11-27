@@ -44,7 +44,11 @@ import { cn } from "~/utils/shadcn";
 // Schema for form validation (using Zod)
 const FormSchema = z.object({
   studentId: z.string(),
-  lectureId: z.string(),
+  lectureId: z
+    .string()
+    .min(1, "Must be at least 1 character")
+    .max(20, "Must be 20 characters or less")
+    .startsWith("COMP", `Lecture ID must start with "COMP"`),
   status: z.union([
     z.literal(AttendanceStatus.PRESENT),
     z.literal(AttendanceStatus.LATE),

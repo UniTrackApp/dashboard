@@ -29,10 +29,18 @@ import {
 
 // Schema for form validation (using Zod)
 const FormSchema = z.object({
-  lectureId: z.string(),
+  lectureId: z
+    .string()
+    .min(1, "Must be at least 1 character")
+    .max(20, "Must be 20 characters or less")
+    .startsWith("COMP", `Lecture ID must start with "COMP"`),
+  moduleId: z
+    .string()
+    .min(1, "Must be at least 1 character")
+    .max(10, "Must be 15 characters or less")
+    .startsWith("COMP", `Module ID must start with "COMP"`),
   startTime: z.date(),
   endTime: z.date(),
-  moduleId: z.string(),
 });
 
 export default function AddModuleForm({
