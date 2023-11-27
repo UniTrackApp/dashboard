@@ -76,7 +76,6 @@ export const studentRouter = createTRPCRouter({
     .input(
       z.object({
         studentId: z.string().min(1),
-        firstName: z.string().min(1).optional(),
       }),
     )
     // This mutation function takes in the input object and deletes the entry in the database
