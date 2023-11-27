@@ -54,12 +54,3 @@ export const moduleRouter = createTRPCRouter({
       });
     }),
 });
-
-// TODO: Remove or restrucure these comments later
-// This is a tRPC router. A router is a collection of various tRPC endpoints or 'procedures' as they call it.
-// We could technically have all our tRPC endpoints/procedures in a single router, but we use multiple routers for seperation of concerns.
-// So one router to manage API calls to Module table while another router manages the API calls to Attendance Record table
-// A procedure can be used to do 2 main things, either query some data or mutate some data somewhere
-
-// This here is a procedure used to query the database and return some data
-// The frontend can 'call' this API endpoint/procedure to fetch this data from backend
