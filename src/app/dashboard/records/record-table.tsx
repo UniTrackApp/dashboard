@@ -1,4 +1,4 @@
-import { type $Enums } from "@prisma/client";
+import { AttendanceRecord } from "@prisma/client";
 import {
   Badge,
   Table,
@@ -32,12 +32,7 @@ import { AttendanceStatus } from "~/utils/constants";
 
 import Link from "next/link";
 
-type AttendanceRecord = {
-  attendanceRecordId: string;
-  studentId: string;
-  lectureId: string;
-  status: $Enums.Status;
-  timestamp: Date;
+type AttendanceRecordWithExtraInfo = AttendanceRecord & {
   studentFullName: string;
   moduleName: string;
 };
@@ -48,7 +43,7 @@ export default function RecordTable({
   idBeingDeleted,
   setIdBeingDeleted,
 }: {
-  allAttendanceRecords: AttendanceRecord[];
+  allAttendanceRecords: AttendanceRecordWithExtraInfo[];
   deleteAttendanceRecordById: (id: { attendanceRecordId: string }) => void;
   idBeingDeleted: string | null;
   setIdBeingDeleted: (id: string | null) => void;
