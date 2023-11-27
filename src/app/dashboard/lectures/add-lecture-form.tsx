@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import { CalendarIcon, Loader2, Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { cn } from "~/utils/shadcn";
+import { cn } from "~/lib/utils";
 
 import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";

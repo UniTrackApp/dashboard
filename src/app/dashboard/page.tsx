@@ -4,8 +4,8 @@ import { Card, Metric, Text } from "@tremor/react";
 import { BookCopy, Clock, CopyCheck, Users } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { Separator } from "~/components/ui/separator";
+import { getFirstName } from "~/lib/utils";
 import { authOptions } from "~/server/auth";
-import { getFirstName } from "~/utils/utils";
 
 export default async function Dashboard() {
   const studentCount = await db.student.count();

@@ -19,7 +19,7 @@ import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import { toast } from "~/components/ui/use-toast";
 
-import { api } from "~/utils/api";
+import { api } from "~/lib/api";
 
 export default function Records() {
   // State - used for button loading spinners during attendance record creation and deletion

@@ -33,7 +33,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 
-import { cn } from "~/utils/shadcn";
+import { cn } from "~/lib/utils";
 
 const links = [
   {

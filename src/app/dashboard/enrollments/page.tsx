@@ -20,7 +20,7 @@ import EnrollmentTable from "./enrollment-table";
 
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
-import { api } from "~/utils/api";
+import { api } from "~/lib/api";
 
 export default function Enrollments() {
   // State - used for button loading spinners during attendance record creation and deletion

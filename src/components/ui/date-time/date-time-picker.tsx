@@ -23,8 +23,8 @@ import {
 import { DateField } from "@/components/ui/date-time/date-field";
 import { TimeField } from "@/components/ui/date-time/time-field";
 
-import { cn } from "@/utils/shadcn";
-import { useForwardedRef } from "@/utils/useForwardedRef";
+import { useForwardedRef } from "~/lib/useForwardedRef";
+import { cn } from "~/lib/utils";
 
 const DateTimePicker = React.forwardRef<
   HTMLDivElement,

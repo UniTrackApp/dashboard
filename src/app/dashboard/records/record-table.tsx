@@ -30,7 +30,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { AttendanceStatus } from "~/utils/constants";
+import { AttendanceStatus } from "~/lib/constants";
 
 type AttendanceRecord = {
   attendanceRecordId: string;

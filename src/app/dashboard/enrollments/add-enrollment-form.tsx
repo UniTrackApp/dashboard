@@ -30,8 +30,8 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 
-import { api } from "~/utils/api";
-import { cn } from "~/utils/shadcn";
+import { api } from "~/lib/api";
+import { cn } from "~/lib/utils";
 
 // Schema for form validation (using Zod)
 const FormSchema = z.object({

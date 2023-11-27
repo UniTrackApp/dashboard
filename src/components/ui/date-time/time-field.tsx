@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { cn } from "@/utils/shadcn";
 import { useRef } from "react";
 import {
   useLocale,
@@ -10,6 +9,7 @@ import {
   type TimeValue,
 } from "react-aria";
 import { useTimeFieldState } from "react-stately";
+import { cn } from "~/lib/utils";
 import { DateSegment } from "./date-segment";
 
 function TimeField(props: AriaTimeFieldProps<TimeValue>) {

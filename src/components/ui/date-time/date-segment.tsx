@@ -1,12 +1,12 @@
 "use client";
 
-import { cn } from "@/utils/shadcn";
 import { useRef } from "react";
 import { useDateSegment } from "react-aria";
 import type {
   DateFieldState,
   DateSegment as IDateSegment,
 } from "react-stately";
+import { cn } from "~/lib/utils";
 
 interface DateSegmentProps {
   segment: IDateSegment;

@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/utils/shadcn";
 import { createCalendar } from "@internationalized/date";
 import { useRef } from "react";
 import {
@@ -10,6 +9,7 @@ import {
   type DateValue,
 } from "react-aria";
 import { useDateFieldState } from "react-stately";
+import { cn } from "~/lib/utils";
 import { DateSegment } from "./date-segment";
 
 function DateField(props: AriaDatePickerProps<DateValue>) {

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AttendanceStatus } from "~/utils/constants";
+import { AttendanceStatus } from "~/lib/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const attendanceRecordRouter = createTRPCRouter({

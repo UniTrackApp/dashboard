@@ -37,9 +37,9 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 
-import { api } from "~/utils/api";
-import { AttendanceStatus } from "~/utils/constants";
-import { cn } from "~/utils/shadcn";
+import { api } from "~/lib/api";
+import { AttendanceStatus } from "~/lib/constants";
+import { cn } from "~/lib/utils";
 
 // Schema for form validation (using Zod)
 const FormSchema = z.object({

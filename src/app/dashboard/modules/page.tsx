@@ -5,7 +5,6 @@ import { useState } from "react";
 import ModuleTable from "@/app/dashboard/modules/module-table";
 import { buttonVariants } from "@/components/ui/button";
 
-import { api } from "@/utils/api";
 import { Badge, Card, Flex, Title } from "@tremor/react";
 import { Plus } from "lucide-react";
 import {
@@ -19,6 +18,7 @@ import {
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import { toast } from "~/components/ui/use-toast";
+import { api } from "~/lib/api";
 import AddModuleForm from "./add-module-form";
 
 export default function Modules() {

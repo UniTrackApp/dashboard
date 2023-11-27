@@ -3,7 +3,7 @@
 import { UserPlus2 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "~/components/ui/use-toast";
-import { api } from "~/utils/api";
+import { api } from "~/lib/api";
 
 import { Badge, Card, Title } from "@tremor/react";
 import { buttonVariants } from "~/components/ui/button";
