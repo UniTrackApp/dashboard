@@ -1,4 +1,4 @@
-import { Student } from "@prisma/client";
+import type { Student } from "@prisma/client";
 import Link from "next/link";
 
 import {

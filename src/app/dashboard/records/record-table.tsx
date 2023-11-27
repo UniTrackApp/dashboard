@@ -1,4 +1,4 @@
-import { Status } from "@prisma/client";
+import type { Status } from "@prisma/client";
 import Link from "next/link";
 
 import {

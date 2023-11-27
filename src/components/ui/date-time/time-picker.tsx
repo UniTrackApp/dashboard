@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React from "react";
-import { TimeValue } from "react-aria";
-import { TimeFieldStateOptions } from "react-stately";
+import type { TimeValue } from "react-aria";
+import type { TimeFieldStateOptions } from "react-stately";
 import { TimeField } from "./time-field";
 
 const TimePicker = React.forwardRef<

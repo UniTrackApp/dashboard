@@ -3,7 +3,10 @@
 import { cn } from "@/utils/shadcn";
 import { useRef } from "react";
 import { useDateSegment } from "react-aria";
-import { DateFieldState, DateSegment as IDateSegment } from "react-stately";
+import type {
+  DateFieldState,
+  DateSegment as IDateSegment,
+} from "react-stately";
 
 interface DateSegmentProps {
   segment: IDateSegment;
