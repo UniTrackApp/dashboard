@@ -5,6 +5,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import {
   ArrowUpDown,
+  Copy,
   ExternalLink,
   MoreHorizontal,
   Pencil,
@@ -112,7 +113,8 @@ export const columns: ColumnDef<AttendanceRecord>[] = [
                 navigator.clipboard.writeText(payment.attendanceRecordId)
               }
             >
-              Copy attendance ID
+              <Copy className="mr-2 h-4 w-4" />
+              Copy record ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>

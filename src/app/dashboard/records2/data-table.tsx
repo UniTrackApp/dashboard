@@ -2,10 +2,12 @@
 import {
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
   type ColumnDef,
+  type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
 } from '@tanstack/react-table'
@@ -21,6 +23,7 @@ import {
 } from '@/components/ui/table'
 import { DataTablePagination } from '~/components/ui/data-table/pagination'
 import { DataTableViewOptions } from '~/components/ui/data-table/view-options'
+import { Input } from '~/components/ui/input'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -34,6 +37,7 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
   const table = useReactTable({
     data,
@@ -44,16 +48,33 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
       columnVisibility,
       rowSelection,
+      columnFilters,
     },
   })
 
   return (
     <>
-      <DataTableViewOptions table={table} />
+      <div className="flex justify-between items-center">
+        <div className="flex items-center py-4">
+          <Input
+            placeholder="Filter by student ID..."
+            defaultValue={
+              (table.getColumn('studentId')?.getFilterValue() as string) ?? ''
+            }
+            onChange={(event) =>
+              table.getColumn('studentId')?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm shrink-0"
+          />
+        </div>
+        <DataTableViewOptions table={table} />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
