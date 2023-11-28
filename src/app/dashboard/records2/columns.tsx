@@ -25,6 +25,7 @@ import Link from 'next/link'
 import { api } from '~/app/trpc/react'
 
 import { Checkbox } from '@/components/ui/checkbox'
+import { DataTableColumnHeader } from '~/components/ui/data-table/column-header'
 
 export const columns: ColumnDef<AttendanceRecord>[] = [
   {
@@ -51,39 +52,40 @@ export const columns: ColumnDef<AttendanceRecord>[] = [
   },
   {
     accessorKey: 'attendanceRecordId',
-    header: 'Attendance Record ID',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Attendance Record ID" />
+    ),
   },
   {
     accessorKey: 'studentId',
-    header: 'Student ID',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Student ID" />
+    ),
   },
   {
     accessorKey: 'lectureId',
-    header: 'Lecture ID',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Lecture ID" />
+    ),
   },
   {
     accessorKey: 'status',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Status
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
   },
   {
     accessorKey: 'timestamp',
-    header: 'Timestamp',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Timestamp" />
+    ),
     accessorFn: (row) => format(new Date(row.timestamp), 'dd/MM/yyyy HH:mm:ss'),
   },
   {
     accessorKey: 'actions',
     header: 'Actions',
     enableHiding: false,
+    enableSorting: false,
     cell: ({ row }) => {
       const payment = row.original
 
