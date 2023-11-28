@@ -15,7 +15,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import Link from 'next/link'
-import { Button } from '~/components/ui/button'
+import { buttonVariants } from '~/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -63,10 +63,14 @@ export default function EnrollmentTable({
             <TableCell className="flex gap-2">
               {/* Dropdown Menu - contains actions for each student */}
               <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Button size={'icon'} variant={'ghost'} className="h-8 w-8">
-                    <MoreHorizontal className="h-5 w-5" />
-                  </Button>
+                <DropdownMenuTrigger
+                  className={buttonVariants({
+                    size: 'icon',
+                    variant: 'ghost',
+                    className: 'h-8 w-8',
+                  })}
+                >
+                  <MoreHorizontal className="h-5 w-5" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
