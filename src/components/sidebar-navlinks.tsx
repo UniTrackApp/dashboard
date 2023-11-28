@@ -55,23 +55,23 @@ const links = [
     icon: <LibraryBig size={18} />,
     wipStatus: false,
   },
-  {
-    name: 'Manage',
-    href: '/dashboard/manage',
-    icon: <UserCog size={18} />,
-    wipStatus: true,
-  },
-  {
-    name: 'Logs',
-    href: '/dashboard/logs',
-    icon: <History size={18} />,
-    wipStatus: true,
-  },
+  // {
+  //   name: 'Manage',
+  //   href: '/dashboard/manage',
+  //   icon: <UserCog size={18} />,
+  //   wipStatus: true,
+  // },
+  // {
+  //   name: 'Logs',
+  //   href: '/dashboard/logs',
+  //   icon: <History size={18} />,
+  //   wipStatus: true,
+  // },
   {
     name: 'Settings',
     href: '/dashboard/settings',
     icon: <Settings size={18} />,
-    wipStatus: true,
+    wipStatus: false,
   },
 ]
 
