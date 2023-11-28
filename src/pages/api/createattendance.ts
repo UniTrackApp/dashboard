@@ -15,7 +15,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     //1 - Receive studentCardId and lectureId from request body
-    const { lectureId, studentCardId } = req.query as RequestBody;
+    const { lectureId, studentCardId } = req.body as RequestBody;
 
     if (!lectureId || !studentCardId) {
       res.status(400).send({ error: "Missing parameters in request body" });
