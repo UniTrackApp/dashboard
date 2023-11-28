@@ -1,6 +1,6 @@
-import { type ReactNode } from "react";
-import Sidebar from "~/app/dashboard/sidebar";
-import MobileNavBar from "~/components/mobile-navbar";
+import { type ReactNode } from 'react'
+import Sidebar from '~/app/dashboard/sidebar'
+import MobileNavBar from '~/components/mobile-navbar'
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
@@ -12,10 +12,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         <MobileNavBar />
       </div>
       <div className="ml-[275px] flex-1 overflow-auto h-screen">
-        <div className="mx-8 flex flex-col pt-4">
-          {children}
-        </div>
+        <div className="mx-8 flex flex-col pt-4">{children}</div>
       </div>
     </div>
-  );
+  )
 }

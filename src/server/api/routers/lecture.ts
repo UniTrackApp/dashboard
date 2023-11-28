@@ -1,9 +1,9 @@
-import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { z } from 'zod'
+import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const lectureRouter = createTRPCRouter({
   getAllLectures: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.lecture.findMany();
+    return await ctx.prisma.lecture.findMany()
   }),
 
   getAllLecturesWithModuleNames: protectedProcedure.query(async ({ ctx }) => {
@@ -15,11 +15,11 @@ export const lectureRouter = createTRPCRouter({
           },
         },
       },
-    });
+    })
   }),
 
   getLectureCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.lecture.count();
+    return await ctx.prisma.lecture.count()
   }),
 
   getAllLectureIds: protectedProcedure.query(async ({ ctx }) => {
@@ -27,7 +27,7 @@ export const lectureRouter = createTRPCRouter({
       select: {
         lectureId: true,
       },
-    });
+    })
   }),
 
   getLectureIdsWithModuleNames: protectedProcedure.query(async ({ ctx }) => {
@@ -40,7 +40,7 @@ export const lectureRouter = createTRPCRouter({
           },
         },
       },
-    });
+    })
   }),
 
   createNewLecture: protectedProcedure
@@ -48,14 +48,14 @@ export const lectureRouter = createTRPCRouter({
       z.object({
         lectureId: z
           .string()
-          .min(1, "Required field")
-          .max(20, "Must be 20 characters or less")
-          .startsWith("COMP", `Lecture ID must start with "COMP"`),
+          .min(1, 'Required field')
+          .max(20, 'Must be 20 characters or less')
+          .startsWith('COMP', `Lecture ID must start with "COMP"`),
         moduleId: z
           .string()
-          .min(1, "Required field")
-          .max(10, "Must be 15 characters or less")
-          .startsWith("COMP", `Module ID must start with "COMP"`),
+          .min(1, 'Required field')
+          .max(10, 'Must be 15 characters or less')
+          .startsWith('COMP', `Module ID must start with "COMP"`),
         startTime: z.date(),
         endTime: z.date(),
       }),
@@ -69,13 +69,13 @@ export const lectureRouter = createTRPCRouter({
             endTime: input.endTime,
             moduleId: input.moduleId,
           },
-        });
+        })
 
-        return newLectureRecord;
+        return newLectureRecord
       } catch (error) {
-        console.error("Error creating attendance record:", error);
+        console.error('Error creating attendance record:', error)
 
-        throw new Error("Failed to create attendance record");
+        throw new Error('Failed to create attendance record')
       }
     }),
 
@@ -84,9 +84,9 @@ export const lectureRouter = createTRPCRouter({
       z.object({
         lectureId: z
           .string()
-          .min(1, "Required field")
-          .max(20, "Must be 20 characters or less")
-          .startsWith("COMP", `Lecture ID must start with "COMP"`),
+          .min(1, 'Required field')
+          .max(20, 'Must be 20 characters or less')
+          .startsWith('COMP', `Lecture ID must start with "COMP"`),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -94,6 +94,6 @@ export const lectureRouter = createTRPCRouter({
         where: {
           lectureId: input.lectureId,
         },
-      });
+      })
     }),
-});
+})

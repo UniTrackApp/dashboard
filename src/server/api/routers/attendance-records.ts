@@ -1,6 +1,6 @@
-import { Status } from "@prisma/client";
-import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { Status } from '@prisma/client'
+import { z } from 'zod'
+import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const attendanceRecordRouter = createTRPCRouter({
   createAttendanceRecord: protectedProcedure
@@ -8,14 +8,14 @@ export const attendanceRecordRouter = createTRPCRouter({
       z.object({
         studentId: z
           .string()
-          .min(1, "Required field")
-          .max(10, "Must be 10 characters or less")
-          .regex(/^[0-9]+$/, "Must be a number"),
+          .min(1, 'Required field')
+          .max(10, 'Must be 10 characters or less')
+          .regex(/^[0-9]+$/, 'Must be a number'),
         lectureId: z
           .string()
-          .min(1, "Required field")
-          .max(20, "Must be 20 characters or less")
-          .startsWith("COMP", `Lecture ID must start with "COMP"`),
+          .min(1, 'Required field')
+          .max(20, 'Must be 20 characters or less')
+          .startsWith('COMP', `Lecture ID must start with "COMP"`),
         status: z.union([
           z.literal(Status.PRESENT),
           z.literal(Status.LATE),
@@ -30,15 +30,15 @@ export const attendanceRecordRouter = createTRPCRouter({
           lectureId: input.lectureId,
           status: input.status,
         },
-      });
+      })
     }),
 
   getAttendanceRecordCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.attendanceRecord.count();
+    return await ctx.prisma.attendanceRecord.count()
   }),
 
   getAttendanceRecords: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.attendanceRecord.findMany();
+    return await ctx.prisma.attendanceRecord.findMany()
   }),
 
   getAttendanceRecordsForTable: protectedProcedure.query(async ({ ctx }) => {
@@ -65,7 +65,7 @@ export const attendanceRecordRouter = createTRPCRouter({
           },
         },
       },
-    });
+    })
 
     return attendanceRecords.map((attendanceRecord) => ({
       attendanceRecordId: attendanceRecord.attendanceRecordId,
@@ -75,7 +75,7 @@ export const attendanceRecordRouter = createTRPCRouter({
       timestamp: attendanceRecord.timestamp,
       studentFullName: `${attendanceRecord.Student.firstName} ${attendanceRecord.Student.lastName}`,
       moduleName: attendanceRecord.Lecture.Module.moduleName,
-    }));
+    }))
   }),
 
   deleteAttendanceRecordById: protectedProcedure
@@ -89,6 +89,6 @@ export const attendanceRecordRouter = createTRPCRouter({
         where: {
           attendanceRecordId: input.attendanceRecordId,
         },
-      });
+      })
     }),
-});
+})

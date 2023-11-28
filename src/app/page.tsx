@@ -1,9 +1,9 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image'
+import Link from 'next/link'
 
-import { ArrowRight } from "lucide-react";
-import { ModeToggle } from "~/components/theme-toggle";
-import { buttonVariants } from "~/components/ui/button";
+import { ArrowRight } from 'lucide-react'
+import { ModeToggle } from '~/components/theme-toggle'
+import { buttonVariants } from '~/components/ui/button'
 
 export default function Home() {
   return (
@@ -28,7 +28,7 @@ export default function Home() {
         <Footer />
       </main>
     </>
-  );
+  )
 }
 
 function Navbar() {
@@ -36,7 +36,7 @@ function Navbar() {
     <>
       <nav className="flex w-full justify-between p-6">
         <Image
-          src={"/logo.png"}
+          src={'/logo.png'}
           width={40}
           height={40}
           className=""
@@ -46,15 +46,15 @@ function Navbar() {
         <Link
           href="/login"
           className={buttonVariants({
-            variant: "secondary",
-            className: "bg-white dark:bg-neutral-900",
+            variant: 'secondary',
+            className: 'bg-white dark:bg-neutral-900',
           })}
         >
           Sign in
         </Link>
       </nav>
     </>
-  );
+  )
 }
 
 function Footer() {
@@ -62,7 +62,7 @@ function Footer() {
     <>
       <footer className="mb-4 text-neutral-800 dark:text-white">
         <div>
-          Built with &lt;3 by{" "}
+          Built with &lt;3 by{' '}
           <Link
             referrerPolicy="no-referrer"
             target="_blank"
@@ -71,7 +71,7 @@ function Footer() {
           >
             Aryan
           </Link>
-          {", "}
+          {', '}
           <Link
             referrerPolicy="no-referrer"
             target="_blank"
@@ -80,7 +80,7 @@ function Footer() {
           >
             Andrea
           </Link>
-          {" and "}
+          {' and '}
           <Link
             referrerPolicy="no-referrer"
             target="_blank"
@@ -95,5 +95,5 @@ function Footer() {
         </div>
       </footer>
     </>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { z } from 'zod'
+import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 // This is a tRPC router used to manage API calls to the Module table
 export const moduleRouter = createTRPCRouter({
@@ -10,13 +10,13 @@ export const moduleRouter = createTRPCRouter({
       z.object({
         moduleId: z
           .string()
-          .min(1, "Required field")
-          .max(10, "Must be 15 characters or less")
-          .startsWith("COMP", `Module ID must start with "COMP"`),
+          .min(1, 'Required field')
+          .max(10, 'Must be 15 characters or less')
+          .startsWith('COMP', `Module ID must start with "COMP"`),
         moduleName: z.string().min(1),
         moduleDesc: z
           .string()
-          .max(60, "Description must be less than 60 characters")
+          .max(60, 'Description must be less than 60 characters')
           .nullish(), // nullish means it can be null or undefined
       }),
     )
@@ -28,17 +28,17 @@ export const moduleRouter = createTRPCRouter({
           moduleName: input.moduleName,
           moduleDesc: input.moduleDesc,
         },
-      });
+      })
     }),
 
   // GET: Gets only the number of module entries
   getModuleCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.module.count();
+    return await ctx.prisma.module.count()
   }),
 
   // GET: Gets all rows and columns from the module table
   getAllModules: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.module.findMany();
+    return await ctx.prisma.module.findMany()
   }),
 
   // DELETE: Deletes a module entry by its ID (primary key)
@@ -48,9 +48,9 @@ export const moduleRouter = createTRPCRouter({
       z.object({
         moduleId: z
           .string()
-          .min(1, "Required field")
-          .max(10, "Must be 15 characters or less")
-          .startsWith("COMP", `Module ID must start with "COMP"`),
+          .min(1, 'Required field')
+          .max(10, 'Must be 15 characters or less')
+          .startsWith('COMP', `Module ID must start with "COMP"`),
       }),
     )
     // This mutation function takes in the input object and deletes the entry in the database
@@ -59,6 +59,6 @@ export const moduleRouter = createTRPCRouter({
         where: {
           moduleId: input.moduleId,
         },
-      });
+      })
     }),
-});
+})

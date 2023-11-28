@@ -1,4 +1,4 @@
-import type { Lecture } from "@prisma/client";
+import type { Lecture } from '@prisma/client'
 import {
   Badge,
   Table,
@@ -7,16 +7,16 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-} from "@tremor/react";
+} from '@tremor/react'
 import {
   ExternalLink,
   Loader2,
   MoreHorizontal,
   Pencil,
   Trash2,
-} from "lucide-react";
-import Link from "next/link";
-import { Button } from "~/components/ui/button";
+} from 'lucide-react'
+import Link from 'next/link'
+import { Button } from '~/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,13 +24,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
+} from '~/components/ui/dropdown-menu'
 
 type LecturesWithModuleNames = Lecture & {
   Module: {
-    moduleName: string;
-  };
-};
+    moduleName: string
+  }
+}
 
 export default function ModuleTable({
   allLectures,
@@ -38,10 +38,10 @@ export default function ModuleTable({
   idBeingDeleted,
   setIdBeingDeleted,
 }: {
-  allLectures: LecturesWithModuleNames[];
-  deleteLectureById: (id: { lectureId: string }) => void;
-  idBeingDeleted: string | null;
-  setIdBeingDeleted: (id: string | null) => void;
+  allLectures: LecturesWithModuleNames[]
+  deleteLectureById: (id: { lectureId: string }) => void
+  idBeingDeleted: string | null
+  setIdBeingDeleted: (id: string | null) => void
 }) {
   return (
     <Table className="mt-6">
@@ -76,7 +76,7 @@ export default function ModuleTable({
               {/* Dropdown Menu - contains actions for each student */}
               <DropdownMenu>
                 <DropdownMenuTrigger>
-                  <Button size={"icon"} variant={"ghost"} className="h-8 w-8">
+                  <Button size={'icon'} variant={'ghost'} className="h-8 w-8">
                     <MoreHorizontal className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -90,7 +90,7 @@ export default function ModuleTable({
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => alert("Not implemented yet")}
+                    onClick={() => alert('Not implemented yet')}
                   >
                     <Pencil className="mr-2 h-4 w-4" />
                     Edit
@@ -101,8 +101,8 @@ export default function ModuleTable({
                     onClick={() => {
                       deleteLectureById({
                         lectureId: lecture.lectureId,
-                      });
-                      setIdBeingDeleted(lecture.lectureId);
+                      })
+                      setIdBeingDeleted(lecture.lectureId)
                     }}
                   >
                     {idBeingDeleted === lecture.lectureId && (
@@ -123,5 +123,5 @@ export default function ModuleTable({
         ))}
       </TableBody>
     </Table>
-  );
+  )
 }

@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
-} from "~/server/api/trpc";
+} from '~/server/api/trpc'
 
 // This is a tRPC router used to manage API calls to the Post table
 export const postRouter = createTRPCRouter({
@@ -14,7 +14,7 @@ export const postRouter = createTRPCRouter({
     .query(({ input }) => {
       return {
         greeting: `Hello ${input.text}`,
-      };
+      }
     }),
 
   // Sample procedure to test if tRPC mutation is working
@@ -22,13 +22,13 @@ export const postRouter = createTRPCRouter({
     .input(z.object({ name: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000))
 
       return ctx.prisma.post.create({
         data: {
           name: input.name,
           createdBy: { connect: { id: ctx.session.user.id } },
         },
-      });
+      })
     }),
-});
+})

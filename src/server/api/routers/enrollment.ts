@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { z } from 'zod'
+import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const enrollmentRouter = createTRPCRouter({
   createEnrollment: protectedProcedure
@@ -7,14 +7,14 @@ export const enrollmentRouter = createTRPCRouter({
       z.object({
         studentId: z
           .string()
-          .min(1, "Required field")
-          .max(10, "Must be 10 characters or less")
-          .regex(/^[0-9]+$/, "Must be a number"),
+          .min(1, 'Required field')
+          .max(10, 'Must be 10 characters or less')
+          .regex(/^[0-9]+$/, 'Must be a number'),
         moduleId: z
           .string()
-          .min(1, "Required field")
-          .max(10, "Must be 15 characters or less")
-          .startsWith("COMP", `Module ID must start with "COMP"`),
+          .min(1, 'Required field')
+          .max(10, 'Must be 15 characters or less')
+          .startsWith('COMP', `Module ID must start with "COMP"`),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -23,15 +23,15 @@ export const enrollmentRouter = createTRPCRouter({
           studentId: input.studentId,
           moduleId: input.moduleId,
         },
-      });
+      })
     }),
 
   getAllEnrollments: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.enrollment.findMany();
+    return await ctx.prisma.enrollment.findMany()
   }),
 
   getEnrollmentCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.enrollment.count();
+    return await ctx.prisma.enrollment.count()
   }),
 
   deleteEnrollmentById: protectedProcedure
@@ -45,6 +45,6 @@ export const enrollmentRouter = createTRPCRouter({
         where: {
           enrollmentId: input.enrollmentId,
         },
-      });
+      })
     }),
-});
+})

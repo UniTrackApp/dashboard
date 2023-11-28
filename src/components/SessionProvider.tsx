@@ -1,5 +1,5 @@
-"use client";
+'use client'
 
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider } from 'next-auth/react'
 
-export const NextAuthSessionProvider = SessionProvider;
+export const NextAuthSessionProvider = SessionProvider

@@ -1,14 +1,14 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { type GetServerSidePropsContext } from "next";
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { type GetServerSidePropsContext } from 'next'
 import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
-} from "next-auth";
-import GitHubProvider from "next-auth/providers/github";
+} from 'next-auth'
+import GitHubProvider from 'next-auth/providers/github'
 
-import { env } from "~/env.mjs";
-import { prisma } from "~/server/prisma";
+import { env } from '~/env.mjs'
+import { prisma } from '~/server/prisma'
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -16,13 +16,13 @@ import { prisma } from "~/server/prisma";
  *
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session extends DefaultSession {
-    user: DefaultSession["user"] & {
-      id: string;
+    user: DefaultSession['user'] & {
+      id: string
       // ...other properties
       // role: UserRole;
-    };
+    }
   }
 
   // interface User {
@@ -39,10 +39,10 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   pages: {
-    signIn: "/login",
+    signIn: '/login',
     // signOut: "/",
   },
   callbacks: {
@@ -57,25 +57,25 @@ export const authOptions: NextAuthOptions = {
 
     session({ token, session }) {
       if (token) {
-        session.user.id = token.id as string;
-        session.user.name = token.name;
-        session.user.email = token.email;
-        session.user.image = token.picture;
+        session.user.id = token.id as string
+        session.user.name = token.name
+        session.user.email = token.email
+        session.user.image = token.picture
       }
-      return session;
+      return session
     },
     async jwt({ token, user }) {
       const dbUser = await prisma.user.findFirst({
         where: {
           email: token.email,
         },
-      });
+      })
 
       if (!dbUser) {
         if (user) {
-          token.id = user?.id;
+          token.id = user?.id
         }
-        return token;
+        return token
       }
 
       return {
@@ -83,7 +83,7 @@ export const authOptions: NextAuthOptions = {
         name: dbUser.name,
         email: dbUser.email,
         picture: dbUser.image,
-      };
+      }
     },
   },
   providers: [
@@ -101,7 +101,7 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
-};
+}
 
 /**
  * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
@@ -109,8 +109,8 @@ export const authOptions: NextAuthOptions = {
  * @see https://next-auth.js.org/configuration/nextjs
  */
 export const getServerAuthSession = (ctx: {
-  req: GetServerSidePropsContext["req"];
-  res: GetServerSidePropsContext["res"];
+  req: GetServerSidePropsContext['req']
+  res: GetServerSidePropsContext['res']
 }) => {
-  return getServerSession(ctx.req, ctx.res, authOptions);
-};
+  return getServerSession(ctx.req, ctx.res, authOptions)
+}

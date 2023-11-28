@@ -1,5 +1,5 @@
-import { Status } from "@prisma/client";
-import Link from "next/link";
+import { Status } from '@prisma/client'
+import Link from 'next/link'
 
 import {
   Badge,
@@ -9,8 +9,8 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-} from "@tremor/react";
-import { format } from "date-fns";
+} from '@tremor/react'
+import { format } from 'date-fns'
 import {
   Check,
   CheckCheck,
@@ -20,8 +20,8 @@ import {
   Pencil,
   Trash2,
   X,
-} from "lucide-react";
-import { Button } from "~/components/ui/button";
+} from 'lucide-react'
+import { Button } from '~/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,17 +29,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
+} from '~/components/ui/dropdown-menu'
 
 type AttendanceRecord = {
-  attendanceRecordId: string;
-  studentId: string;
-  lectureId: string;
-  status: Status;
-  timestamp: Date;
-  studentFullName: string;
-  moduleName: string;
-};
+  attendanceRecordId: string
+  studentId: string
+  lectureId: string
+  status: Status
+  timestamp: Date
+  studentFullName: string
+  moduleName: string
+}
 
 export default function RecordTable({
   allAttendanceRecords,
@@ -47,10 +47,10 @@ export default function RecordTable({
   idBeingDeleted,
   setIdBeingDeleted,
 }: {
-  allAttendanceRecords: AttendanceRecord[];
-  deleteAttendanceRecordById: (id: { attendanceRecordId: string }) => void;
-  idBeingDeleted: string | null;
-  setIdBeingDeleted: (id: string | null) => void;
+  allAttendanceRecords: AttendanceRecord[]
+  deleteAttendanceRecordById: (id: { attendanceRecordId: string }) => void
+  idBeingDeleted: string | null
+  setIdBeingDeleted: (id: string | null) => void
 }) {
   return (
     <Table className="mt-4">
@@ -102,7 +102,7 @@ export default function RecordTable({
               )}
             </TableCell>
             <TableCell className="">
-              {format(record.timestamp, "dd-MMM-yyyy HH:mm:ss")}
+              {format(record.timestamp, 'dd-MMM-yyyy HH:mm:ss')}
             </TableCell>
 
             {/* Buttons to update or delete data */}
@@ -110,7 +110,7 @@ export default function RecordTable({
               {/* Dropdown Menu - contains actions for each student */}
               <DropdownMenu>
                 <DropdownMenuTrigger>
-                  <Button size={"icon"} variant={"ghost"} className="h-8 w-8">
+                  <Button size={'icon'} variant={'ghost'} className="h-8 w-8">
                     <MoreHorizontal className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -124,7 +124,7 @@ export default function RecordTable({
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => alert("Not implemented yet")}
+                    onClick={() => alert('Not implemented yet')}
                   >
                     <Pencil className="mr-2 h-4 w-4" />
                     Edit
@@ -135,8 +135,8 @@ export default function RecordTable({
                     onClick={() => {
                       deleteAttendanceRecordById({
                         attendanceRecordId: record.attendanceRecordId,
-                      });
-                      setIdBeingDeleted(record.attendanceRecordId);
+                      })
+                      setIdBeingDeleted(record.attendanceRecordId)
                     }}
                   >
                     {idBeingDeleted === record.attendanceRecordId && (
@@ -157,5 +157,5 @@ export default function RecordTable({
         ))}
       </TableBody>
     </Table>
-  );
+  )
 }

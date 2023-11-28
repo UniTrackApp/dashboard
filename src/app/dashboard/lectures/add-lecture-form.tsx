@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-"use client";
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
-import { CalendarIcon, Loader2, Plus } from "lucide-react";
-import { useForm } from "react-hook-form";
-import z from "zod";
-import { cn } from "~/lib/utils";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { format } from 'date-fns'
+import { CalendarIcon, Loader2, Plus } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import z from 'zod'
+import { cn } from '~/lib/utils'
 
-import { Button } from "~/components/ui/button";
-import { Calendar } from "~/components/ui/calendar";
+import { Button } from '~/components/ui/button'
+import { Calendar } from '~/components/ui/calendar'
 import {
   Form,
   FormControl,
@@ -19,53 +19,53 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
+} from '~/components/ui/form'
+import { Input } from '~/components/ui/input'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "~/components/ui/popover";
+} from '~/components/ui/popover'
 
 // Schema for form validation (using Zod)
 const FormSchema = z.object({
   lectureId: z
     .string()
-    .min(1, "Required field")
-    .max(20, "Must be 20 characters or less")
-    .startsWith("COMP", `Lecture ID must start with "COMP"`),
+    .min(1, 'Required field')
+    .max(20, 'Must be 20 characters or less')
+    .startsWith('COMP', `Lecture ID must start with "COMP"`),
   moduleId: z
     .string()
-    .min(1, "Required field")
-    .max(10, "Must be 15 characters or less")
-    .startsWith("COMP", `Module ID must start with "COMP"`),
+    .min(1, 'Required field')
+    .max(10, 'Must be 15 characters or less')
+    .startsWith('COMP', `Module ID must start with "COMP"`),
   startTime: z.date(),
   endTime: z.date(),
-});
+})
 
 export default function AddModuleForm({
   createNewLecture,
   isBeingAdded,
   setIsBeingAdded,
 }: {
-  createNewLecture: (entry: z.infer<typeof FormSchema>) => void;
-  isBeingAdded: boolean;
-  setIsBeingAdded: (value: boolean) => void;
+  createNewLecture: (entry: z.infer<typeof FormSchema>) => void
+  isBeingAdded: boolean
+  setIsBeingAdded: (value: boolean) => void
 }) {
   // Form hook - used for form validation and submission logic (using react-hook-form)
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  });
+  })
 
   // Form submission function - called when the form is submitted (using react-hook-form)
   function onSubmit(formData: z.infer<typeof FormSchema>) {
-    setIsBeingAdded(true);
+    setIsBeingAdded(true)
     createNewLecture({
       lectureId: formData.lectureId,
       startTime: formData.startTime,
       endTime: formData.endTime,
       moduleId: formData.moduleId,
-    });
+    })
   }
   return (
     <Form {...form}>
@@ -117,14 +117,14 @@ export default function AddModuleForm({
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
-                      variant={"outline"}
+                      variant={'outline'}
                       className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground",
+                        'w-[240px] pl-3 text-left font-normal',
+                        !field.value && 'text-muted-foreground',
                       )}
                     >
                       {field.value ? (
-                        format(field.value, "PPP")
+                        format(field.value, 'PPP')
                       ) : (
                         <span>Pick a start time</span>
                       )}
@@ -138,7 +138,7 @@ export default function AddModuleForm({
                     selected={field.value}
                     onSelect={field.onChange}
                     disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
+                      date > new Date() || date < new Date('1900-01-01')
                     }
                     initialFocus
                   />
@@ -165,14 +165,14 @@ export default function AddModuleForm({
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
-                      variant={"outline"}
+                      variant={'outline'}
                       className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground",
+                        'w-[240px] pl-3 text-left font-normal',
+                        !field.value && 'text-muted-foreground',
                       )}
                     >
                       {field.value ? (
-                        format(field.value, "PPP")
+                        format(field.value, 'PPP')
                       ) : (
                         <span>Pick a end time</span>
                       )}
@@ -186,7 +186,7 @@ export default function AddModuleForm({
                     selected={field.value}
                     onSelect={field.onChange}
                     disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
+                      date > new Date() || date < new Date('1900-01-01')
                     }
                     initialFocus
                   />
@@ -220,5 +220,5 @@ export default function AddModuleForm({
         </Button>
       </form>
     </Form>
-  );
+  )
 }

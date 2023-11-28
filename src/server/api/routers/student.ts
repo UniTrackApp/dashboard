@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { z } from 'zod'
+import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc'
 
 // This is a tRPC router used to manage API calls to the Student table
 export const studentRouter = createTRPCRouter({
@@ -10,22 +10,22 @@ export const studentRouter = createTRPCRouter({
       z.object({
         firstName: z
           .string()
-          .min(1, "Required field")
-          .max(50, "Must be 50 characters or less"),
+          .min(1, 'Required field')
+          .max(50, 'Must be 50 characters or less'),
         lastName: z
           .string()
-          .min(1, "Required field")
-          .max(50, "Must be 50 characters or less"),
+          .min(1, 'Required field')
+          .max(50, 'Must be 50 characters or less'),
         studentId: z
           .string()
-          .min(1, "Required field")
-          .max(10, "Must be 10 characters or less")
-          .regex(/^[0-9]+$/, "Must be a number"),
+          .min(1, 'Required field')
+          .max(10, 'Must be 10 characters or less')
+          .regex(/^[0-9]+$/, 'Must be a number'),
         studentCardId: z
           .string()
           .toUpperCase()
-          .min(1, "Required field")
-          .max(50, "Must be 50 characters or less"),
+          .min(1, 'Required field')
+          .max(50, 'Must be 50 characters or less'),
       }),
     )
     // This mutation function takes in the input object and creates a new entry in the database
@@ -37,12 +37,12 @@ export const studentRouter = createTRPCRouter({
           studentId: input.studentId,
           studentCardId: input.studentCardId,
         },
-      });
+      })
     }),
 
   // GET: Gets all rows and columns from the student table
   getAllStudents: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.prisma.student.findMany();
+    return ctx.prisma.student.findMany()
   }),
 
   // GET: Gets a specific student entry by their ID (primary key)
@@ -50,16 +50,16 @@ export const studentRouter = createTRPCRouter({
     .input(
       z
         .string()
-        .min(1, "Required field")
-        .max(10, "Must be 10 characters or less")
-        .regex(/^[0-9]+$/, "Must be a number"),
+        .min(1, 'Required field')
+        .max(10, 'Must be 10 characters or less')
+        .regex(/^[0-9]+$/, 'Must be a number'),
     )
     .query(async (props) => {
       return props.ctx.prisma.student.findFirst({
         where: {
           studentId: props.input,
         },
-      });
+      })
     }),
 
   // GET: Gets a specific student entry by their card ID
@@ -67,21 +67,21 @@ export const studentRouter = createTRPCRouter({
     .input(
       z
         .string()
-        .min(1, "Required field")
-        .max(10, "Must be 10 characters or less")
-        .regex(/^[0-9]+$/, "Must be a number"),
+        .min(1, 'Required field')
+        .max(10, 'Must be 10 characters or less')
+        .regex(/^[0-9]+$/, 'Must be a number'),
     )
     .query(async (props) => {
       return props.ctx.prisma.student.findFirst({
         where: {
           studentCardId: props.input,
         },
-      });
+      })
     }),
 
   // GET: Gets the number of student entries
   getStudentCount: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.student.count();
+    return await ctx.prisma.student.count()
   }),
 
   // GET: Gets all student IDs from the student table
@@ -90,7 +90,7 @@ export const studentRouter = createTRPCRouter({
       select: {
         studentId: true,
       },
-    });
+    })
   }),
 
   // DELETE: Deletes a student entry by its ID (primary key)
@@ -100,9 +100,9 @@ export const studentRouter = createTRPCRouter({
       z.object({
         studentId: z
           .string()
-          .min(1, "Required field")
-          .max(10, "Must be 10 characters or less")
-          .regex(/^[0-9]+$/, "Must be a number"),
+          .min(1, 'Required field')
+          .max(10, 'Must be 10 characters or less')
+          .regex(/^[0-9]+$/, 'Must be a number'),
       }),
     )
     // This mutation function takes in the input object and deletes the entry in the database
@@ -111,6 +111,6 @@ export const studentRouter = createTRPCRouter({
         where: {
           studentId: input.studentId,
         },
-      });
+      })
     }),
-});
+})

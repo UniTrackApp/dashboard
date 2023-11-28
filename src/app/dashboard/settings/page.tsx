@@ -1,12 +1,12 @@
-import { getServerSession } from "next-auth";
-import Image from "next/image";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Separator } from "~/components/ui/separator";
-import { authOptions } from "~/server/auth";
+import { getServerSession } from 'next-auth'
+import Image from 'next/image'
+import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
+import { Separator } from '~/components/ui/separator'
+import { authOptions } from '~/server/auth'
 
 export default async function Settings() {
-  const user = await getServerSession(authOptions);
+  const user = await getServerSession(authOptions)
 
   return (
     <div className="flex flex-col gap-4">
@@ -72,5 +72,5 @@ export default async function Settings() {
         </div>
       )}
     </div>
-  );
+  )
 }

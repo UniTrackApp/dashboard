@@ -1,4 +1,4 @@
-import { type Module } from "@prisma/client";
+import { type Module } from '@prisma/client'
 import {
   Table,
   TableBody,
@@ -6,16 +6,16 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-} from "@tremor/react";
+} from '@tremor/react'
 import {
   ExternalLink,
   Loader2,
   MoreHorizontal,
   Pencil,
   Trash2,
-} from "lucide-react";
-import Link from "next/link";
-import { Button } from "~/components/ui/button";
+} from 'lucide-react'
+import Link from 'next/link'
+import { Button } from '~/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,7 +23,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
+} from '~/components/ui/dropdown-menu'
 
 export default function ModuleTable({
   allModules,
@@ -31,10 +31,10 @@ export default function ModuleTable({
   idBeingDeleted,
   setIdBeingDeleted,
 }: {
-  allModules: Module[];
-  deleteModuleById: (id: { moduleId: string }) => void;
-  idBeingDeleted: string | null;
-  setIdBeingDeleted: (id: string | null) => void;
+  allModules: Module[]
+  deleteModuleById: (id: { moduleId: string }) => void
+  idBeingDeleted: string | null
+  setIdBeingDeleted: (id: string | null) => void
 }) {
   return (
     <Table className="mt-6">
@@ -61,7 +61,7 @@ export default function ModuleTable({
               {/* Dropdown Menu - contains actions for each student */}
               <DropdownMenu>
                 <DropdownMenuTrigger>
-                  <Button size={"icon"} variant={"ghost"} className="h-8 w-8">
+                  <Button size={'icon'} variant={'ghost'} className="h-8 w-8">
                     <MoreHorizontal className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -75,7 +75,7 @@ export default function ModuleTable({
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => alert("Not implemented yet")}
+                    onClick={() => alert('Not implemented yet')}
                   >
                     <Pencil className="mr-2 h-4 w-4" />
                     Edit
@@ -86,8 +86,8 @@ export default function ModuleTable({
                     onClick={() => {
                       deleteModuleById({
                         moduleId: module.moduleId,
-                      });
-                      setIdBeingDeleted(module.moduleId);
+                      })
+                      setIdBeingDeleted(module.moduleId)
                     }}
                   >
                     {idBeingDeleted === module.moduleId && (
@@ -108,5 +108,5 @@ export default function ModuleTable({
         ))}
       </TableBody>
     </Table>
-  );
+  )
 }

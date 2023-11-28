@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-"use client";
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronsUpDown, Loader2, Plus } from "lucide-react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Check, ChevronsUpDown, Loader2, Plus } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
 
-import { Button } from "~/components/ui/button";
+import { Button } from '~/components/ui/button'
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "~/components/ui/command";
+} from '~/components/ui/command'
 import {
   Form,
   FormControl,
@@ -23,56 +23,56 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
+} from '~/components/ui/form'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "~/components/ui/popover";
+} from '~/components/ui/popover'
 
-import { api } from "~/lib/api";
-import { cn } from "~/lib/utils";
+import { api } from '~/lib/api'
+import { cn } from '~/lib/utils'
 
 // Schema for form validation (using Zod)
 const FormSchema = z.object({
   studentId: z
     .string()
-    .min(1, "Required field")
-    .max(10, "Must be 10 characters or less")
-    .regex(/^[0-9]+$/, "Must be a number"),
+    .min(1, 'Required field')
+    .max(10, 'Must be 10 characters or less')
+    .regex(/^[0-9]+$/, 'Must be a number'),
   moduleId: z
     .string()
-    .min(1, "Required field")
-    .max(10, "Must be 15 characters or less")
-    .startsWith("COMP", `Module ID must start with "COMP"`),
-});
+    .min(1, 'Required field')
+    .max(10, 'Must be 15 characters or less')
+    .startsWith('COMP', `Module ID must start with "COMP"`),
+})
 
 export default function AddEnrollmentForm({
   createEnrollment,
   isBeingAdded,
   setIsBeingAdded,
 }: {
-  createEnrollment: (entry: z.infer<typeof FormSchema>) => void;
-  isBeingAdded: boolean;
-  setIsBeingAdded: (value: boolean) => void;
+  createEnrollment: (entry: z.infer<typeof FormSchema>) => void
+  isBeingAdded: boolean
+  setIsBeingAdded: (value: boolean) => void
 }) {
   // Form hook - used for form validation and submission logic (using react-hook-form)
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  });
+  })
 
   // Form submission function - called when the form is submitted (using react-hook-form)
   function onSubmit(formData: z.infer<typeof FormSchema>) {
-    setIsBeingAdded(true);
+    setIsBeingAdded(true)
     createEnrollment({
       studentId: formData.studentId,
       moduleId: formData.moduleId,
-    });
+    })
   }
 
   // Used to fetch all students and lectures for the comboboxes
-  const { data: allStudents } = api.student.getAllStudents.useQuery();
-  const { data: getAllModules } = api.module.getAllModules.useQuery();
+  const { data: allStudents } = api.student.getAllStudents.useQuery()
+  const { data: getAllModules } = api.module.getAllModules.useQuery()
 
   return (
     <Form {...form}>
@@ -92,15 +92,15 @@ export default function AddEnrollmentForm({
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-[300px] justify-between",
-                          !field.value && "text-muted-foreground",
+                          'w-[300px] justify-between',
+                          !field.value && 'text-muted-foreground',
                         )}
                       >
                         {field.value
                           ? allStudents?.find(
                               (student) => student.studentId === field.value,
                             )?.studentId
-                          : "Select student ID"}
+                          : 'Select student ID'}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
@@ -115,19 +115,19 @@ export default function AddEnrollmentForm({
                             value={student.studentId}
                             key={student.studentId}
                             onSelect={() => {
-                              form.setValue("studentId", student.studentId);
+                              form.setValue('studentId', student.studentId)
                             }}
                           >
                             <Check
                               className={cn(
-                                "mr-2 h-4 w-4",
+                                'mr-2 h-4 w-4',
                                 student.studentId === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0",
+                                  ? 'opacity-100'
+                                  : 'opacity-0',
                               )}
                             />
                             <span className="truncate tabular-nums">
-                              {student.studentId} - {student.firstName}{" "}
+                              {student.studentId} - {student.firstName}{' '}
                               {student.lastName}
                             </span>
                           </CommandItem>
@@ -158,15 +158,15 @@ export default function AddEnrollmentForm({
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-[300px] justify-between",
-                          !field.value && "text-muted-foreground",
+                          'w-[300px] justify-between',
+                          !field.value && 'text-muted-foreground',
                         )}
                       >
                         {field.value
                           ? getAllModules?.find(
                               (module) => module.moduleId === field.value,
                             )?.moduleId
-                          : "Select module ID"}
+                          : 'Select module ID'}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
@@ -181,15 +181,15 @@ export default function AddEnrollmentForm({
                             value={module.moduleId}
                             key={module.moduleId}
                             onSelect={() => {
-                              form.setValue("moduleId", module.moduleId);
+                              form.setValue('moduleId', module.moduleId)
                             }}
                           >
                             <Check
                               className={cn(
-                                "mr-2 h-4 w-4",
+                                'mr-2 h-4 w-4',
                                 module.moduleId === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0",
+                                  ? 'opacity-100'
+                                  : 'opacity-0',
                               )}
                             />
                             <span className="truncate tabular-nums">
@@ -226,5 +226,5 @@ export default function AddEnrollmentForm({
         </Button>
       </form>
     </Form>
-  );
+  )
 }

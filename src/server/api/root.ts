@@ -1,11 +1,11 @@
-import { postRouter } from "~/server/api/routers/post";
-import { studentRouter } from "~/server/api/routers/student";
-import { createTRPCRouter } from "~/server/api/trpc";
-import { attendanceRecordRouter } from "./routers/attendance-records";
-import { enrollmentRouter } from "./routers/enrollment";
-import { lectureRouter } from "./routers/lecture";
-import { moduleRouter } from "./routers/module";
-import { uniTrackRouter } from "./routers/unitrack";
+import { postRouter } from '~/server/api/routers/post'
+import { studentRouter } from '~/server/api/routers/student'
+import { createTRPCRouter } from '~/server/api/trpc'
+import { attendanceRecordRouter } from './routers/attendance-records'
+import { enrollmentRouter } from './routers/enrollment'
+import { lectureRouter } from './routers/lecture'
+import { moduleRouter } from './routers/module'
+import { uniTrackRouter } from './routers/unitrack'
 
 /**
  * This is the primary router for your server.
@@ -20,7 +20,7 @@ export const appRouter = createTRPCRouter({
   attendanceRecord: attendanceRecordRouter,
   enrollment: enrollmentRouter,
   universal: uniTrackRouter,
-});
+})
 
 // export type definition of API
-export type AppRouter = typeof appRouter;
+export type AppRouter = typeof appRouter

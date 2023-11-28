@@ -3,5 +3,5 @@ export default function Manage() {
     <div>
       <h1>Manage</h1>
     </div>
-  );
+  )
 }

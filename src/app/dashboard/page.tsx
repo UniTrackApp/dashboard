@@ -1,18 +1,18 @@
-import { prisma } from "~/server/prisma";
+import { prisma } from '~/server/prisma'
 
-import { Card, Metric, Text } from "@tremor/react";
-import { BookCopy, Clock, CopyCheck, Users } from "lucide-react";
-import { getServerSession } from "next-auth";
-import { Separator } from "~/components/ui/separator";
-import { getFirstName } from "~/lib/utils";
-import { authOptions } from "~/server/auth";
+import { Card, Metric, Text } from '@tremor/react'
+import { BookCopy, Clock, CopyCheck, Users } from 'lucide-react'
+import { getServerSession } from 'next-auth'
+import { Separator } from '~/components/ui/separator'
+import { getFirstName } from '~/lib/utils'
+import { authOptions } from '~/server/auth'
 
 export default async function Dashboard() {
-  const studentCount = await prisma.student.count();
-  const lectureCount = await prisma.lecture.count();
-  const moduleCount = await prisma.module.count();
-  const attendanceRecordCount = await prisma.attendanceRecord.count();
-  const user = await getServerSession(authOptions);
+  const studentCount = await prisma.student.count()
+  const lectureCount = await prisma.lecture.count()
+  const moduleCount = await prisma.module.count()
+  const attendanceRecordCount = await prisma.attendanceRecord.count()
+  const user = await getServerSession(authOptions)
 
   return (
     <div>
@@ -58,5 +58,5 @@ export default async function Dashboard() {
         </Card>
       </div>
     </div>
-  );
+  )
 }

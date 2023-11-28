@@ -1,5 +1,5 @@
-import type { Student } from "@prisma/client";
-import Link from "next/link";
+import type { Student } from '@prisma/client'
+import Link from 'next/link'
 
 import {
   DropdownMenu,
@@ -8,7 +8,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu'
 import {
   Table,
   TableBody,
@@ -16,8 +16,8 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-} from "@tremor/react";
-import { Button } from "~/components/ui/button";
+} from '@tremor/react'
+import { Button } from '~/components/ui/button'
 
 import {
   ExternalLink,
@@ -25,7 +25,7 @@ import {
   MoreHorizontal,
   Pencil,
   Trash2,
-} from "lucide-react";
+} from 'lucide-react'
 
 export default function StudentTable({
   allStudentsInfo,
@@ -33,10 +33,10 @@ export default function StudentTable({
   isBeingDeleted,
   setIsBeingDeleted,
 }: {
-  allStudentsInfo: Student[];
-  deleteStudentById: (id: { studentId: string }) => void;
-  isBeingDeleted: string | null;
-  setIsBeingDeleted: (value: string) => void;
+  allStudentsInfo: Student[]
+  deleteStudentById: (id: { studentId: string }) => void
+  isBeingDeleted: string | null
+  setIsBeingDeleted: (value: string) => void
 }) {
   return (
     <>
@@ -63,7 +63,7 @@ export default function StudentTable({
                 {/* Dropdown Menu - contains actions for each student */}
                 <DropdownMenu>
                   <DropdownMenuTrigger>
-                    <Button size={"icon"} variant={"ghost"} className="h-8 w-8">
+                    <Button size={'icon'} variant={'ghost'} className="h-8 w-8">
                       <MoreHorizontal className="h-5 w-5" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -80,7 +80,7 @@ export default function StudentTable({
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => alert("Not implemented yet")}
+                      onClick={() => alert('Not implemented yet')}
                     >
                       <Pencil className="mr-2 h-4 w-4" />
                       Edit
@@ -91,8 +91,8 @@ export default function StudentTable({
                       onClick={() => {
                         deleteStudentById({
                           studentId: student.studentId,
-                        });
-                        setIsBeingDeleted(student.studentId);
+                        })
+                        setIsBeingDeleted(student.studentId)
                       }}
                     >
                       {isBeingDeleted === student.studentId && (
@@ -114,5 +114,5 @@ export default function StudentTable({
         </TableBody>
       </Table>
     </>
-  );
+  )
 }

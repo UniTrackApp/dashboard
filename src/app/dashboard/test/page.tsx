@@ -1,11 +1,11 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { Calendar } from "~/components/ui/calendar";
-import { DateTimePicker } from "~/components/ui/date-time/date-time-picker";
+import { useState } from 'react'
+import { Calendar } from '~/components/ui/calendar'
+import { DateTimePicker } from '~/components/ui/date-time/date-time-picker'
 
 export default function DatePickerDemo() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date | undefined>(new Date())
 
   return (
     <div>
@@ -17,5 +17,5 @@ export default function DatePickerDemo() {
         className="rounded-md border"
       />
     </div>
-  );
+  )
 }

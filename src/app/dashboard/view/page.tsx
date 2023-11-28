@@ -3,5 +3,5 @@ export default function View() {
     <div>
       <h1>View</h1>
     </div>
-  );
+  )
 }

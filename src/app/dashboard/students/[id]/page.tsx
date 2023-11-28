@@ -1,12 +1,12 @@
-import React from "react";
-import { api } from "~/app/trpc/server";
+import React from 'react'
+import { api } from '~/app/trpc/server'
 
 export default async function IndividualStudentPage({
   params,
 }: {
-  params: { id: string };
+  params: { id: string }
 }) {
-  const data = await api.student.getStudentById.query(params.id);
+  const data = await api.student.getStudentById.query(params.id)
 
   return (
     <div>
@@ -21,5 +21,5 @@ export default async function IndividualStudentPage({
         </div>
       )}
     </div>
-  );
+  )
 }

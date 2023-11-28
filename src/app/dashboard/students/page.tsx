@@ -1,12 +1,12 @@
-"use client";
+'use client'
 
-import { UserPlus2 } from "lucide-react";
-import { useState } from "react";
-import { useToast } from "~/components/ui/use-toast";
-import { api } from "~/lib/api";
+import { UserPlus2 } from 'lucide-react'
+import { useState } from 'react'
+import { useToast } from '~/components/ui/use-toast'
+import { api } from '~/lib/api'
 
-import { Badge, Card, Title } from "@tremor/react";
-import { buttonVariants } from "~/components/ui/button";
+import { Badge, Card, Title } from '@tremor/react'
+import { buttonVariants } from '~/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -14,71 +14,71 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "~/components/ui/dialog";
-import { Separator } from "~/components/ui/separator";
-import { Skeleton } from "~/components/ui/skeleton";
-import AddStudentForm from "./add-student-form";
-import StudentTable from "./student-table";
+} from '~/components/ui/dialog'
+import { Separator } from '~/components/ui/separator'
+import { Skeleton } from '~/components/ui/skeleton'
+import AddStudentForm from './add-student-form'
+import StudentTable from './student-table'
 
 export default function Students() {
-  const { toast } = useToast();
+  const { toast } = useToast()
 
-  const [isBeingDeleted, setIsBeingDeleted] = useState<string | null>(null);
-  const [isBeingAdded, setIsBeingAdded] = useState(false);
+  const [isBeingDeleted, setIsBeingDeleted] = useState<string | null>(null)
+  const [isBeingAdded, setIsBeingAdded] = useState(false)
 
   // State - used to close dialog after an attendance record is added
-  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false)
 
   const {
     data: allStudentsInfo,
     refetch: refetchAllStudents,
     isLoading: isloadingAllStudents,
-  } = api.student.getAllStudents.useQuery();
+  } = api.student.getAllStudents.useQuery()
 
   const {
     data: studentCount,
     refetch: refetchStudentCount,
     isLoading: isLoadingStudentCount,
-  } = api.student.getStudentCount.useQuery();
+  } = api.student.getStudentCount.useQuery()
 
   const { mutate: createStudent } = api.student.createStudent.useMutation({
     onSuccess({ firstName, studentId }) {
       toast({
-        title: "Student Added ✅",
+        title: 'Student Added ✅',
         description: `${firstName} (${studentId}) has been added to the database.`,
-      });
-      void refetchAllStudents();
-      void refetchStudentCount();
-      setIsBeingAdded(false);
-      setDialogIsOpen(false);
+      })
+      void refetchAllStudents()
+      void refetchStudentCount()
+      setIsBeingAdded(false)
+      setDialogIsOpen(false)
     },
     onError({ data }) {
-      console.log(data);
+      console.log(data)
       toast({
-        title: "Error 😢",
-        description: "Something went wrong, please try again.",
-      });
+        title: 'Error 😢',
+        description: 'Something went wrong, please try again.',
+      })
     },
-  });
+  })
 
   const { mutate: deleteStudentById } =
     api.student.deleteStudentById.useMutation({
       onSuccess({ firstName }) {
         toast({
-          title: "Student Deleted ❌",
+          title: 'Student Deleted ❌',
           description: `${firstName} has been deleted from the database.`,
-        });
-        void refetchAllStudents();
-        void refetchStudentCount();
-        setIsBeingDeleted(null);
+        })
+        void refetchAllStudents()
+        void refetchStudentCount()
+        setIsBeingDeleted(null)
       },
       onError() {
         toast({
-          title: "Error 😢",
-          description: "Something went wrong, please try again.",
-        });
+          title: 'Error 😢',
+          description: 'Something went wrong, please try again.',
+        })
       },
-    });
+    })
 
   return (
     <>
@@ -107,8 +107,8 @@ export default function Students() {
           <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
             <DialogTrigger
               className={buttonVariants({
-                variant: "default",
-                className: "w-fit",
+                variant: 'default',
+                className: 'w-fit',
               })}
             >
               <UserPlus2 className="mr-2" />
@@ -147,5 +147,5 @@ export default function Students() {
         )}
       </Card>
     </>
-  );
+  )
 }

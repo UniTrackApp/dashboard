@@ -1,12 +1,12 @@
-"use client";
+'use client'
 
-import { useState } from "react";
+import { useState } from 'react'
 
-import ModuleTable from "@/app/dashboard/modules/module-table";
-import { buttonVariants } from "@/components/ui/button";
+import ModuleTable from '@/app/dashboard/modules/module-table'
+import { buttonVariants } from '@/components/ui/button'
 
-import { Badge, Card, Flex, Title } from "@tremor/react";
-import { Plus } from "lucide-react";
+import { Badge, Card, Flex, Title } from '@tremor/react'
+import { Plus } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -14,79 +14,79 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "~/components/ui/dialog";
-import { Separator } from "~/components/ui/separator";
-import { Skeleton } from "~/components/ui/skeleton";
-import { toast } from "~/components/ui/use-toast";
-import { api } from "~/lib/api";
-import AddModuleForm from "./add-module-form";
+} from '~/components/ui/dialog'
+import { Separator } from '~/components/ui/separator'
+import { Skeleton } from '~/components/ui/skeleton'
+import { toast } from '~/components/ui/use-toast'
+import { api } from '~/lib/api'
+import AddModuleForm from './add-module-form'
 
 export default function Modules() {
   // State - used for button loading spinners during module creation and deletion
-  const [idBeingDeleted, setIdBeingDeleted] = useState<string | null>(null);
-  const [isBeingAdded, setIsBeingAdded] = useState(false);
+  const [idBeingDeleted, setIdBeingDeleted] = useState<string | null>(null)
+  const [isBeingAdded, setIsBeingAdded] = useState(false)
 
   // State - used to close dialog after a module is added
-  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false)
 
   // Fetches all modules, and refetches when createNewModule is called
   const {
     data: allModules,
     refetch: refetchAllModules,
     isLoading: isLoadingAllModules,
-  } = api.module.getAllModules.useQuery();
+  } = api.module.getAllModules.useQuery()
 
   // Fetches module count and refetches when createNewModule is called
   const {
     data: moduleCount,
     refetch: refetchModuleCount,
     isLoading: isLoadingModuleCount,
-  } = api.module.getModuleCount.useQuery();
+  } = api.module.getModuleCount.useQuery()
 
   // Creates a new module entry
   const { mutate: createModule } = api.module.createModule.useMutation({
     // Displays a toast notification when the mutation is successful
     onSuccess() {
       toast({
-        title: "Module Added ✅",
+        title: 'Module Added ✅',
         description: `Module added to database successfully.`,
-      });
-      void refetchAllModules();
-      void refetchModuleCount();
-      setIsBeingAdded(false);
-      setDialogIsOpen(false);
+      })
+      void refetchAllModules()
+      void refetchModuleCount()
+      setIsBeingAdded(false)
+      setDialogIsOpen(false)
     },
     // Displays a toast notification when the mutation fails
     // TODO: Fetch error message from server and display it in the toast description
     onError() {
       toast({
-        title: "Error 😢",
-        description: "Something went wrong, please try again.",
-      });
+        title: 'Error 😢',
+        description: 'Something went wrong, please try again.',
+      })
     },
-  });
+  })
 
   // Deletes a module by ID
   const { mutate: deleteModuleById } = api.module.deleteModuleById.useMutation({
     // Displays a toast notification when the mutation is successful
     onSuccess() {
       toast({
-        title: "Module Deleted ✅",
-        description: "Module deleted from database successfully.",
-      });
-      void refetchAllModules();
-      void refetchModuleCount();
-      setIdBeingDeleted(null);
+        title: 'Module Deleted ✅',
+        description: 'Module deleted from database successfully.',
+      })
+      void refetchAllModules()
+      void refetchModuleCount()
+      setIdBeingDeleted(null)
     },
     // Displays a toast notification when the mutation fails
     // TODO: Fetch error message from server and display it in the toast description
     onError() {
       toast({
-        title: "Error 😢",
-        description: "Something went wrong, please try again.",
-      });
+        title: 'Error 😢',
+        description: 'Something went wrong, please try again.',
+      })
     },
-  });
+  })
 
   return (
     <>
@@ -112,7 +112,7 @@ export default function Modules() {
 
           {/* Dialog - used to create new modules */}
           <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
-            <DialogTrigger className={buttonVariants({ className: "w-fit" })}>
+            <DialogTrigger className={buttonVariants({ className: 'w-fit' })}>
               <Plus size={20} className="mr-2" />
               Create Module
             </DialogTrigger>
@@ -150,5 +150,5 @@ export default function Modules() {
         )}
       </Card>
     </>
-  );
+  )
 }

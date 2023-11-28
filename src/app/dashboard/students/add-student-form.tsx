@@ -1,8 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import { Button } from "~/components/ui/button";
+import { Button } from '~/components/ui/button'
 import {
   Form,
   FormControl,
@@ -10,56 +10,56 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
+} from '~/components/ui/form'
+import { Input } from '~/components/ui/input'
 
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus } from 'lucide-react'
 
 // Schema for form validation (using Zod)
 const FormSchema = z.object({
   firstName: z
     .string()
-    .min(1, "Required field")
-    .max(50, "Must be 50 characters or less"),
+    .min(1, 'Required field')
+    .max(50, 'Must be 50 characters or less'),
   lastName: z
     .string()
-    .min(1, "Required field")
-    .max(50, "Must be 50 characters or less"),
+    .min(1, 'Required field')
+    .max(50, 'Must be 50 characters or less'),
   studentId: z
     .string()
-    .min(1, "Required field")
-    .max(10, "Must be 10 characters or less")
-    .regex(/^[0-9]+$/, "Must be a number"),
+    .min(1, 'Required field')
+    .max(10, 'Must be 10 characters or less')
+    .regex(/^[0-9]+$/, 'Must be a number'),
   studentCardId: z
     .string()
     .toUpperCase()
-    .min(1, "Required field")
-    .max(50, "Must be 50 characters or less"),
-});
+    .min(1, 'Required field')
+    .max(50, 'Must be 50 characters or less'),
+})
 
 export default function AddStudentForm({
   createStudent,
   isBeingAdded,
   setIsBeingAdded,
 }: {
-  createStudent: (entry: z.infer<typeof FormSchema>) => void;
-  isBeingAdded: boolean;
-  setIsBeingAdded: (value: boolean) => void;
+  createStudent: (entry: z.infer<typeof FormSchema>) => void
+  isBeingAdded: boolean
+  setIsBeingAdded: (value: boolean) => void
 }) {
   // Form hook - used for form validation and submission logic (using react-hook-form)
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  });
+  })
 
   // Form submission function - called when the form is submitted (using react-hook-form)
   function onSubmit(formData: z.infer<typeof FormSchema>) {
-    setIsBeingAdded(true);
+    setIsBeingAdded(true)
     createStudent({
       firstName: formData.firstName,
       lastName: formData.lastName,
       studentId: formData.studentId,
       studentCardId: formData.studentCardId,
-    });
+    })
   }
 
   return (
@@ -145,5 +145,5 @@ export default function AddStudentForm({
         </form>
       </Form>
     </div>
-  );
+  )
 }

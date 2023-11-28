@@ -1,11 +1,11 @@
-"use client";
+'use client'
 
-import { useState } from "react";
+import { useState } from 'react'
 
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from '@/components/ui/button'
 
-import { Badge, Card, Flex, Title } from "@tremor/react";
-import { Plus } from "lucide-react";
+import { Badge, Card, Flex, Title } from '@tremor/react'
+import { Plus } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -13,36 +13,36 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "~/components/ui/dialog";
-import { toast } from "~/components/ui/use-toast";
-import { api } from "~/lib/api";
+} from '~/components/ui/dialog'
+import { toast } from '~/components/ui/use-toast'
+import { api } from '~/lib/api'
 
-import { Separator } from "~/components/ui/separator";
-import { Skeleton } from "~/components/ui/skeleton";
-import AddLectureForm from "./add-lecture-form";
-import LectureTable from "./lecture-table";
+import { Separator } from '~/components/ui/separator'
+import { Skeleton } from '~/components/ui/skeleton'
+import AddLectureForm from './add-lecture-form'
+import LectureTable from './lecture-table'
 
 export default function Lectures() {
   // State - used for button loading spinners during lecture creation and deletion
-  const [idBeingDeleted, setIdBeingDeleted] = useState<string | null>(null);
-  const [isBeingAdded, setIsBeingAdded] = useState(false);
+  const [idBeingDeleted, setIdBeingDeleted] = useState<string | null>(null)
+  const [isBeingAdded, setIsBeingAdded] = useState(false)
 
   // State - used to close dialog after a lecture is added
-  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false)
 
   // Fetches all lectures, and refetches when createNewLecture is called
   const {
     data: allLectures,
     refetch: refetchAllLectures,
     isLoading: isLoadingAllLectures,
-  } = api.lecture.getAllLecturesWithModuleNames.useQuery();
+  } = api.lecture.getAllLecturesWithModuleNames.useQuery()
 
   // Fetches lecture count and refetches when createNewLecture is called
   const {
     data: lectureCount,
     refetch: refetchLectureCount,
     isLoading: isLoadingLectureCount,
-  } = api.lecture.getLectureCount.useQuery();
+  } = api.lecture.getLectureCount.useQuery()
 
   // Creates a new lecture entry
   const { mutate: createNewLecture } = api.lecture.createNewLecture.useMutation(
@@ -50,24 +50,24 @@ export default function Lectures() {
       // Displays a toast notification when the mutation is successful
       onSuccess() {
         toast({
-          title: "Lecture Added ✅",
+          title: 'Lecture Added ✅',
           description: `Lecture added to database successfully.`,
-        });
-        void refetchAllLectures();
-        void refetchLectureCount();
-        setIsBeingAdded(false);
-        setDialogIsOpen(false);
+        })
+        void refetchAllLectures()
+        void refetchLectureCount()
+        setIsBeingAdded(false)
+        setDialogIsOpen(false)
       },
       // Displays a toast notification when the mutation fails
       // TODO: Fetch error message from server and display it in the toast description
       onError() {
         toast({
-          title: "Error 😢",
-          description: "Something went wrong, please try again.",
-        });
+          title: 'Error 😢',
+          description: 'Something went wrong, please try again.',
+        })
       },
     },
-  );
+  )
 
   // Deletes a lecture by ID
   const { mutate: deleteLectureById } =
@@ -75,22 +75,22 @@ export default function Lectures() {
       // Displays a toast notification when the mutation is successful
       onSuccess() {
         toast({
-          title: "Lecture Deleted ✅",
-          description: "Lecture deleted from database successfully.",
-        });
-        void refetchAllLectures();
-        void refetchLectureCount();
-        setIdBeingDeleted(null);
+          title: 'Lecture Deleted ✅',
+          description: 'Lecture deleted from database successfully.',
+        })
+        void refetchAllLectures()
+        void refetchLectureCount()
+        setIdBeingDeleted(null)
       },
       // Displays a toast notification when the mutation fails
       // TODO: Fetch error message from server and display it in the toast description
       onError() {
         toast({
-          title: "Error 😢",
-          description: "Something went wrong, please try again.",
-        });
+          title: 'Error 😢',
+          description: 'Something went wrong, please try again.',
+        })
       },
-    });
+    })
 
   return (
     <>
@@ -117,7 +117,7 @@ export default function Lectures() {
 
           {/* Dialog - used to create new lectures */}
           <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
-            <DialogTrigger className={buttonVariants({ className: "w-fit" })}>
+            <DialogTrigger className={buttonVariants({ className: 'w-fit' })}>
               <Plus size={20} className="mr-2" />
               Create Lecture
             </DialogTrigger>
@@ -155,5 +155,5 @@ export default function Lectures() {
         )}
       </Card>
     </>
-  );
+  )
 }

@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import { Badge, Card, Flex, Title } from "@tremor/react";
-import { Plus } from "lucide-react";
-import { useState } from "react";
+import { Badge, Card, Flex, Title } from '@tremor/react'
+import { Plus } from 'lucide-react'
+import { useState } from 'react'
 
-import { buttonVariants } from "~/components/ui/button";
+import { buttonVariants } from '~/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -12,37 +12,37 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "~/components/ui/dialog";
-import { toast } from "~/components/ui/use-toast";
+} from '~/components/ui/dialog'
+import { toast } from '~/components/ui/use-toast'
 
-import AddEnrollmentForm from "./add-enrollment-form";
-import EnrollmentTable from "./enrollment-table";
+import AddEnrollmentForm from './add-enrollment-form'
+import EnrollmentTable from './enrollment-table'
 
-import { Separator } from "~/components/ui/separator";
-import { Skeleton } from "~/components/ui/skeleton";
-import { api } from "~/lib/api";
+import { Separator } from '~/components/ui/separator'
+import { Skeleton } from '~/components/ui/skeleton'
+import { api } from '~/lib/api'
 
 export default function Enrollments() {
   // State - used for button loading spinners during attendance record creation and deletion
-  const [idBeingDeleted, setIdBeingDeleted] = useState<string | null>(null);
-  const [isBeingAdded, setIsBeingAdded] = useState(false);
+  const [idBeingDeleted, setIdBeingDeleted] = useState<string | null>(null)
+  const [isBeingAdded, setIsBeingAdded] = useState(false)
 
   // State - used to close dialog after an attendance record is added
-  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const [dialogIsOpen, setDialogIsOpen] = useState(false)
 
   // Fetches all enrollments, and refetches when createNewEnrollment is called
   const {
     data: allEnrollments,
     refetch: refetchAllEnrollments,
     isLoading: isLoadingAllEnrollments,
-  } = api.enrollment.getAllEnrollments.useQuery();
+  } = api.enrollment.getAllEnrollments.useQuery()
 
   // Fetches enrollment count, and refetches when createNewEnrollment is called
   const {
     data: enrollmentCount,
     refetch: refetchEnrollmentCount,
     isLoading: isLoadingEnrollmentCount,
-  } = api.enrollment.getEnrollmentCount.useQuery();
+  } = api.enrollment.getEnrollmentCount.useQuery()
 
   // Creates a new enrollment entry
   const { mutate: createEnrollment } =
@@ -50,23 +50,23 @@ export default function Enrollments() {
       // Displays a toast notification when the mutation is successful
       onSuccess() {
         toast({
-          title: "Enrollment Added ✅",
+          title: 'Enrollment Added ✅',
           description: `Enrollment added to database successfully.`,
-        });
-        void refetchAllEnrollments();
-        void refetchEnrollmentCount();
-        setIsBeingAdded(false);
-        setDialogIsOpen(false);
+        })
+        void refetchAllEnrollments()
+        void refetchEnrollmentCount()
+        setIsBeingAdded(false)
+        setDialogIsOpen(false)
       },
       // Displays a toast notification when the mutation fails
       // TODO: Fetch error message from server and display it in the toast description
       onError() {
         toast({
-          title: "Error 😢",
-          description: "Something went wrong, please try again.",
-        });
+          title: 'Error 😢',
+          description: 'Something went wrong, please try again.',
+        })
       },
-    });
+    })
 
   // Deletes an enrollment entry
   const { mutate: deleteEnrollmentById } =
@@ -74,22 +74,22 @@ export default function Enrollments() {
       // Displays a toast notification when the mutation is successful
       onSuccess() {
         toast({
-          title: "Enrollment Deleted ✅",
-          description: "Enrollment deleted from database successfully.",
-        });
-        void refetchAllEnrollments();
-        void refetchEnrollmentCount();
-        setIdBeingDeleted(null);
+          title: 'Enrollment Deleted ✅',
+          description: 'Enrollment deleted from database successfully.',
+        })
+        void refetchAllEnrollments()
+        void refetchEnrollmentCount()
+        setIdBeingDeleted(null)
       },
       // Displays a toast notification when the mutation fails
       // TODO: Fetch error message from server and display it in the toast description
       onError() {
         toast({
-          title: "Error 😢",
-          description: "Something went wrong, please try again.",
-        });
+          title: 'Error 😢',
+          description: 'Something went wrong, please try again.',
+        })
       },
-    });
+    })
 
   return (
     <div className="flex flex-col justify-center">
@@ -117,7 +117,7 @@ export default function Enrollments() {
 
             {/* Dialog - used to create new Attendance Records */}
             <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
-              <DialogTrigger className={buttonVariants({ className: "w-fit" })}>
+              <DialogTrigger className={buttonVariants({ className: 'w-fit' })}>
                 <Plus size={20} className="mr-2" />
                 Add Enrollment
               </DialogTrigger>
@@ -156,5 +156,5 @@ export default function Enrollments() {
         </Card>
       </div>
     </div>
-  );
+  )
 }

@@ -1,56 +1,56 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/unbound-method */
-"use client";
+'use client'
 
-import { CalendarIcon } from "lucide-react";
-import React, { useRef, useState } from "react";
+import { CalendarIcon } from 'lucide-react'
+import React, { useRef, useState } from 'react'
 import {
   useButton,
   useDatePicker,
   useInteractOutside,
   type DateValue,
-} from "react-aria";
-import { useDatePickerState, type DatePickerStateOptions } from "react-stately";
+} from 'react-aria'
+import { useDatePickerState, type DatePickerStateOptions } from 'react-stately'
 
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover'
 
-import { DateField } from "@/components/ui/date-time/date-field";
-import { TimeField } from "@/components/ui/date-time/time-field";
+import { DateField } from '@/components/ui/date-time/date-field'
+import { TimeField } from '@/components/ui/date-time/time-field'
 
-import { useForwardedRef } from "~/lib/useForwardedRef";
-import { cn } from "~/lib/utils";
+import { useForwardedRef } from '~/lib/useForwardedRef'
+import { cn } from '~/lib/utils'
 
 const DateTimePicker = React.forwardRef<
   HTMLDivElement,
   DatePickerStateOptions<DateValue>
 >((props, forwardedRef) => {
-  const ref = useForwardedRef(forwardedRef);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const contentRef = useRef<HTMLDivElement | null>(null);
+  const ref = useForwardedRef(forwardedRef)
+  const buttonRef = useRef<HTMLButtonElement | null>(null)
+  const contentRef = useRef<HTMLDivElement | null>(null)
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
-  const state = useDatePickerState(props);
+  const state = useDatePickerState(props)
   const {
     groupProps,
     fieldProps,
     buttonProps: _buttonProps,
     dialogProps,
     calendarProps,
-  } = useDatePicker(props, state, ref);
-  const { buttonProps } = useButton(_buttonProps, buttonRef);
+  } = useDatePicker(props, state, ref)
+  const { buttonProps } = useButton(_buttonProps, buttonRef)
   useInteractOutside({
     ref: contentRef,
     onInteractOutside: (e) => {
-      setOpen(false);
+      setOpen(false)
     },
-  });
+  })
 
   return (
     <div
@@ -58,7 +58,7 @@ const DateTimePicker = React.forwardRef<
       ref={ref}
       className={cn(
         groupProps.className,
-        "flex items-center rounded-md ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+        'flex items-center rounded-md ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
       )}
     >
       <DateField {...fieldProps} />
@@ -87,9 +87,9 @@ const DateTimePicker = React.forwardRef<
         </PopoverContent>
       </Popover>
     </div>
-  );
-});
+  )
+})
 
-DateTimePicker.displayName = "DateTimePicker";
+DateTimePicker.displayName = 'DateTimePicker'
 
-export { DateTimePicker };
+export { DateTimePicker }
