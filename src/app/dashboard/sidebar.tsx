@@ -20,6 +20,7 @@ export default function Sidebar() {
           </Suspense>
         </div>
 
+        {/* Nav links - with badges for WIP status */}
         <Suspense>
           <SidebarNavlinks />
         </Suspense>
