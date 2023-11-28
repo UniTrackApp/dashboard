@@ -5,9 +5,9 @@ name: Node.js (Build)
 
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
   pull_request:
-    branches: ["main"]
+    branches: ['main']
     types: [opened, synchronize, reopened]
 
 env:
@@ -33,7 +33,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: 'npm'
       - name: Install dependencies
         run: npm ci # clean install, without using the cache
       - name: Build Next.js with Node.js ${{ matrix.node-version }}
