@@ -23,17 +23,7 @@ export default async function Records() {
       </div>
 
       {/* Card - Contains table and button to add new students */}
-      <div className="space-y-8">
-        <Card>
-          {/* Card Title - displays table name + item counts */}
-          <Flex justifyContent="between">
-            <Flex justifyContent="start" className="gap-2">
-              <Title>Count</Title>
-              <Badge color="blue">{attendanceRecordCount}</Badge>
-            </Flex>
-          </Flex>
-        </Card>
-
+      <div>
         {/* Table - to display Attendance Records */}
         <DataTable columns={columns} data={data} />
       </div>
