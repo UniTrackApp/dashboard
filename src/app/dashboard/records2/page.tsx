@@ -1,12 +1,10 @@
 import { prisma } from '~/server/prisma'
 
-import { Badge, Card, Flex, Title } from '@tremor/react'
 import { Separator } from '~/components/ui/separator'
 import { columns } from './columns'
 import { DataTable } from './data-table'
 
 export default async function Records() {
-  const attendanceRecordCount = await prisma.attendanceRecord.count()
   const data = await prisma.attendanceRecord.findMany()
 
   return (
