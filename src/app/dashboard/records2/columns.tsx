@@ -59,6 +59,7 @@ export const columns: ColumnDef<AttendanceRecord>[] = [
   {
     accessorKey: 'actions',
     header: 'Actions',
+    enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original
 
