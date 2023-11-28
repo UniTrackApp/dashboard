@@ -24,7 +24,31 @@ import { revalidatePath } from 'next/cache'
 import Link from 'next/link'
 import { api } from '~/app/trpc/react'
 
+import { Checkbox } from '@/components/ui/checkbox'
+
 export const columns: ColumnDef<AttendanceRecord>[] = [
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: 'attendanceRecordId',
     header: 'Attendance Record ID',
