@@ -3,12 +3,12 @@
 import {
   BookCheck,
   CheckCircle,
-  History,
+  // History,
   Home,
   LibraryBig,
   Presentation,
   Settings,
-  UserCog,
+  // UserCog,
   Users,
 } from 'lucide-react'
 import Link from 'next/link'
