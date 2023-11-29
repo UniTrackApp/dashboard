@@ -17,7 +17,7 @@ export default async function Records() {
           Manage attendance records for your students here. Including adding new
           records, and deleting existing ones.
         </p>
-        <Separator className="my-6" />
+        <Separator className="mt-4 mb-1" />
       </div>
 
       {/* Card - Contains table and button to add new students */}

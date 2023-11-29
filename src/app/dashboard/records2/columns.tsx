@@ -54,7 +54,7 @@ export const columns: ColumnDef<AttendanceRecord>[] = [
   {
     accessorKey: 'attendanceRecordId',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Attendance Record ID" />
+      <DataTableColumnHeader column={column} title="ID" />
     ),
   },
   {
