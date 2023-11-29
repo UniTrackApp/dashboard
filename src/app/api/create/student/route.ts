@@ -1,6 +1,3 @@
-// TODO: Andrea, remove this ESLint exception when you start working on this file
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { z } from 'zod'
 import { prisma } from '~/server/prisma'
