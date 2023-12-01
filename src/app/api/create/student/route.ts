@@ -1,6 +1,10 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { z } from 'zod'
-import { prisma } from '~/server/prisma'
+import { PrismaClient } from '@prisma/client/edge'
+
+const prisma = new PrismaClient()
+
+export const runtime = 'edge'
 
 // This is a zod schema used to validate the request body
 const studentInfoSchema = z.object({
@@ -67,7 +71,10 @@ export async function POST(request: Request) {
   } catch (error) {
     // Validation error if format of parameters are wrong
     if (error instanceof z.ZodError) {
-      return Response.json({ error: error.issues.at(0)?.message }, { status: 400 })
+      return Response.json(
+        { error: error.issues.at(0)?.message },
+        { status: 400 },
+      )
     }
     // If the student exist will throw an error and send a response to client
     if (error instanceof PrismaClientKnownRequestError) {
