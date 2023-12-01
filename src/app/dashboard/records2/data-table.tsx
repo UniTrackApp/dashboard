@@ -24,6 +24,7 @@ import {
 import { DataTablePagination } from '~/components/ui/data-table/pagination'
 import { DataTableViewOptions } from '~/components/ui/data-table/view-options'
 import { Input } from '~/components/ui/input'
+import AddAttendanceRecordForm from './add-record-form'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -61,7 +62,7 @@ export function DataTable<TData, TValue>({
   return (
     <>
       <div className="flex justify-between items-center">
-        <div className="flex items-center py-4">
+        <div className="flex items-center py-4 gap-2">
           <Input
             placeholder="Filter by student ID..."
             defaultValue={
@@ -72,8 +73,12 @@ export function DataTable<TData, TValue>({
             }
             className="max-w-sm shrink-0"
           />
+          <DataTableViewOptions table={table} />
         </div>
-        <DataTableViewOptions table={table} />
+        <div>
+          {/* Dialog Form - used to create new Attendance Records */}
+          <AddAttendanceRecordForm />
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
