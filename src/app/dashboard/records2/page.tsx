@@ -5,7 +5,28 @@ import { columns } from './columns'
 import { DataTable } from './data-table'
 
 export default async function Records() {
-  const data = await prisma.attendanceRecord.findMany()
+  const data = await prisma.attendanceRecord.findMany({
+    include: {
+      Lecture: {
+        select: {
+          Module: {
+            select: {
+              moduleName: true,
+            },
+          },
+        },
+      },
+      Student: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+    orderBy: {
+      timestamp: 'desc',
+    },
+  })
 
   return (
     <div className="flex flex-col justify-center">

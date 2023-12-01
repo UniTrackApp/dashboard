@@ -28,7 +28,19 @@ import { api } from '~/app/trpc/react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from '~/components/ui/data-table/column-header'
 
-export const columns: ColumnDef<AttendanceRecord>[] = [
+type AttendanceRecordExtraInfo = AttendanceRecord & {
+  Student: {
+    firstName: string
+    lastName: string
+  }
+  Lecture: {
+    Module: {
+      moduleName: string
+    }
+  }
+}
+
+export const columns: ColumnDef<AttendanceRecordExtraInfo>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -61,6 +73,12 @@ export const columns: ColumnDef<AttendanceRecord>[] = [
     accessorKey: 'studentId',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Student ID" />
+    ),
+  },
+  {
+    accessorKey: 'Lecture.Module.moduleName',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Module Name" />
     ),
   },
   {
