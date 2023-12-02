@@ -1,5 +1,6 @@
 import { prisma } from '~/server/prisma'
 
+import Link from 'next/link'
 import { Separator } from '~/components/ui/separator'
 import { columns } from './columns'
 import { DataTable } from './data-table'
@@ -34,9 +35,16 @@ export default async function Records() {
         <h1 className="text-2xl font-bold text-foreground">
           Attendance Records
         </h1>
-        <p className="mt-1 text-muted-foreground">
-          Manage attendance records for your students here. Including adding new
-          records, and deleting existing ones.
+        <p className="mt-1 text-amber-400">
+          This is currently a work in progress and will be missing some
+          features. Please use the{' '}
+          <Link
+            className="underline-offset-4 underline"
+            href="/dashboard/records"
+          >
+            other page
+          </Link>{' '}
+          if you encounter any issues.
         </p>
         <Separator className="mt-4 mb-1" />
       </div>
