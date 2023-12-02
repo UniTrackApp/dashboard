@@ -65,6 +65,9 @@ export const attendanceRecordRouter = createTRPCRouter({
           },
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     })
 
     return attendanceRecords.map((attendanceRecord) => ({
