@@ -38,6 +38,12 @@ const links = [
     wipStatus: false,
   },
   {
+    name: 'Records 2.0',
+    href: '/dashboard/records-new',
+    icon: <CheckCircle size={18} />,
+    wipStatus: true,
+  },
+  {
     name: 'Enrollments',
     href: '/dashboard/enrollments',
     icon: <BookCheck size={18} />,
