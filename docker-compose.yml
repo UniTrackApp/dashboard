@@ -1,0 +1,29 @@
+# Use postgres/example user/password credentials
+version: '3.9'
+
+name: unitrack
+
+services:
+  # Our local Postgres database instance
+  postgres-db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: unitrack
+    volumes:
+      - unitrack-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432 # Default postgres port
+
+  # Use Adminer to quickly view the database at localhost:8080
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  unitrack-data:
+    driver: local
