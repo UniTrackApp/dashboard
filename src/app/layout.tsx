@@ -6,10 +6,12 @@ import { headers } from 'next/headers'
 import { NextAuthSessionProvider } from '~/components/SessionProvider'
 import { TailwindIndicator } from '~/components/tailwind-indicator'
 import { Toaster } from '~/components/ui/toaster'
-import '~/styles/globals.css'
 import { TRPCReactProvider } from './trpc/react'
 
 import { ThemeProvider } from '@/components/theme-provider'
+import { Theme } from '@radix-ui/themes'
+import '@radix-ui/themes/styles.css'
+import '~/styles/globals.css'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -32,23 +34,25 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        <TRPCReactProvider headers={headers()}>
-          <NextAuthSessionProvider session={session}>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <main className="min-h-screen">
-                {children}
-                <Analytics />
-                <Toaster />
-                <TailwindIndicator />
-              </main>
-            </ThemeProvider>
-          </NextAuthSessionProvider>
-        </TRPCReactProvider>
+        <NextAuthSessionProvider session={session}>
+          <TRPCReactProvider headers={headers()}>
+            <Theme>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <main className="min-h-screen">
+                  {children}
+                  <Analytics />
+                  <Toaster />
+                  <TailwindIndicator />
+                </main>
+              </ThemeProvider>
+            </Theme>
+          </TRPCReactProvider>
+        </NextAuthSessionProvider>
       </body>
     </html>
   )

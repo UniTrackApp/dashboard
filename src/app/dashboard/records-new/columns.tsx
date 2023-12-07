@@ -1,15 +1,18 @@
 'use client'
 
-import { AttendanceRecord } from '@prisma/client'
+import { AttendanceRecord, Status } from '@prisma/client'
 import { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import {
-  ArrowUpDown,
+  Check,
+  CheckCheck,
   Copy,
   ExternalLink,
+  LibraryBig,
   MoreHorizontal,
   Pencil,
   Trash2,
+  X,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -26,6 +29,7 @@ import Link from 'next/link'
 import { api } from '~/app/trpc/react'
 
 import { Checkbox } from '@/components/ui/checkbox'
+import { Badge } from '@radix-ui/themes'
 import { DataTableColumnHeader } from '~/components/ui/data-table/column-header'
 
 type AttendanceRecordExtraInfo = AttendanceRecord & {
@@ -76,10 +80,27 @@ export const columns: ColumnDef<AttendanceRecordExtraInfo>[] = [
     ),
   },
   {
-    accessorKey: 'Lecture.Module.moduleName',
+    accessorKey: 'Student',
+    accessorFn: (row) => row.Student.firstName + ' ' + row.Student.lastName,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Student Name" />
+    ),
+  },
+  {
+    accessorKey: 'Lecture',
+    accessorFn: (row) => row.Lecture.Module.moduleName,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Module Name" />
     ),
+    cell: ({ row }) => {
+      const moduleName = row.original.Lecture.Module.moduleName
+
+      return (
+        <Badge color="gray" variant="surface" radius="medium" size="1">
+          {moduleName}
+        </Badge>
+      )
+    },
   },
   {
     accessorKey: 'lectureId',
@@ -92,6 +113,33 @@ export const columns: ColumnDef<AttendanceRecordExtraInfo>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Status" />
     ),
+    cell: ({ row }) => {
+      const status = row.original.status
+
+      switch (status) {
+        case Status.PRESENT:
+          return (
+            <Badge color="green" variant="soft">
+              <CheckCheck className="h-4 w-4" />
+              {status}
+            </Badge>
+          )
+        case Status.LATE:
+          return (
+            <Badge color="yellow" variant="soft" radius="medium" size="1">
+              <Check className="h-4 w-4" />
+              {status}
+            </Badge>
+          )
+        case Status.ABSENT:
+          return (
+            <Badge color="red" variant="soft" radius="medium" size="1">
+              <X className="h-4 w-4" />
+              {status}
+            </Badge>
+          )
+      }
+    },
   },
   {
     accessorKey: 'timestamp',
@@ -112,7 +160,7 @@ export const columns: ColumnDef<AttendanceRecordExtraInfo>[] = [
         api.attendanceRecord.deleteAttendanceRecordById.useMutation({
           onSuccess: () => {
             console.log('✅ Successfully deleted attendance record')
-            revalidatePath('/dashboard/records2')
+            revalidatePath('/dashboard/records-new')
           },
         })
 

@@ -35,7 +35,7 @@ export default async function Records() {
         <h1 className="text-2xl font-bold text-foreground">
           Attendance Records
         </h1>
-        <p className="mt-1 text-amber-400">
+        <p className="mt-1 text-amber-500 dark:text-amber-400">
           This is currently a work in progress and will be missing some
           features. Please use the{' '}
           <Link
