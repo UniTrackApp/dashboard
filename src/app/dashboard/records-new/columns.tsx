@@ -185,6 +185,7 @@ export const columns: ColumnDef<AttendanceRecordExtraInfo>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
+                className="cursor-pointer"
                 onClick={() =>
                   navigator.clipboard.writeText(
                     attendanceRecord.attendanceRecordId,
@@ -192,11 +193,11 @@ export const columns: ColumnDef<AttendanceRecordExtraInfo>[] = [
                 }
               >
                 <Copy className="mr-2 h-4 w-4" />
-                Copy record ID
+                Copy ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Link href="#" className="flex">
+              <DropdownMenuItem asChild>
+                <Link href="#" className="flex cursor-not-allowed">
                   <ExternalLink className="mr-2 h-4 w-4" />
                   View info
                 </Link>
@@ -204,7 +205,10 @@ export const columns: ColumnDef<AttendanceRecordExtraInfo>[] = [
 
               <Modal open={openEditModal} onOpenChange={setOpenEditModal}>
                 <Modal.Trigger asChild>
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onSelect={(e) => e.preventDefault()}
+                  >
                     <Pencil className="mr-2 h-4 w-4" />
                     Edit
                   </DropdownMenuItem>
@@ -232,7 +236,7 @@ export const columns: ColumnDef<AttendanceRecordExtraInfo>[] = [
               <Modal open={openDeleteModal} onOpenChange={setOpenDeleteModal}>
                 <Modal.Trigger asChild>
                   <DropdownMenuItem
-                    className="text-destructive"
+                    className="text-destructive cursor-pointer"
                     onSelect={(e) => e.preventDefault()}
                   >
                     <Trash2 className="mr-2 h-4 w-4" />

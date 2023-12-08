@@ -1,6 +1,10 @@
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Status } from '@prisma/client'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
+import { api } from '~/app/trpc/react'
 import { AttendanceRecordExtraInfo } from './columns'
 
 import {
@@ -11,11 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import { api } from '~/app/trpc/react'
 import { Button } from '~/components/ui/button'
 import {
   Select,
@@ -25,8 +24,6 @@ import {
   SelectValue,
 } from '~/components/ui/select'
 import { useToast } from '~/components/ui/use-toast'
-
-function EditAttendanceRecordCard() {}
 
 const formSchema = z.object({
   status: z.union([
@@ -57,16 +54,11 @@ export default function EditAttendanceRecordForm({
         status: values.status,
       },
       {
-        onSuccess(data, variables, context) {
-          console.log('😈 data', data)
-          console.log('😈 variables', variables)
-          console.log('😈 context', context)
-
+        onSuccess(variables) {
           afterSave()
-
           toast({
             title: '✅ Successfully updated',
-            description: `Changed status to ${variables.status}`,
+            description: <div>Changed status to {variables.status}</div>,
           })
         },
       },
