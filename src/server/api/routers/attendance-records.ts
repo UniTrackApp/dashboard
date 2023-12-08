@@ -41,6 +41,20 @@ export const attendanceRecordRouter = createTRPCRouter({
     return await ctx.prisma.attendanceRecord.findMany()
   }),
 
+  getAttendanceRecordById: protectedProcedure
+    .input(
+      z.object({
+        attendanceRecordId: z.string().cuid(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.attendanceRecord.findUnique({
+        where: {
+          attendanceRecordId: input.attendanceRecordId,
+        },
+      })
+    }),
+
   getAttendanceRecordsForTable: protectedProcedure.query(async ({ ctx }) => {
     const attendanceRecords = await ctx.prisma.attendanceRecord.findMany({
       select: {
@@ -80,6 +94,30 @@ export const attendanceRecordRouter = createTRPCRouter({
       moduleName: attendanceRecord.Lecture.Module.moduleName,
     }))
   }),
+
+  updateAttendanceRecord: protectedProcedure
+    .input(
+      z.object({
+        attendanceRecordId: z.string().cuid().optional(),
+        status: z
+          .union([
+            z.literal(Status.PRESENT),
+            z.literal(Status.LATE),
+            z.literal(Status.ABSENT),
+          ])
+          .optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.attendanceRecord.update({
+        where: {
+          attendanceRecordId: input.attendanceRecordId,
+        },
+        data: {
+          status: input.status,
+        },
+      })
+    }),
 
   deleteAttendanceRecordById: protectedProcedure
     .input(

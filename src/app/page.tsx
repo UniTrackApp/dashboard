@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { ModeToggle } from '~/components/theme-toggle'
 import { buttonVariants } from '~/components/ui/button'
-import RenderModal from '~/components/render-modal'
 
 export default function Home() {
   return (
@@ -19,7 +18,6 @@ export default function Home() {
             <p className="text-center text-lg text-neutral-700 dark:text-neutral-300 sm:text-xl">
               An open-source student monitoring system for modern universities.
             </p>
-            <RenderModal />
           </div>
 
           <Link href="/dashboard" className={`${buttonVariants()} gap-2`}>

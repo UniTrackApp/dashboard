@@ -23,7 +23,7 @@ export default function Modal({
   )
 }
 
-Modal.Button = DialogPrimitive.Trigger
+Modal.Trigger = DialogPrimitive.Trigger
 
 Modal.Portal = DialogPrimitive.Portal
 
