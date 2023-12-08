@@ -31,8 +31,10 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@radix-ui/themes'
 import { DataTableColumnHeader } from '~/components/ui/data-table/column-header'
 
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import Modal from '~/components/ui/modal'
-import EditAttendanceRecordForm from './edit-record-form'
+import EditAttendanceRecordForm from './edit-record'
 
 export type AttendanceRecordExtraInfo = AttendanceRecord & {
   Student: {
@@ -158,77 +160,108 @@ export const columns: ColumnDef<AttendanceRecordExtraInfo>[] = [
     cell: ({ row }) => {
       const attendanceRecord = row.original
 
+      const [openEditModal, setOpenEditModal] = useState(false)
+      const [openDeleteModal, setOpenDeleteModal] = useState(false)
+      const [openDropdown, setOpenDropdown] = useState(false)
+
+      const { refresh } = useRouter()
+
       const { mutate: deleteAttendanceRecordById } =
         api.attendanceRecord.deleteAttendanceRecordById.useMutation({
           onSuccess: () => {
-            console.log('✅ Successfully deleted attendance record')
-            revalidatePath('/dashboard/records-new')
+            refresh()
           },
         })
 
       return (
         <div className="flex flex-row gap-1">
-          <Modal>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem
-                  onClick={() =>
-                    navigator.clipboard.writeText(
-                      attendanceRecord.attendanceRecordId,
-                    )
-                  }
-                >
-                  <Copy className="mr-2 h-4 w-4" />
-                  Copy record ID
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Link href="#" className="flex">
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    View info
-                  </Link>
-                </DropdownMenuItem>
+          <DropdownMenu open={openDropdown} onOpenChange={setOpenDropdown}>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() =>
+                  navigator.clipboard.writeText(
+                    attendanceRecord.attendanceRecordId,
+                  )
+                }
+              >
+                <Copy className="mr-2 h-4 w-4" />
+                Copy record ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Link href="#" className="flex">
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  View info
+                </Link>
+              </DropdownMenuItem>
 
+              <Modal open={openEditModal} onOpenChange={setOpenEditModal}>
                 <Modal.Trigger asChild>
-                  <DropdownMenuItem
-                  // onSelect={(e) => e.preventDefault() }
-                  >
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                     <Pencil className="mr-2 h-4 w-4" />
                     Edit
                   </DropdownMenuItem>
                 </Modal.Trigger>
+                <Modal.Content title="Edit record">
+                  <Modal.Header>
+                    <Modal.Description>
+                      Proceed with caution when manually editing an attendance
+                      record as there could be unintended consequences.
+                    </Modal.Description>
+                  </Modal.Header>
+                  <EditAttendanceRecordForm
+                    attendanceRecord={attendanceRecord}
+                    afterSave={() => {
+                      setOpenEditModal(false)
+                      refresh()
+                      setOpenDropdown(false)
+                    }}
+                  />
+                </Modal.Content>
+              </Modal>
 
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="text-destructive"
-                  onClick={() => {
-                    deleteAttendanceRecordById({
-                      attendanceRecordId: row.original.attendanceRecordId,
-                    })
-                  }}
-                >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Modal.Content title="Edit record">
-              <Modal.Header>
-                <Modal.Description>
-                  Proceed with caution when manually editing an attendance
-                  record as there could be unintended consequences.
-                </Modal.Description>
-              </Modal.Header>
-              <EditAttendanceRecordForm attendanceRecord={attendanceRecord} />
-            </Modal.Content>
-          </Modal>
+              <DropdownMenuSeparator />
+
+              <Modal open={openDeleteModal} onOpenChange={setOpenDeleteModal}>
+                <Modal.Trigger asChild>
+                  <DropdownMenuItem
+                    className="text-destructive"
+                    onSelect={(e) => e.preventDefault()}
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete
+                  </DropdownMenuItem>
+                </Modal.Trigger>
+                <Modal.Content title="Delete record">
+                  <Modal.Header>
+                    <Modal.Description>
+                      Are you sure you want to delete this record?
+                    </Modal.Description>
+                  </Modal.Header>
+                  <Modal.Footer>
+                    <Button
+                      variant={'destructive'}
+                      onClick={() => {
+                        deleteAttendanceRecordById({
+                          attendanceRecordId: row.original.attendanceRecordId,
+                        })
+                        setOpenDeleteModal(false)
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </Modal.Footer>
+                </Modal.Content>
+              </Modal>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       )
     },

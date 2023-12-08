@@ -26,6 +26,8 @@ import {
 } from '~/components/ui/select'
 import { useToast } from '~/components/ui/use-toast'
 
+function EditAttendanceRecordCard() {}
+
 const formSchema = z.object({
   status: z.union([
     z.literal(Status.PRESENT),
@@ -36,8 +38,10 @@ const formSchema = z.object({
 
 export default function EditAttendanceRecordForm({
   attendanceRecord,
+  afterSave,
 }: {
   attendanceRecord: AttendanceRecordExtraInfo
+  afterSave: () => void
 }) {
   const { toast } = useToast()
   const { mutate } = api.attendanceRecord.updateAttendanceRecord.useMutation()
@@ -58,9 +62,11 @@ export default function EditAttendanceRecordForm({
           console.log('😈 variables', variables)
           console.log('😈 context', context)
 
+          afterSave()
+
           toast({
-            title: 'SUIIII',
-            description: 'Changed status',
+            title: '✅ Successfully updated',
+            description: `Changed status to ${variables.status}`,
           })
         },
       },
