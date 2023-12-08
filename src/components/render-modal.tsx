@@ -9,7 +9,7 @@ export default function RenderModal() {
       <Modal.Button asChild>
         <Button>About</Button>
       </Modal.Button>
-      <Modal.Content title="About Trelllo">
+      <Modal.Content title="what">
         <div className="mt-4 space-y-3 text-gray-600">
           <p>This is a React app built with Radix UI!</p>
           <p>Technologies used:</p>
