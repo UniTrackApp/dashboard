@@ -24,7 +24,7 @@ import {
 import { DataTablePagination } from '~/components/ui/data-table/pagination'
 import { DataTableViewOptions } from '~/components/ui/data-table/view-options'
 import { Input } from '~/components/ui/input'
-import AddAttendanceRecordForm from './add-record-form'
+import AddAttendanceRecordForm from './form-record-create'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

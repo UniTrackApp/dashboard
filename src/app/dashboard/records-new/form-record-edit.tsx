@@ -70,6 +70,7 @@ export default function EditAttendanceRecordForm({
       <h2 className="text-sm">Current Status: {attendanceRecord.status}</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          {/* Selector - to edit attendance statuses */}
           <FormField
             control={form.control}
             name="status"

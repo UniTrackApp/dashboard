@@ -46,7 +46,7 @@ Modal.Overlay.displayName = DialogPrimitive.Overlay.displayName
 
 Modal.Content = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  { title: string } & React.ComponentPropsWithoutRef<
+  { title?: string } & React.ComponentPropsWithoutRef<
     typeof DialogPrimitive.Content
   >
 >(({ className, title, children, ...props }, ref) => (

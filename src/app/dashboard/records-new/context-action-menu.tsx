@@ -10,7 +10,7 @@ import { useState } from 'react'
 import { api } from '~/app/trpc/react'
 
 import { AttendanceRecordExtraInfo } from '~/app/dashboard/records-new/columns'
-import EditAttendanceRecordForm from '~/app/dashboard/records-new/edit-record'
+import EditAttendanceRecordForm from '~/app/dashboard/records-new/form-record-edit'
 
 import Link from 'next/link'
 import { Button } from '~/components/ui/button'
@@ -29,12 +29,15 @@ export default function ContextActionMenu({
 }: {
   attendanceRecord: AttendanceRecordExtraInfo
 }) {
+  // State - to manage the open/close state of the modals and dropdown
   const [openEditModal, setOpenEditModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [openDropdown, setOpenDropdown] = useState(false)
 
+  // To refresh the page after a mutation
   const { refresh } = useRouter()
 
+  // To delete a record by ID (using TRPC)
   const { mutate: deleteAttendanceRecordById } =
     api.attendanceRecord.deleteAttendanceRecordById.useMutation({
       onSuccess: () => {
@@ -50,6 +53,7 @@ export default function ContextActionMenu({
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
+      {/* Dropdown Menu Content - This is where all buttons and their actions will be */}
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
@@ -69,6 +73,7 @@ export default function ContextActionMenu({
           </Link>
         </DropdownMenuItem>
 
+        {/* Modal - to edit records */}
         <Modal open={openEditModal} onOpenChange={setOpenEditModal}>
           <Modal.Trigger asChild>
             <DropdownMenuItem
@@ -99,6 +104,7 @@ export default function ContextActionMenu({
 
         <DropdownMenuSeparator />
 
+        {/* Modal - to delete records */}
         <Modal open={openDeleteModal} onOpenChange={setOpenDeleteModal}>
           <Modal.Trigger asChild>
             <DropdownMenuItem
