@@ -35,11 +35,13 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  // State for table options, e.g. sorting, column visibility, etc.
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
+  // Create the table instance using the useReactTable hook and the options state above
   const table = useReactTable({
     data,
     columns,
@@ -62,7 +64,9 @@ export function DataTable<TData, TValue>({
   return (
     <>
       <div className="flex justify-between items-center">
+        {/* Table Info (at top) - used to display controls to manipulate table data */}
         <div className="flex items-center py-4 gap-2">
+          {/* Search Box - to filter records by student ID */}
           <Input
             placeholder="Filter by student ID..."
             defaultValue={
@@ -73,15 +77,17 @@ export function DataTable<TData, TValue>({
             }
             className="max-w-sm shrink-0"
           />
+          {/* Table View Options - to customize columns visible on data table */}
           <DataTableViewOptions table={table} />
         </div>
         <div>
-          {/* Dialog Form - used to create new Attendance Records */}
+          {/* Create New Records (Modal + Form) - used to create new Attendance Records */}
           <AddAttendanceRecordForm />
         </div>
       </div>
       <div className="rounded-md border">
         <Table>
+          {/* Table Header */}
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -100,6 +106,8 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
+
+          {/* Table Body */}
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
@@ -118,6 +126,7 @@ export function DataTable<TData, TValue>({
                 </TableRow>
               ))
             ) : (
+              // If no results, display this message instead
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
@@ -130,6 +139,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
         <div className="p-4 pb-6">
+          {/* Pagination - To navigate between pages of data */}
           <DataTablePagination table={table} />
         </div>
       </div>

@@ -5,6 +5,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Status } from '@prisma/client'
 import { Check, ChevronsUpDown, Loader2, Plus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -74,6 +75,9 @@ export default function AddAttendanceRecordForm() {
   // State - used for button loading spinners during attendance record creation and deletion
   const [isBeingAdded, setIsBeingAdded] = useState(false)
 
+  // Used to refresh the page data after an attendance record is added (since page is a Server Component)
+  const router = useRouter()
+
   // Form hook - used for form validation and submission logic (using react-hook-form)
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -94,10 +98,6 @@ export default function AddAttendanceRecordForm() {
   const { data: allLectures } =
     api.lecture.getLectureIdsWithModuleNames.useQuery()
 
-  // Fetches all attendance records, and refetches when createNewRecord is called
-  const { refetch: refetchAllAttendanceRecords } =
-    api.attendanceRecord.getAttendanceRecordsForTable.useQuery()
-
   // Creates a new attendance record entry
   const { mutate: createAttendanceRecord } =
     api.attendanceRecord.createAttendanceRecord.useMutation({
@@ -107,7 +107,7 @@ export default function AddAttendanceRecordForm() {
           title: 'Attendance Record Added ✅',
           description: `Attendance record added to database successfully.`,
         })
-        void refetchAllAttendanceRecords()
+        router.refresh()
         setIsBeingAdded(false)
         setDialogIsOpen(false)
       },
