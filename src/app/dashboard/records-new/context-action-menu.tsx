@@ -98,6 +98,10 @@ export default function ContextActionMenu({
                 setOpenDropdown(false)
                 refresh()
               }}
+              notAuthed={() => {
+                setOpenEditModal(false)
+                setOpenDropdown(false)
+              }}
             />
           </Modal.Content>
         </Modal>

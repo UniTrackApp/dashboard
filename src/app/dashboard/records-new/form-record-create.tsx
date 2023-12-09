@@ -59,6 +59,9 @@ const FormSchema = z.object({
 })
 
 export default function AddAttendanceRecordForm() {
+  // Get current user's role
+  const { data: userRole } = api.user.getUserRole.useQuery()
+
   // State - used to close dialog after an attendance record is added
   const [dialogIsOpen, setDialogIsOpen] = useState(false)
 
@@ -76,6 +79,15 @@ export default function AddAttendanceRecordForm() {
   // Form submission function - called when the form is submitted (using react-hook-form)
   function onSubmit(formData: z.infer<typeof FormSchema>) {
     setIsBeingAdded(true)
+    if (userRole === 'GUEST') {
+      toast({
+        title: '❌ Not allowed',
+        description: 'Only admins can add new attendance records',
+      })
+      setIsBeingAdded(false)
+      setDialogIsOpen(false)
+      return
+    }
     createAttendanceRecord({
       studentId: formData.studentId,
       lectureId: formData.lectureId,

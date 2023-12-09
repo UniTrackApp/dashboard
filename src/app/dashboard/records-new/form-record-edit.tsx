@@ -36,10 +36,15 @@ const formSchema = z.object({
 export default function EditAttendanceRecordForm({
   attendanceRecord,
   afterSave,
+  notAuthed,
 }: {
   attendanceRecord: AttendanceRecordExtraInfo
   afterSave: () => void
+  notAuthed: () => void
 }) {
+  // Get current user's role
+  const { data: userRole } = api.user.getUserRole.useQuery()
+
   const { toast } = useToast()
   const { mutate } = api.attendanceRecord.updateAttendanceRecord.useMutation()
 
@@ -48,6 +53,14 @@ export default function EditAttendanceRecordForm({
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    if (userRole !== 'ADMIN') {
+      notAuthed()
+      toast({
+        title: '❌ Not allowed',
+        description: 'Only admins can edit attendance records',
+      })
+      return
+    }
     mutate(
       {
         attendanceRecordId: attendanceRecord.attendanceRecordId,

@@ -37,16 +37,9 @@ export default async function Records() {
         <h1 className="text-2xl font-bold text-foreground">
           Attendance Records
         </h1>
-        <p className="mt-1 text-amber-500 dark:text-amber-400">
-          This is currently a work in progress and will be missing some
-          features. Please use the{' '}
-          <Link
-            className="underline-offset-4 underline"
-            href="/dashboard/records"
-          >
-            other page
-          </Link>{' '}
-          if you encounter any issues.
+        <p className="mt-1">
+          Manage attendance records for your students here. Including adding new
+          records, and deleting existing ones.
         </p>
         <Separator className="mt-4 mb-1" />
       </div>
