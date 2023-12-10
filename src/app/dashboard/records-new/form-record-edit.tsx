@@ -15,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { useRouter } from 'next/navigation'
 import { Button } from '~/components/ui/button'
 import {
   Select,
@@ -35,40 +36,46 @@ const formSchema = z.object({
 
 export default function EditAttendanceRecordForm({
   attendanceRecord,
-  afterSave,
-  notAuthed,
+  closeModalAndDropdown,
 }: {
   attendanceRecord: AttendanceRecordExtraInfo
-  afterSave: () => void
-  notAuthed: () => void
+  closeModalAndDropdown: () => void
 }) {
-  // Get current user's role
+  // Get current user's role from database
   const { data: userRole } = api.user.getUserRole.useQuery()
 
+  // To refresh the page after a mutation
+  const router = useRouter()
+
+  // To display toast messages
   const { toast } = useToast()
-  const { mutate } = api.attendanceRecord.updateAttendanceRecord.useMutation()
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-  })
+  // Mutation function to update attendance records (using TRPC)
+  const { mutate: updateAttendanceRecord } =
+    api.attendanceRecord.updateAttendanceRecord.useMutation()
 
+  // Function to update attendance records if user is authorized
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (userRole !== 'ADMIN') {
-      notAuthed()
+    // Check if user is allowed to update attendance records
+    if (userRole !== 'ADMIN' && userRole !== 'SUPERADMIN') {
+      closeModalAndDropdown()
       toast({
         title: '❌ Not allowed',
         description: 'Only admins can edit attendance records',
       })
       return
     }
-    mutate(
+
+    // Update the record if user is authorized
+    updateAttendanceRecord(
       {
         attendanceRecordId: attendanceRecord.attendanceRecordId,
         status: values.status,
       },
       {
         onSuccess(variables) {
-          afterSave()
+          router.refresh()
+          closeModalAndDropdown()
           toast({
             title: '✅ Successfully updated',
             description: <div>Changed status to {variables.status}</div>,
@@ -77,6 +84,11 @@ export default function EditAttendanceRecordForm({
       },
     )
   }
+
+  // Form definition using react-hook-form
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  })
 
   return (
     <>

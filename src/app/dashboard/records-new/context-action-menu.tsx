@@ -1,3 +1,8 @@
+'use client'
+
+import Link from 'next/link'
+import { useState } from 'react'
+
 import {
   Copy,
   ExternalLink,
@@ -5,14 +10,6 @@ import {
   Pencil,
   Trash2,
 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { api } from '~/app/trpc/react'
-
-import { AttendanceRecordExtraInfo } from '~/app/dashboard/records-new/columns'
-import EditAttendanceRecordForm from '~/app/dashboard/records-new/form-record-edit'
-
-import Link from 'next/link'
 import { Button } from '~/components/ui/button'
 import {
   DropdownMenu,
@@ -24,6 +21,10 @@ import {
 } from '~/components/ui/dropdown-menu'
 import Modal from '~/components/ui/modal'
 
+import { AttendanceRecordExtraInfo } from '~/app/dashboard/records-new/columns'
+import EditAttendanceRecordForm from '~/app/dashboard/records-new/form-record-edit'
+import DeleteAttendanceRecord from './form-record-delete'
+
 export default function ContextActionMenu({
   attendanceRecord,
 }: {
@@ -34,31 +35,23 @@ export default function ContextActionMenu({
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [openDropdown, setOpenDropdown] = useState(false)
 
-  // To refresh the page after a mutation
-  const { refresh } = useRouter()
-
-  // To delete a record by ID (using TRPC)
-  const { mutate: deleteAttendanceRecordById } =
-    api.attendanceRecord.deleteAttendanceRecordById.useMutation({
-      onSuccess: () => {
-        refresh()
-      },
-    })
-
   return (
     <DropdownMenu open={openDropdown} onOpenChange={setOpenDropdown}>
+      {/* Dropdown Menu Trigger Button */}
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-8 w-8 p-0">
           <span className="sr-only">Open menu</span>
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
+
       {/* Dropdown Menu Content - This is where all buttons and their actions will be */}
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
           className="cursor-pointer"
           onClick={() =>
+            // Copies the attendance record ID to the clipboard
             navigator.clipboard.writeText(attendanceRecord.attendanceRecordId)
           }
         >
@@ -93,12 +86,7 @@ export default function ContextActionMenu({
             </Modal.Header>
             <EditAttendanceRecordForm
               attendanceRecord={attendanceRecord}
-              afterSave={() => {
-                setOpenEditModal(false)
-                setOpenDropdown(false)
-                refresh()
-              }}
-              notAuthed={() => {
+              closeModalAndDropdown={() => {
                 setOpenEditModal(false)
                 setOpenDropdown(false)
               }}
@@ -126,18 +114,13 @@ export default function ContextActionMenu({
               </Modal.Description>
             </Modal.Header>
             <Modal.Footer>
-              <Button
-                variant={'destructive'}
-                onClick={() => {
-                  deleteAttendanceRecordById({
-                    attendanceRecordId: attendanceRecord.attendanceRecordId,
-                  })
+              <DeleteAttendanceRecord
+                attendanceRecord={attendanceRecord}
+                closeModalAndDropdown={() => {
                   setOpenDeleteModal(false)
                   setOpenDropdown(false)
                 }}
-              >
-                Delete
-              </Button>
+              />
             </Modal.Footer>
           </Modal.Content>
         </Modal>
