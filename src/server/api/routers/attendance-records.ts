@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const attendanceRecordRouter = createTRPCRouter({
+  // CREATE: Creates a new attendance record entry in the database
   createAttendanceRecord: protectedProcedure
     .input(
       z.object({
@@ -33,14 +34,17 @@ export const attendanceRecordRouter = createTRPCRouter({
       })
     }),
 
+  // GET: Gets only the number of attendance record entries
   getAttendanceRecordCount: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.attendanceRecord.count()
   }),
 
+  // GET: Gets all rows and columns from the attendance record table
   getAttendanceRecords: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.attendanceRecord.findMany()
   }),
 
+  // GET: Gets a single attendance record entry by its ID (primary key)
   getAttendanceRecordById: protectedProcedure
     .input(
       z.object({
@@ -55,6 +59,7 @@ export const attendanceRecordRouter = createTRPCRouter({
       })
     }),
 
+  // GET: Gets all rows and columns from the attendance record table, but with the student's full name and module name
   getAttendanceRecordsForTable: protectedProcedure.query(async ({ ctx }) => {
     const attendanceRecords = await ctx.prisma.attendanceRecord.findMany({
       select: {
@@ -95,6 +100,7 @@ export const attendanceRecordRouter = createTRPCRouter({
     }))
   }),
 
+  // UPDATE: Updates an attendance record's status value by its ID (primary key)
   updateAttendanceRecord: protectedProcedure
     .input(
       z.object({
@@ -119,6 +125,7 @@ export const attendanceRecordRouter = createTRPCRouter({
       })
     }),
 
+  // DELETE: Deletes an attendance record entry by its ID (primary key)
   deleteAttendanceRecordById: protectedProcedure
     .input(
       z.object({
@@ -129,6 +136,23 @@ export const attendanceRecordRouter = createTRPCRouter({
       return await ctx.prisma.attendanceRecord.delete({
         where: {
           attendanceRecordId: input.attendanceRecordId,
+        },
+      })
+    }),
+
+  // DELETE: Deletes multiple attendance record entries using a provided array of IDs (primary key)
+  deleteAttendanceRecordsByIds: protectedProcedure
+    .input(
+      z.object({
+        attendanceRecordIds: z.array(z.string().cuid()),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.attendanceRecord.deleteMany({
+        where: {
+          attendanceRecordId: {
+            in: input.attendanceRecordIds,
+          },
         },
       })
     }),

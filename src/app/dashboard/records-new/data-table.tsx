@@ -1,4 +1,5 @@
 'use client'
+
 import {
   flexRender,
   getCoreRowModel,
@@ -24,6 +25,7 @@ import {
 import { DataTablePagination } from '~/components/ui/data-table/pagination'
 import { DataTableViewOptions } from '~/components/ui/data-table/view-options'
 import { Input } from '~/components/ui/input'
+import DeleteSelectedRecords from './delete-selected-records'
 import AddAttendanceRecordForm from './form-record-create'
 
 interface DataTableProps<TData, TValue> {
@@ -63,9 +65,9 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center py-4">
         {/* Table Info (at top) - used to display controls to manipulate table data */}
-        <div className="flex items-center py-4 gap-2">
+        <div className="flex gap-2">
           {/* Search Box - to filter records by student ID */}
           <Input
             placeholder="Filter by student ID..."
@@ -80,7 +82,10 @@ export function DataTable<TData, TValue>({
           {/* Table View Options - to customize columns visible on data table */}
           <DataTableViewOptions table={table} />
         </div>
-        <div>
+        <div className="flex gap-2">
+          {/* Delete Selected Records (Button) - used to delete multiple selected Attendance Records */}
+          <DeleteSelectedRecords table={table} />
+
           {/* Create New Records (Modal + Form) - used to create new Attendance Records */}
           <AddAttendanceRecordForm />
         </div>
