@@ -51,6 +51,7 @@ export const columns: ColumnDef<AttendanceRecordExtraInfo>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID" />
     ),
+    enableHiding: false,
   },
   {
     accessorKey: 'studentId',
