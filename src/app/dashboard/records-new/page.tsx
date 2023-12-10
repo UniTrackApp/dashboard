@@ -1,6 +1,5 @@
 import { prisma } from '~/server/prisma'
 
-import Link from 'next/link'
 import { Separator } from '~/components/ui/separator'
 import { columns } from './columns'
 import { DataTable } from './data-table'
