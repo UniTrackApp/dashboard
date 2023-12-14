@@ -36,7 +36,7 @@ export default async function Records() {
         <h1 className="text-2xl font-bold text-foreground">
           Attendance Records
         </h1>
-        <p className="mt-1">
+        <p className="mt-1 text-muted-foreground">
           Manage attendance records for your students here. Including adding new
           records, and deleting existing ones.
         </p>
