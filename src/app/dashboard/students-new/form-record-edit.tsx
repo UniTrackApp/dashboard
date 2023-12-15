@@ -86,6 +86,12 @@ export default function EditStudentForm({
             description: 'Student record has been updated',
           })
         },
+        onError(error) {
+          toast({
+            title: '❌ Error',
+            description: error.message,
+          })
+        },
       },
     )
   }

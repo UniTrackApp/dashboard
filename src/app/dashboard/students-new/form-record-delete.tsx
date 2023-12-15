@@ -51,6 +51,12 @@ export default function DeleteStudent({
                 description: 'Attendance record deleted successfully',
               })
             },
+            onError(error) {
+              toast({
+                title: '❌ Error',
+                description: error.message,
+              })
+            },
           },
         )
       }}

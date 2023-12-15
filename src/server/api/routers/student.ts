@@ -156,4 +156,27 @@ export const studentRouter = createTRPCRouter({
         },
       })
     }),
+
+  // DELETE: Deletes multiple student entries by their IDs (primary key)
+  deleteStudentsByIds: protectedProcedure
+    .input(
+      z.object({
+        studentIds: z.array(
+          z
+            .string()
+            .min(1, 'Required field')
+            .max(10, 'Must be 10 characters or less')
+            .regex(/^[0-9]+$/, 'Must be a number'),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.student.deleteMany({
+        where: {
+          studentId: {
+            in: input.studentIds,
+          },
+        },
+      })
+    }),
 })

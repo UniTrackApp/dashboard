@@ -25,8 +25,9 @@ import {
 import { DataTablePagination } from '~/components/ui/data-table/pagination'
 import { DataTableViewOptions } from '~/components/ui/data-table/view-options'
 import { Input } from '~/components/ui/input'
-// import DeleteSelectedRecords from './delete-selected-records'
-// import AddAttendanceRecordForm from './form-record-create'
+
+import DeleteSelectedStudents from './delete-selected-records'
+import AddStudentForm from './form-record-create'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -84,10 +85,10 @@ export function DataTable<TData, TValue>({
         </div>
         <div className="flex gap-2">
           {/* Delete Selected Records (Button) - used to delete multiple selected Attendance Records */}
-          {/* <DeleteSelectedRecords table={table} /> */}
+          <DeleteSelectedStudents table={table} />
 
           {/* Create New Records (Modal + Form) - used to create new Attendance Records */}
-          {/* <AddAttendanceRecordForm /> */}
+          <AddStudentForm />
         </div>
       </div>
       <div className="rounded-md border">

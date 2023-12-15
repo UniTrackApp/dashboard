@@ -33,7 +33,7 @@ const links = [
   },
   {
     name: 'Students 2.0',
-    href: '/dashboard/students',
+    href: '/dashboard/students-new',
     icon: <Users size={18} />,
     wipStatus: true,
   },

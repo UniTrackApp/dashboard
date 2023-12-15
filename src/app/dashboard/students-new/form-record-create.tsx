@@ -1,8 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Status } from '@prisma/client'
-import { Check, ChevronsUpDown, Loader2, Plus } from 'lucide-react'
+import { Loader2, Plus } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -10,55 +9,42 @@ import * as z from 'zod'
 
 import { Button } from '~/components/ui/button'
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from '~/components/ui/command'
-import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '~/components/ui/form'
+import { Input } from '~/components/ui/input'
 import Modal from '~/components/ui/modal'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '~/components/ui/popover'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select'
 import { toast } from '~/components/ui/use-toast'
 
 import { api } from '~/lib/api'
-import { cn } from '~/lib/utils'
 
 // Schema for form validation (using Zod)
 const FormSchema = z.object({
-  studentId: z.string(),
-  lectureId: z
+  firstName: z
     .string()
     .min(1, 'Required field')
-    .max(20, 'Must be 20 characters or less')
-    .startsWith('COMP', `Lecture ID must start with "COMP"`),
-  status: z.union([
-    z.literal(Status.PRESENT),
-    z.literal(Status.LATE),
-    z.literal(Status.ABSENT),
-  ]),
+    .max(50, 'Must be 50 characters or less'),
+  lastName: z
+    .string()
+    .min(1, 'Required field')
+    .max(50, 'Must be 50 characters or less'),
+  studentId: z
+    .string()
+    .min(1, 'Required field')
+    .max(10, 'Must be 10 characters or less')
+    .regex(/^[0-9]+$/, 'Must be a number'),
+  studentCardId: z
+    .string()
+    .toUpperCase()
+    .min(1, 'Required field')
+    .max(50, 'Must be 50 characters or less'),
 })
 
-export default function AddAttendanceRecordForm() {
+export default function AddStudentForm() {
   // Get current user's role
   const { data: userRole } = api.user.getUserRole.useQuery()
 
@@ -88,50 +74,45 @@ export default function AddAttendanceRecordForm() {
       setDialogIsOpen(false)
       return
     }
-    createAttendanceRecord({
+    createStudent({
       studentId: formData.studentId,
-      lectureId: formData.lectureId,
-      status: formData.status,
+      studentCardId: formData.studentCardId,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
     })
   }
 
-  // Used to fetch all students and lectures for the comboboxes
-  const { data: allStudents } = api.student.getAllStudents.useQuery()
-  const { data: allLectures } =
-    api.lecture.getLectureIdsWithModuleNames.useQuery()
-
-  // Creates a new attendance record entry
-  const { mutate: createAttendanceRecord } =
-    api.attendanceRecord.createAttendanceRecord.useMutation({
-      // Displays a toast notification when the mutation is successful
-      onSuccess() {
-        toast({
-          title: 'Attendance Record Added ✅',
-          description: `Attendance record added to database successfully.`,
-        })
-        router.refresh()
-        setIsBeingAdded(false)
-        setDialogIsOpen(false)
-      },
-      // Displays a toast notification when the mutation fails
-      // TODO: Fetch error message from server and display it in the toast description
-      onError(e) {
-        console.log(e)
-        toast({
-          title: 'Error 😢',
-          description: 'Something went wrong, please try again.',
-        })
-      },
-    })
+  // Creates a new student entry
+  const { mutate: createStudent } = api.student.createStudent.useMutation({
+    // Displays a toast notification when the mutation is successful
+    onSuccess() {
+      toast({
+        title: 'Student Added ✅',
+        description: `Student added to database successfully.`,
+      })
+      router.refresh()
+      setIsBeingAdded(false)
+      setDialogIsOpen(false)
+    },
+    // Displays a toast notification when the mutation fails
+    // TODO: Fetch error message from server and display it in the toast description
+    onError(e) {
+      console.log(e)
+      toast({
+        title: 'Error 😢',
+        description: 'Something went wrong, please try again.',
+      })
+    },
+  })
 
   return (
     <>
-      {/* Modal - used to create new Attendance Records */}
+      {/* Modal - used to create new students */}
       <Modal open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
         <Modal.Trigger asChild>
           <Button>
             <Plus size={20} className="mr-2" />
-            Add Record
+            Add Student
           </Button>
         </Modal.Trigger>
         <Modal.Content title="Add an attendance record">
@@ -142,7 +123,37 @@ export default function AddAttendanceRecordForm() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
               >
-                {/* Combobox field - for Student ID */}
+                {/* Input field - for first name */}
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="First Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Input field - for last name */}
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Last Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Input field - for student ID */}
                 <FormField
                   control={form.control}
                   name="studentId"
@@ -150,171 +161,22 @@ export default function AddAttendanceRecordForm() {
                     <FormItem className="flex flex-col">
                       <FormLabel>Student ID</FormLabel>
                       <FormControl>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant="outline"
-                                role="combobox"
-                                className={cn(
-                                  'w-[300px] justify-between',
-                                  !field.value && 'text-muted-foreground',
-                                )}
-                              >
-                                {field.value
-                                  ? allStudents?.find(
-                                      (student) =>
-                                        student.studentId === field.value,
-                                    )?.studentId
-                                  : 'Select student ID'}
-                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-[300px] p-0">
-                            <Command>
-                              <CommandInput placeholder="Search student IDs..." />
-                              <CommandEmpty>No student ID found.</CommandEmpty>
-                              <CommandGroup>
-                                {allStudents?.map((student) => (
-                                  <CommandItem
-                                    value={student.studentId}
-                                    key={student.studentId}
-                                    onSelect={() => {
-                                      form.setValue(
-                                        'studentId',
-                                        student.studentId,
-                                      )
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        'mr-2 h-4 w-4',
-                                        student.studentId === field.value
-                                          ? 'opacity-100'
-                                          : 'opacity-0',
-                                      )}
-                                    />
-                                    <span className="truncate tabular-nums">
-                                      {student.studentId} - {student.firstName}{' '}
-                                      {student.lastName}
-                                    </span>
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
+                        <Input placeholder="Student ID" {...field} />
                       </FormControl>
-                      <FormDescription>
-                        Open to view autocompletions...
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                {/* Combobox field - for Lecture ID */}
+                {/* Input field - for student card ID */}
                 <FormField
                   control={form.control}
-                  name="lectureId"
+                  name="studentCardId"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Lecture ID</FormLabel>
+                      <FormLabel>Student Card ID</FormLabel>
                       <FormControl>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant="outline"
-                                role="combobox"
-                                className={cn(
-                                  'w-[300px] justify-between',
-                                  !field.value && 'text-muted-foreground',
-                                )}
-                              >
-                                {field.value
-                                  ? allLectures?.find(
-                                      (lecture) =>
-                                        lecture.lectureId === field.value,
-                                    )?.lectureId
-                                  : 'Select lecture ID'}
-                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-[300px] p-0">
-                            <Command>
-                              <CommandInput placeholder="Search lecture IDs..." />
-                              <CommandEmpty>No lecture ID found.</CommandEmpty>
-                              <CommandGroup>
-                                {allLectures?.map((lecture) => (
-                                  <CommandItem
-                                    value={lecture.lectureId}
-                                    key={lecture.lectureId}
-                                    onSelect={() => {
-                                      form.setValue(
-                                        'lectureId',
-                                        lecture.lectureId,
-                                      )
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        'mr-2 h-4 w-4',
-                                        lecture.lectureId === field.value
-                                          ? 'opacity-100'
-                                          : 'opacity-0',
-                                      )}
-                                    />
-                                    <span className="truncate tabular-nums">
-                                      {lecture.lectureId} -{' '}
-                                      {lecture.Module.moduleName}
-                                    </span>
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
-                      </FormControl>
-                      <FormDescription>
-                        Open to view autocompletions...
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Select selector - for attendance status */}
-                <FormField
-                  control={form.control}
-                  name="status"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel>Status</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl className="w-[300px]">
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a status" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className="w-[300px]">
-                            <SelectItem value={Status.PRESENT}>
-                              {Status.PRESENT}
-                            </SelectItem>
-                            <SelectItem value={Status.LATE}>
-                              {Status.LATE}
-                            </SelectItem>
-                            <SelectItem value={Status.ABSENT}>
-                              {Status.ABSENT}
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <Input placeholder="Student Card ID" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -333,7 +195,7 @@ export default function AddAttendanceRecordForm() {
                   {!isBeingAdded && (
                     <>
                       <Plus className="mr-2 h-4 w-4" />
-                      <span>Add Record </span>
+                      <span>Add Module</span>
                     </>
                   )}
                 </Button>
