@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       <div className="absolute right-0 top-0 md:hidden">
         <MobileNavBar />
       </div>
-      <div className="ml-[275px] flex-1 overflow-auto h-screen bg-background">
+      <div className="md:ml-[275px] flex-1 overflow-auto h-screen bg-background">
         <div className="mx-8 flex flex-col pt-4">{children}</div>
       </div>
     </div>
