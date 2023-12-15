@@ -5,7 +5,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from '~/components/ui/checkbox'
 import { DataTableColumnHeader } from '~/components/ui/data-table/column-header'
 
-import ContextActionMenu from './context-action-menu'
+import ContextActionMenu from '~/components/dashboard/students/context-action-menu'
 
 export const columns: ColumnDef<Student>[] = [
   {

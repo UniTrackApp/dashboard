@@ -26,8 +26,8 @@ import { DataTablePagination } from '~/components/ui/data-table/pagination'
 import { DataTableViewOptions } from '~/components/ui/data-table/view-options'
 import { Input } from '~/components/ui/input'
 
-import DeleteSelectedStudents from './delete-selected-records'
-import AddStudentForm from './form-record-create'
+import DeleteSelectedStudents from '~/components/dashboard/students/delete-selected-records'
+import AddStudentForm from '~/components/dashboard/students/form-record-create'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

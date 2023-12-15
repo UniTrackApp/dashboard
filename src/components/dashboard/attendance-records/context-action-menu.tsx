@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { useState } from 'react'
 
-import { Student } from '@prisma/client'
 import {
   Copy,
   ExternalLink,
@@ -22,10 +21,15 @@ import {
 } from '~/components/ui/dropdown-menu'
 import Modal from '~/components/ui/modal'
 
-import DeleteStudent from './form-record-delete'
-import EditStudentForm from './form-record-edit'
+import { AttendanceRecordExtraInfo } from '~/app/dashboard/records-new/columns'
+import EditAttendanceRecordForm from '~/components/dashboard/attendance-records/form-record-edit'
+import DeleteAttendanceRecord from './form-record-delete'
 
-export default function ContextActionMenu({ student }: { student: Student }) {
+export default function ContextActionMenu({
+  attendanceRecord,
+}: {
+  attendanceRecord: AttendanceRecordExtraInfo
+}) {
   // State - to manage the open/close state of the modals and dropdown
   const [openEditModal, setOpenEditModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
@@ -48,7 +52,7 @@ export default function ContextActionMenu({ student }: { student: Student }) {
           className="cursor-pointer"
           onClick={() =>
             // Copies the attendance record ID to the clipboard
-            navigator.clipboard.writeText(student.studentId)
+            navigator.clipboard.writeText(attendanceRecord.attendanceRecordId)
           }
         >
           <Copy className="mr-2 h-4 w-4" />
@@ -76,11 +80,12 @@ export default function ContextActionMenu({ student }: { student: Student }) {
           <Modal.Content title="Edit record">
             <Modal.Header>
               <Modal.Description>
-                Edit the details of this attendance record.
+                Proceed with caution when manually editing an attendance record
+                as there could be unintended consequences.
               </Modal.Description>
             </Modal.Header>
-            <EditStudentForm
-              student={student}
+            <EditAttendanceRecordForm
+              attendanceRecord={attendanceRecord}
               closeModalAndDropdown={() => {
                 setOpenEditModal(false)
                 setOpenDropdown(false)
@@ -109,8 +114,8 @@ export default function ContextActionMenu({ student }: { student: Student }) {
               </Modal.Description>
             </Modal.Header>
             <Modal.Footer>
-              <DeleteStudent
-                student={student}
+              <DeleteAttendanceRecord
+                attendanceRecord={attendanceRecord}
                 closeModalAndDropdown={() => {
                   setOpenDeleteModal(false)
                   setOpenDropdown(false)

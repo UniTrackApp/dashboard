@@ -5,7 +5,7 @@ import { Status } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { api } from '~/app/trpc/react'
-import { AttendanceRecordExtraInfo } from './columns'
+import { AttendanceRecordExtraInfo } from '../../../app/dashboard/records-new/columns'
 
 import {
   Form,

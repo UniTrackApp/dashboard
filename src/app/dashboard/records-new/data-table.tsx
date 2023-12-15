@@ -25,8 +25,9 @@ import {
 import { DataTablePagination } from '~/components/ui/data-table/pagination'
 import { DataTableViewOptions } from '~/components/ui/data-table/view-options'
 import { Input } from '~/components/ui/input'
-import DeleteSelectedRecords from './delete-selected-records'
-import AddAttendanceRecordForm from './form-record-create'
+
+import DeleteSelectedRecords from '~/components/dashboard/attendance-records/delete-selected-records'
+import AddAttendanceRecordForm from '~/components/dashboard/attendance-records/form-record-create'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

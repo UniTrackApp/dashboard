@@ -9,7 +9,7 @@ import { Check, CheckCheck, X } from 'lucide-react'
 import { Checkbox } from '~/components/ui/checkbox'
 import { DataTableColumnHeader } from '~/components/ui/data-table/column-header'
 
-import ContextActionMenu from './context-action-menu'
+import ContextActionMenu from '~/components/dashboard/attendance-records/context-action-menu'
 
 export type AttendanceRecordExtraInfo = AttendanceRecord & {
   Student: {
