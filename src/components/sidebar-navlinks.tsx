@@ -32,6 +32,12 @@ const links = [
     wipStatus: false,
   },
   {
+    name: 'Students 2.0',
+    href: '/dashboard/students',
+    icon: <Users size={18} />,
+    wipStatus: true,
+  },
+  {
     name: 'Records',
     href: '/dashboard/records',
     icon: <CheckCircle size={18} />,
