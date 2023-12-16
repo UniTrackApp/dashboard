@@ -1,5 +1,6 @@
 'use client'
 
+import { Badge } from '@radix-ui/themes'
 import {
   BookCheck,
   CheckCircle,
@@ -14,7 +15,6 @@ import {
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
-import { Badge } from '~/components/ui/badge'
 import { buttonVariants } from '~/components/ui/button'
 import { cn } from '~/lib/utils'
 
@@ -30,24 +30,14 @@ const links = [
     href: '/dashboard/students',
     icon: <Users size={18} />,
     wipStatus: false,
-  },
-  {
-    name: 'Students 2.0',
-    href: '/dashboard/students-new',
-    icon: <Users size={18} />,
-    wipStatus: true,
+    newStatus: true,
   },
   {
     name: 'Records',
     href: '/dashboard/records',
     icon: <CheckCircle size={18} />,
     wipStatus: false,
-  },
-  {
-    name: 'Records 2.0',
-    href: '/dashboard/records-new',
-    icon: <CheckCircle size={18} />,
-    wipStatus: true,
+    newStatus: true,
   },
   {
     name: 'Enrollments',
@@ -109,12 +99,12 @@ export default function SidebarNavlins() {
             {link.icon}
             {link.name}
             {link.wipStatus && (
-              <Badge
-                variant="warning"
-                className="ml-auto text-xs dark:bg-yellow-300 dark:text-yellow-900"
-              >
-                WIP
+              <Badge color="grass" className="ml-auto text-xs">
+                🛠️ WIP
               </Badge>
+            )}
+            {link.newStatus && (
+              <Badge className="ml-auto text-xs">✨ NEW</Badge>
             )}
           </Link>
         ))}
