@@ -13,7 +13,6 @@ import {
 import { useDatePickerState, type DatePickerStateOptions } from 'react-stately'
 
 import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
 import {
   Popover,
   PopoverContent,
@@ -25,6 +24,7 @@ import { TimeField } from '@/components/ui/date-time/time-field'
 
 import { useForwardedRef } from '~/lib/useForwardedRef'
 import { cn } from '~/lib/utils'
+import { DateTimeCalendar } from './date-time-calendar'
 
 const DateTimePicker = React.forwardRef<
   HTMLDivElement,
@@ -76,7 +76,7 @@ const DateTimePicker = React.forwardRef<
         </PopoverTrigger>
         <PopoverContent ref={contentRef} className="w-full">
           <div {...dialogProps} className="space-y-3">
-            {/* <Calendar {...calendarProps} /> */}
+            <DateTimeCalendar {...calendarProps} />
             {!!state.hasTime && (
               <TimeField
                 value={state.timeValue}
