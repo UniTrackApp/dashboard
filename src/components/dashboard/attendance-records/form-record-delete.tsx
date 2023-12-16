@@ -1,6 +1,6 @@
 'use client'
 
-import { AttendanceRecord } from '@prisma/client'
+import { type AttendanceRecord } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import { api } from '~/app/trpc/react'
 

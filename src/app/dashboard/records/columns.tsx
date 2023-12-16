@@ -1,7 +1,7 @@
 'use client'
 
-import { AttendanceRecord, Status } from '@prisma/client'
-import { ColumnDef } from '@tanstack/react-table'
+import { Status, type AttendanceRecord } from '@prisma/client'
+import { type ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
 
 import { Badge } from '@radix-ui/themes'

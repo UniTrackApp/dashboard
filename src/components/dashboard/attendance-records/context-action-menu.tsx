@@ -21,7 +21,7 @@ import {
 } from '~/components/ui/dropdown-menu'
 import Modal from '~/components/ui/modal'
 
-import { AttendanceRecordExtraInfo } from '~/app/dashboard/records/columns'
+import { type AttendanceRecordExtraInfo } from '~/app/dashboard/records/columns'
 import EditAttendanceRecordForm from '~/components/dashboard/attendance-records/form-record-edit'
 import DeleteAttendanceRecord from './form-record-delete'
 

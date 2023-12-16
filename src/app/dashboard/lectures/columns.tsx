@@ -1,7 +1,7 @@
 'use client'
 
 import { type Lecture } from '@prisma/client'
-import { ColumnDef } from '@tanstack/react-table'
+import { type ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
 
 import { Checkbox } from '~/components/ui/checkbox'

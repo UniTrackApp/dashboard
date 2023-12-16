@@ -1,7 +1,7 @@
 'use client'
 
-import { Student } from '@prisma/client'
-import { ColumnDef } from '@tanstack/react-table'
+import { type Student } from '@prisma/client'
+import { type ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from '~/components/ui/checkbox'
 import { DataTableColumnHeader } from '~/components/ui/data-table/column-header'
 

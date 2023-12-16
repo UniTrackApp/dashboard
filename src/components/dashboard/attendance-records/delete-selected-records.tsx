@@ -1,5 +1,5 @@
-import { AttendanceRecord } from '@prisma/client'
-import { Table } from '@tanstack/react-table'
+import { type AttendanceRecord } from '@prisma/client'
+import { type Table } from '@tanstack/react-table'
 import { useRouter } from 'next/navigation'
 import { api } from '~/app/trpc/react'
 import { Button } from '~/components/ui/button'
