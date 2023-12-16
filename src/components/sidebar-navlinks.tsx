@@ -50,6 +50,7 @@ const links = [
     href: '/dashboard/lectures',
     icon: <Presentation size={18} />,
     wipStatus: false,
+    newStatus: true,
   },
   {
     name: 'Modules',
