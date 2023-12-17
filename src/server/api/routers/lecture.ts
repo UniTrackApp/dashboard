@@ -104,8 +104,8 @@ export const lectureRouter = createTRPCRouter({
           .max(10, 'Must be 15 characters or less')
           .startsWith('COMP', `Module ID must start with "COMP"`)
           .optional(),
-        startTime: z.date(),
-        endTime: z.date(),
+        startTime: z.date().optional(),
+        endTime: z.date().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {

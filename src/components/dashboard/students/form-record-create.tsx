@@ -116,7 +116,10 @@ export default function AddStudentForm() {
           </Button>
         </Modal.Trigger>
         <Modal.Content title="Add an attendance record">
-          <div className="mt-4 flex flex-col gap-4">
+          <Modal.Description>
+            Create a new attendance record for a student manually.
+          </Modal.Description>
+          <div className="flex flex-col gap-4">
             {/* Form - to add new attendance records */}
             <Form {...form}>
               <form

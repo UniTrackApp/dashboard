@@ -65,7 +65,7 @@ export default function ContextActionMenu({ lecture }: { lecture: Lecture }) {
           </Link>
         </DropdownMenuItem>
 
-        {/* Modal - to edit records */}
+        {/* Modal - to edit lectures */}
         <Modal open={openEditModal} onOpenChange={setOpenEditModal}>
           <Modal.Trigger asChild>
             <DropdownMenuItem
@@ -76,10 +76,10 @@ export default function ContextActionMenu({ lecture }: { lecture: Lecture }) {
               Edit
             </DropdownMenuItem>
           </Modal.Trigger>
-          <Modal.Content title="Edit record">
+          <Modal.Content title="Edit lecture">
             <Modal.Header>
               <Modal.Description>
-                Edit the details of this attendance record.
+                Edit the details of this lecture.
               </Modal.Description>
             </Modal.Header>
             <EditLectureForm
@@ -94,7 +94,7 @@ export default function ContextActionMenu({ lecture }: { lecture: Lecture }) {
 
         <DropdownMenuSeparator />
 
-        {/* Modal - to delete records */}
+        {/* Modal - to delete lectures */}
         <Modal open={openDeleteModal} onOpenChange={setOpenDeleteModal}>
           <Modal.Trigger asChild>
             <DropdownMenuItem
@@ -105,10 +105,10 @@ export default function ContextActionMenu({ lecture }: { lecture: Lecture }) {
               Delete
             </DropdownMenuItem>
           </Modal.Trigger>
-          <Modal.Content title="Delete record">
+          <Modal.Content title="Delete lecture">
             <Modal.Header>
               <Modal.Description>
-                Are you sure you want to delete this record?
+                Are you sure you want to delete this lecture?
               </Modal.Description>
             </Modal.Header>
             <Modal.Footer>

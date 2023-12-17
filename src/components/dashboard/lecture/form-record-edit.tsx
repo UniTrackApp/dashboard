@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/form'
 import { parseDateTime } from '@internationalized/date'
 import { format } from 'date-fns'
-import { Plus } from 'lucide-react'
+import { Check, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Button } from '~/components/ui/button'
 import { DateTimePicker } from '~/components/ui/date-time/date-time-picker'
@@ -28,16 +28,16 @@ import { useToast } from '~/components/ui/use-toast'
 const formSchema = z.object({
   lectureId: z
     .string()
-    .min(1, 'Required field')
     .max(20, 'Must be 20 characters or less')
-    .startsWith('COMP', `Lecture ID must start with "COMP"`),
+    .startsWith('COMP', `Lecture ID must start with "COMP"`)
+    .optional(),
   moduleId: z
     .string()
-    .min(1, 'Required field')
     .max(10, 'Must be 15 characters or less')
-    .startsWith('COMP', `Module ID must start with "COMP"`),
-  startTime: z.date(),
-  endTime: z.date(),
+    .startsWith('COMP', `Module ID must start with "COMP"`)
+    .optional(),
+  startTime: z.date().optional(),
+  endTime: z.date().optional(),
 })
 
 export default function EditLectureForm({
@@ -188,12 +188,27 @@ export default function EditLectureForm({
           />
 
           {/* Submit button - uses state for loading spinner */}
-          <Button type="submit">
-            <>
-              <Plus className="mr-2 h-4 w-4" />
-              <span>Add Lecture</span>
-            </>
-          </Button>
+          <div className="flex gap-4 justify-end">
+            <Button
+              type="button"
+              variant={'ghost'}
+              onClick={() => {
+                closeModalAndDropdown()
+              }}
+            >
+              <X className="mr-2 h-4 w-4" />
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="bg-green-600 text-white hover:bg-green-700"
+            >
+              <>
+                <Check className="mr-2 h-4 w-4" />
+                <span>Save changes</span>
+              </>
+            </Button>
+          </div>
         </form>
       </Form>
     </>
