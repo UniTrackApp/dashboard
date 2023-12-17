@@ -71,12 +71,12 @@ export function DataTable<TData, TValue>({
         <div className="flex gap-2">
           {/* Search Box - to filter records by student ID */}
           <Input
-            placeholder="Filter by student ID..."
+            placeholder="Search by lecture ID..."
             defaultValue={
-              (table.getColumn('studentId')?.getFilterValue() as string) ?? ''
+              (table.getColumn('lectureId')?.getFilterValue() as string) ?? ''
             }
             onChange={(event) =>
-              table.getColumn('studentId')?.setFilterValue(event.target.value)
+              table.getColumn('lectureId')?.setFilterValue(event.target.value)
             }
             className="max-w-sm shrink-0"
           />

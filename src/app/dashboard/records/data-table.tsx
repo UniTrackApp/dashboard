@@ -71,7 +71,7 @@ export function DataTable<TData, TValue>({
         <div className="flex gap-2">
           {/* Search Box - to filter records by student ID */}
           <Input
-            placeholder="Filter by student ID..."
+            placeholder="Search by student ID..."
             defaultValue={
               (table.getColumn('studentId')?.getFilterValue() as string) ?? ''
             }
