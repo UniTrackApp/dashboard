@@ -27,7 +27,7 @@ import { DataTableViewOptions } from '~/components/ui/data-table/view-options'
 import { Input } from '~/components/ui/input'
 
 import DeleteSelectedStudents from '~/components/dashboard/students/delete-selected-records'
-import AddStudentForm from '~/components/dashboard/students/form-record-create'
+import AddStudentForm from '~/components/dashboard/students/form-student-create'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

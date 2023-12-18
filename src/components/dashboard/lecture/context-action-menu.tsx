@@ -22,8 +22,8 @@ import {
 } from '~/components/ui/dropdown-menu'
 import Modal from '~/components/ui/modal'
 
-import DeleteLecture from '~/components/dashboard/lecture/form-record-delete'
-import EditLectureForm from '~/components/dashboard/lecture/form-record-edit'
+import DeleteLecture from '~/components/dashboard/lecture/form-lecture-delete'
+import EditLectureForm from '~/components/dashboard/lecture/form-lecture-edit'
 
 export default function ContextActionMenu({ lecture }: { lecture: Lecture }) {
   // State - to manage the open/close state of the modals and dropdown

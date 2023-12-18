@@ -22,8 +22,8 @@ import {
 } from '~/components/ui/dropdown-menu'
 import Modal from '~/components/ui/modal'
 
-import DeleteStudent from '~/components/dashboard/students/form-record-delete'
-import EditStudentForm from '~/components/dashboard/students/form-record-edit'
+import DeleteStudent from '~/components/dashboard/students/form-student-delete'
+import EditStudentForm from '~/components/dashboard/students/form-student-edit'
 
 export default function ContextActionMenu({ student }: { student: Student }) {
   // State - to manage the open/close state of the modals and dropdown

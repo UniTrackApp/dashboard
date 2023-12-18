@@ -27,7 +27,7 @@ import { DataTableViewOptions } from '~/components/ui/data-table/view-options'
 import { Input } from '~/components/ui/input'
 
 import DeleteSelectedLectures from '~/components/dashboard/lecture/delete-selected-records'
-import AddLectureForm from '~/components/dashboard/lecture/form-record-create'
+import AddLectureForm from '~/components/dashboard/lecture/form-lecture-create'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
