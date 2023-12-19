@@ -25,20 +25,7 @@ import { toast } from '~/components/ui/use-toast'
 import { api } from '~/lib/api'
 
 // Schema for form validation (using Zod)
-const FormSchema = z.object({
-  lectureId: z
-    .string()
-    .min(1, 'Required field')
-    .max(20, 'Must be 20 characters or less')
-    .startsWith('COMP', `Lecture ID must start with "COMP"`),
-  moduleId: z
-    .string()
-    .min(1, 'Required field')
-    .max(10, 'Must be 15 characters or less')
-    .startsWith('COMP', `Module ID must start with "COMP"`),
-  startTime: z.date(),
-  endTime: z.date(),
-})
+import { LectureSchemaCreate } from '~/types/schemas'
 
 export default function AddLectureForm() {
   // Get current user's role
@@ -54,12 +41,12 @@ export default function AddLectureForm() {
   const router = useRouter()
 
   // Form hook - used for form validation and submission logic (using react-hook-form)
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof LectureSchemaCreate>>({
+    resolver: zodResolver(LectureSchemaCreate),
   })
 
   // Form submission function - called when the form is submitted (using react-hook-form)
-  function onSubmit(formData: z.infer<typeof FormSchema>) {
+  function onSubmit(formData: z.infer<typeof LectureSchemaCreate>) {
     setIsBeingAdded(true)
     if (userRole === 'GUEST') {
       toast({

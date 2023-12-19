@@ -1,4 +1,11 @@
 import { z } from 'zod'
+import {
+  lectureIdSchema,
+  lectureIdSchemaRequired,
+  LectureSchemaCreate,
+  moduleIdSchemaOptional,
+  moduleIdSchemaRequired,
+} from '~/types/schemas'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const lectureRouter = createTRPCRouter({
@@ -50,22 +57,7 @@ export const lectureRouter = createTRPCRouter({
 
   // CREATE: Creates a new lecture record
   createLecture: protectedProcedure
-    .input(
-      z.object({
-        lectureId: z
-          .string()
-          .min(1, 'Required field')
-          .max(20, 'Must be 20 characters or less')
-          .startsWith('COMP', `Lecture ID must start with "COMP"`),
-        moduleId: z
-          .string()
-          .min(1, 'Required field')
-          .max(10, 'Must be 15 characters or less')
-          .startsWith('COMP', `Module ID must start with "COMP"`),
-        startTime: z.date(),
-        endTime: z.date(),
-      }),
-    )
+    .input(LectureSchemaCreate)
     .mutation(async ({ ctx, input }) => {
       try {
         const newLectureRecord = await ctx.prisma.lecture.create({
@@ -89,21 +81,9 @@ export const lectureRouter = createTRPCRouter({
   updateLecture: protectedProcedure
     .input(
       z.object({
-        currentLectureId: z
-          .string()
-          .max(20, 'Must be 20 characters or less')
-          .startsWith('COMP', `Lecture ID must start with "COMP"`)
-          .optional(),
-        updatedLectureId: z
-          .string()
-          .max(20, 'Must be 20 characters or less')
-          .startsWith('COMP', `Lecture ID must start with "COMP"`)
-          .optional(),
-        moduleId: z
-          .string()
-          .max(10, 'Must be 15 characters or less')
-          .startsWith('COMP', `Module ID must start with "COMP"`)
-          .optional(),
+        currentLectureId: lectureIdSchema.optional(), 
+        updatedLectureId: lectureIdSchema.optional(),
+        moduleId: moduleIdSchemaOptional.optional(),
         startTime: z.date().optional(),
         endTime: z.date().optional(),
       }),
