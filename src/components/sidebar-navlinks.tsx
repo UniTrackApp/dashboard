@@ -57,6 +57,7 @@ const links = [
     href: '/dashboard/modules',
     icon: <LibraryBig size={18} />,
     wipStatus: false,
+    newStatus: true,
   },
   // {
   //   name: 'Manage',
