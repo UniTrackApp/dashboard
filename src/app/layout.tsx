@@ -1,4 +1,5 @@
 import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { type Metadata } from 'next'
 import { getServerSession } from 'next-auth'
 import { Inter } from 'next/font/google'
@@ -45,6 +46,7 @@ export default async function RootLayout({
               >
                 <main className="min-h-screen">
                   {children}
+                  <SpeedInsights />
                   <Analytics />
                   <Toaster />
                   <TailwindIndicator />
