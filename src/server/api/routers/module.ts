@@ -45,6 +45,44 @@ export const moduleRouter = createTRPCRouter({
     })
   }),
 
+  // GET: Gets a single module by its ID (primary key)
+  getModuleById: protectedProcedure
+    .input(
+      z.object({
+        moduleId: z
+          .string()
+          .min(1, 'Required field')
+          .max(10, 'Must be 15 characters or less')
+          .startsWith('COMP', `Module ID must start with "COMP"`),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.module.findUnique({
+        where: {
+          moduleId: input.moduleId,
+        },
+      })
+    }),
+
+  // GET: Gets a single module's lectures by its ID (primary key)
+  getModuleLecturesById: protectedProcedure
+    .input(
+      z.object({
+        moduleId: z
+          .string()
+          .min(1, 'Required field')
+          .max(10, 'Must be 15 characters or less')
+          .startsWith('COMP', `Module ID must start with "COMP"`),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.lecture.findMany({
+        where: {
+          moduleId: input.moduleId,
+        },
+      })
+    }),
+
   // UPDATE: Updates a module entry
   updateModule: protectedProcedure
     .input(

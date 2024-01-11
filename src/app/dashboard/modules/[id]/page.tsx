@@ -6,7 +6,15 @@ export default async function IndividualStudentPage({
 }: {
   params: { id: string }
 }) {
-  const data = await api.student.getStudentById.query(params.id)
+  const data = await api.module.getModuleById.query({
+    moduleId: params.id,
+  })
+
+  const relatedData = await api.module.getModuleLecturesById.query({
+    moduleId: params.id,
+  })
+
+  console.log('✨ relatedData ->', relatedData)
 
   return (
     <div>
@@ -14,10 +22,22 @@ export default async function IndividualStudentPage({
       {!data && <p>Error: Student doesn&apos;t exist with ID: {params.id}</p>}
       {!!data && (
         <div>
-          <p>{data.firstName}</p>
-          <p>{data.lastName}</p>
-          <p>{data.studentId}</p>
-          <p>{data.studentCardId}</p>
+          <p>{data.moduleId}</p>
+          <p>{data.moduleName}</p>
+          <p>{data.moduleDesc}</p>
+          <div className='flex flex-col gap-2'>
+            {relatedData?.map((lecture) => {
+              return (
+                <>
+                  <div key={lecture.lectureId} className="border border-border">
+                    <div>{lecture.lectureId}</div>
+                    <div>{lecture.startTime.toString()}</div>
+                    <div>{lecture.endTime.toString()}</div>
+                  </div>
+                </>
+              )
+            })}
+          </div>
         </div>
       )}
     </div>
