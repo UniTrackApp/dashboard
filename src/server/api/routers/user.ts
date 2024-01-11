@@ -14,6 +14,6 @@ export const userRouter = createTRPCRouter({
     // })
 
     // return user?.role
-    return Role.ADMIN
+    return 'ADMIN'
   }),
 })
