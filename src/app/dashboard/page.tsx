@@ -1,20 +1,16 @@
-import { getServerSession } from 'next-auth'
 import { Suspense } from 'react'
 import QuickStatsCards from '~/components/quick-stats-cards'
 
 import { Separator } from '~/components/ui/separator'
 import { Skeleton } from '~/components/ui/skeleton'
-import { getFirstName } from '~/lib/utils'
-import { authOptions } from '~/server/auth'
 
-export default async function Dashboard() {
-  const user = await getServerSession(authOptions)
-
+export default function Dashboard() {
   return (
     <div>
       <div>
         <h1 className="text-2xl font-bold text-foreground">
-          👋 Welcome, {getFirstName(user?.user.name)}
+          {/* NOTE: Disabling authentication for now */}
+          👋 Welcome
         </h1>
         <p className="mt-1 text-muted-foreground">
           This is your dashboard. You can get an overview of all UniTrack data

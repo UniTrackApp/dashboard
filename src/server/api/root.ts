@@ -4,7 +4,6 @@ import { attendanceRecordRouter } from '~/server/api/routers/attendance-records'
 import { enrollmentRouter } from '~/server/api/routers/enrollment'
 import { lectureRouter } from '~/server/api/routers/lecture'
 import { moduleRouter } from '~/server/api/routers/module'
-import { postRouter } from '~/server/api/routers/post'
 import { studentRouter } from '~/server/api/routers/student'
 import { uniTrackRouter } from '~/server/api/routers/unitrack'
 import { userRouter } from '~/server/api/routers/user'
@@ -15,7 +14,6 @@ import { userRouter } from '~/server/api/routers/user'
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  post: postRouter,
   student: studentRouter,
   lecture: lectureRouter,
   module: moduleRouter,
