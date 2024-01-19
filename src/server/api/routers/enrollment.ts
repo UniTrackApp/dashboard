@@ -1,5 +1,21 @@
+import { TRPCError } from '@trpc/server'
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
 import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
+
+// Create a new ratelimit instance, used to rate limit the APIs to 1 request per minute
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(1, '1 m'),
+  analytics: true,
+  /**
+   * Optional prefix for the keys used in redis. This is useful if you want to share a redis
+   * instance with other applications and want to avoid key collisions. The default prefix is
+   * "@upstash/ratelimit"
+   */
+  prefix: '@upstash/ratelimit',
+})
 
 export const enrollmentRouter = createTRPCRouter({
   createEnrollment: protectedProcedure
@@ -18,6 +34,15 @@ export const enrollmentRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      // Rate limits the API to 1 request per minute
+      const { success } = await ratelimit.limit(ctx.session.user.id)
+      if (!success) {
+        throw new TRPCError({
+          code: 'TOO_MANY_REQUESTS',
+          message: 'You are being rate limited. Try again later.',
+        })
+      }
+
       return await ctx.prisma.enrollment.create({
         data: {
           studentId: input.studentId,
