@@ -1,10 +1,22 @@
+<div align="center">
+
 ![unitrack-compressed](https://github.com/user-attachments/assets/dfaafa5d-691f-40c0-96e0-9d764341c426)
 
 # 📊 UniTrack Dashboard - Attendance Monitoring Platform for Universities
 
-Easily track and analyze student attendance through a robust dashboard. Gain valuable insights and manage academic administration more effectively with powerful data analytics and visualizations.
+<p>Easily track and analyze student attendance through a robust dashboard. Gain valuable insights and manage academic administration more effectively with powerful data analytics and visualizations.</p>
 
-✦ [Introduction](#-introduction) ✦ [Features](#-features) ✦ [Tech Stack](#-tech-stack) ✦ [Directory Structure](#-directory-structure) ✦ [Getting Started](#-getting-started) ✦ [Roadmap](#-roadmap) ✦ [License](#-license)
+<a href="#-introduction">Introduction</a>
+<span>&nbsp;&nbsp;✦&nbsp;&nbsp;</span>
+<a href="#-features">Features</a>
+<span>&nbsp;&nbsp;✦&nbsp;&nbsp;</span>
+<a href="#-tech-stack">Tech Stack</a>
+<span>&nbsp;&nbsp;✦&nbsp;&nbsp;</span>
+<a href="#-directory-structure">Directory Structure</a>
+<span>&nbsp;&nbsp;✦&nbsp;&nbsp;</span>
+<a href="#-getting-started">Getting Started</a>
+<span>&nbsp;&nbsp;✦&nbsp;&nbsp;</span>
+<a href="#-roadmap">Roadmap</a>
 
 ![Next JS](https://img.shields.io/badge/Next.JS-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/react-black?style=for-the-badge&logo=react&logoColor=%2361DAFB)
@@ -15,9 +27,11 @@ Easily track and analyze student attendance through a robust dashboard. Gain val
 ![Vercel](https://img.shields.io/badge/Vercel-black?style=for-the-badge&logo=vercel&logoColor=white)
 ![Railway](https://img.shields.io/badge/Railway-black?style=for-the-badge&logo=Railway&logoColor=white)
 
+</div>
+
 ## 📝 Introduction
 
-UniTrack Dashboard is the core administrative platform for tracking and analyzing student attendance in universities. Designed to provide a comprehensive and intuitive interface for academic administration, the platform supports features such as data tables for managing students, classes, and lectures, along with rich attendance analytics. Built using modern web technologies such as Next.js, Prisma, and Tailwind CSS, it offers both performance and scalability.
+UniTrack Dashboard is an admin tool for tracking and analyzing student attendance in universities. It offers a user-friendly interface for managing students, classes, and lectures, with detailed attendance analytics. Built with Next.js, Tailwind CSS, and Prisma.
 
 ## ✨ Features
 
