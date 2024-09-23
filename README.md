@@ -73,7 +73,7 @@ UniTrack Dashboard is an admin tool for tracking and analyzing student attendanc
 │   ├── lib              # Shared utility functions and hooks
 │   ├── pages            # (deprecated) Next.js Pages Router directory
 │   ├── server           # tRPC Routers, Prisma Client, and NextAuth server-side code
-│   │     └── routers    # tRPC Routers for providing type-safe API endpoints / procedures
+│   │     └── routers    # tRPC Procedures for type-safe API endpoints
 │   ├── styles           # Global styles, Tailwind CSS configuration, and custom font imports
 │   ├── types            # Shared TypeScript types and Zod schemas for validation
 │   └── env.mjs          # Type-safe environment variables using t3-env
