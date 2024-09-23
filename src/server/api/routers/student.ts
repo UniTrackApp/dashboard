@@ -93,6 +93,49 @@ export const studentRouter = createTRPCRouter({
     })
   }),
 
+  // UPDATE: Updates a student entry by its ID (primary key)
+  updateStudent: protectedProcedure
+    .input(
+      z.object({
+        currentStudentId: z
+          .string()
+          .max(10, 'Must be 10 characters or less')
+          .regex(/^[0-9]+$/, 'Must be a number'),
+        updatedStudentId: z
+          .string()
+          .max(10, 'Must be 10 characters or less')
+          .regex(/^[0-9]+$/, 'Must be a number')
+          .optional(),
+        studentCardId: z
+          .string()
+          .toUpperCase()
+          .max(50, 'Must be 50 characters or less')
+          .optional(),
+        firstName: z
+          .string()
+          .max(50, 'Must be 50 characters or less')
+          .optional(),
+        lastName: z
+          .string()
+          .min(1, 'Required field')
+          .max(50, 'Must be 50 characters or less')
+          .optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.student.update({
+        where: {
+          studentId: input.currentStudentId,
+        },
+        data: {
+          studentId: input.updatedStudentId ?? undefined,
+          studentCardId: input.studentCardId ?? undefined,
+          firstName: input.firstName ?? undefined,
+          lastName: input.lastName ?? undefined,
+        },
+      })
+    }),
+
   // DELETE: Deletes a student entry by its ID (primary key)
   deleteStudentById: protectedProcedure
     // Takes in an input object that is validated using zod
@@ -110,6 +153,29 @@ export const studentRouter = createTRPCRouter({
       return ctx.prisma.student.delete({
         where: {
           studentId: input.studentId,
+        },
+      })
+    }),
+
+  // DELETE: Deletes multiple student entries by their IDs (primary key)
+  deleteStudentsByIds: protectedProcedure
+    .input(
+      z.object({
+        studentIds: z.array(
+          z
+            .string()
+            .min(1, 'Required field')
+            .max(10, 'Must be 10 characters or less')
+            .regex(/^[0-9]+$/, 'Must be a number'),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.student.deleteMany({
+        where: {
+          studentId: {
+            in: input.studentIds,
+          },
         },
       })
     }),

@@ -55,16 +55,18 @@ export default function Enrollments() {
         })
         void refetchAllEnrollments()
         void refetchEnrollmentCount()
-        setIsBeingAdded(false)
         setDialogIsOpen(false)
+        setIsBeingAdded(false)
       },
       // Displays a toast notification when the mutation fails
       // TODO: Fetch error message from server and display it in the toast description
-      onError() {
+      onError: (e) => {
         toast({
           title: 'Error 😢',
-          description: 'Something went wrong, please try again.',
+          description: e.message,
         })
+        setDialogIsOpen(false)
+        setIsBeingAdded(false)
       },
     })
 

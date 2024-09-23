@@ -38,8 +38,46 @@ export const moduleRouter = createTRPCRouter({
 
   // GET: Gets all rows and columns from the module table
   getAllModules: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.module.findMany()
+    return await ctx.prisma.module.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
   }),
+
+  // UPDATE: Updates a module entry
+  updateModule: protectedProcedure
+    .input(
+      z.object({
+        currentModuleId: z
+          .string()
+          .max(10, 'Must be 15 characters or less')
+          .startsWith('COMP', `Module ID must start with "COMP"`),
+        updatedModuleId: z
+          .string()
+          .max(10, 'Must be 15 characters or less')
+          .startsWith('COMP', `Module ID must start with "COMP"`)
+          .optional(),
+        moduleName: z.string().optional(),
+        moduleDesc: z
+          .string()
+          .max(60, 'Description must be less than 60 characters')
+          .optional()
+          .nullish(), // nullish means it can be null or undefined
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.module.update({
+        where: {
+          moduleId: input.currentModuleId,
+        },
+        data: {
+          moduleId: input.updatedModuleId,
+          moduleName: input.moduleName,
+          moduleDesc: input.moduleDesc,
+        },
+      })
+    }),
 
   // DELETE: Deletes a module entry by its ID (primary key)
   deleteModuleById: protectedProcedure
@@ -58,6 +96,28 @@ export const moduleRouter = createTRPCRouter({
       return await ctx.prisma.module.delete({
         where: {
           moduleId: input.moduleId,
+        },
+      })
+    }),
+
+  deleteModulesByIds: protectedProcedure
+    .input(
+      z.object({
+        moduleIds: z.array(
+          z
+            .string()
+            .min(1, 'Required field')
+            .max(10, 'Must be 15 characters or less')
+            .startsWith('COMP', `Module ID must start with "COMP"`),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.module.deleteMany({
+        where: {
+          moduleId: {
+            in: input.moduleIds,
+          },
         },
       })
     }),

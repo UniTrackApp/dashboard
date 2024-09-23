@@ -1,16 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { format } from 'date-fns'
-import { CalendarIcon, Loader2, Plus } from 'lucide-react'
+import { Loader2, Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
-import { cn } from '~/lib/utils'
 
 import { Button } from '~/components/ui/button'
-import { Calendar } from '~/components/ui/calendar'
+import { DateTimePicker } from '~/components/ui/date-time/date-time-picker'
 import {
   Form,
   FormControl,
@@ -21,11 +17,6 @@ import {
   FormMessage,
 } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '~/components/ui/popover'
 
 // Schema for form validation (using Zod)
 const FormSchema = z.object({
@@ -60,6 +51,7 @@ export default function AddModuleForm({
   // Form submission function - called when the form is submitted (using react-hook-form)
   function onSubmit(formData: z.infer<typeof FormSchema>) {
     setIsBeingAdded(true)
+    console.log('🎉 formData -> ', formData)
     createNewLecture({
       lectureId: formData.lectureId,
       startTime: formData.startTime,
@@ -67,6 +59,7 @@ export default function AddModuleForm({
       moduleId: formData.moduleId,
     })
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -113,42 +106,12 @@ export default function AddModuleForm({
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Start Time</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={'outline'}
-                      className={cn(
-                        'w-[240px] pl-3 text-left font-normal',
-                        !field.value && 'text-muted-foreground',
-                      )}
-                    >
-                      {field.value ? (
-                        format(field.value, 'PPP')
-                      ) : (
-                        <span>Pick a start time</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date('1900-01-01')
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormDescription className="flex flex-col">
-                <p className="text-amber-500">
-                  NOTE: Temporarily hardcoded to use 00:00:00 as time
-                </p>
-              </FormDescription>
+              <DateTimePicker
+                granularity="minute"
+                onChange={(value) => {
+                  field.onChange(value.toDate('Europe/London'))
+                }}
+              />
               <FormMessage />
             </FormItem>
           )}
@@ -161,42 +124,12 @@ export default function AddModuleForm({
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>End Time</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={'outline'}
-                      className={cn(
-                        'w-[240px] pl-3 text-left font-normal',
-                        !field.value && 'text-muted-foreground',
-                      )}
-                    >
-                      {field.value ? (
-                        format(field.value, 'PPP')
-                      ) : (
-                        <span>Pick a end time</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date('1900-01-01')
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormDescription className="flex flex-col">
-                <p className="text-amber-500">
-                  NOTE: Temporarily hardcoded to use 00:00:00 as time
-                </p>
-              </FormDescription>
+              <DateTimePicker
+                granularity="minute"
+                onChange={(value) => {
+                  field.onChange(value.toDate('Europe/London'))
+                }}
+              />
               <FormMessage />
             </FormItem>
           )}

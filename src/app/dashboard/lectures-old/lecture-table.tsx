@@ -1,4 +1,4 @@
-import type { Lecture } from '@prisma/client'
+import { type Lecture } from '@prisma/client'
 import {
   Badge,
   Table,
