@@ -2,7 +2,7 @@
 
 ![unitrack-compressed](https://github.com/user-attachments/assets/dfaafa5d-691f-40c0-96e0-9d764341c426)
 
-# 📊 UniTrack Dashboard - Attendance Monitoring Platform for Universities
+# 📊 UniTrack: Attendance Monitoring Platform for Universities
 
 <p>Easily track and analyze student attendance through a robust dashboard. Gain valuable insights and manage academic administration more effectively with powerful data analytics and visualizations.</p>
 
