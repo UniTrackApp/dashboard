@@ -68,13 +68,17 @@ UniTrack Dashboard is an admin tool for tracking and analyzing student attendanc
 │
 ├── src                  # Main source code
 │   ├── app              # Next.js App Router directory for pages and API routes
+│   │     └── api        # API routes for the attendance scanner hardware units
 │   ├── components       # UI and shared components, with shadcn-ui
 │   ├── lib              # Shared utility functions and hooks
 │   ├── pages            # (deprecated) Next.js Pages Router directory
 │   ├── server           # tRPC Routers, Prisma Client, and NextAuth server-side code
+│   │     └── routers    # tRPC Routers for providing type-safe API endpoints / procedures
 │   ├── styles           # Global styles, Tailwind CSS configuration, and custom font imports
+│   ├── types            # Shared TypeScript types and Zod schemas for validation
 │   └── env.mjs          # Type-safe environment variables using t3-env
 │
+├── docker-compose.yml   # Docker Compose file for local development databases
 ├── .nvmrc               # Node Version Manager (nvm/fnm) file for setting a specific Node version
 └── package.json         # Project metadata and dependencies
 ```
