@@ -1,123 +1,127 @@
-# 📊 UniTrack Dashboad - an attendance monitoring platform for universities
+![unitrack-compressed](https://github.com/user-attachments/assets/dfaafa5d-691f-40c0-96e0-9d764341c426)
 
-Track and analyze student attendance easily with our attendance monitoring dashboard. Gain valuable insights to streamline academic administration and improve student engagement.
+# 📊 UniTrack Dashboard - Attendance Monitoring Platform for Universities
 
-## 🛠️ Tech Stack
+Easily track and analyze student attendance through a robust dashboard. Gain valuable insights and manage academic administration more effectively with powerful data analytics and visualizations.
 
-- ✅ Bootstrapping: create-t3-app
-- ✅ Fullstack Framework: Next.js 14
-- ✅ UI Framework: React with Server Components
-- ✅ Language: TypeScript
-- ✅ Styling: [Tailwind CSS](https://tailwindcss.com)
-- ✅ End-to-end typesafe API: tRPC.
-- ✅ ORM: Prisma
-- ✅ Database: Railway
-- ✅ Auth: Next-Auth.js
-- ✅ Typescript Schema Validation: zod
+✦ [Introduction](#-introduction) ✦ [Features](#-features) ✦ [Tech Stack](#-tech-stack) ✦ [Directory Structure](#-directory-structure) ✦ [Getting Started](#-getting-started) ✦ [Roadmap](#-roadmap) ✦ [License](#-license)
 
-- ✅ Forms: react-hook-form
-- ✅ Linting/Formatting: ESLint + Prettier + prettier-plugin-tailwind
-- ✅ Client Side Querying: React Query
+![Next JS](https://img.shields.io/badge/Next.JS-black?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/react-black?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Prisma](https://img.shields.io/badge/Prisma-black?style=for-the-badge&logo=Prisma&logoColor=3982CE)
+![tRPC](https://img.shields.io/badge/tRPC-black.svg?style=for-the-badge&logo=tRPC&logoColor=2596BE)
+![TailwindCSS](https://img.shields.io/badge/tailwind-black?style=for-the-badge&logo=tailwind-css&logoColor=2338B2AC)
+![shadcn/ui](https://img.shields.io/badge/shadcn/ui-black?style=for-the-badge&logo=shadcnui&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-black?style=for-the-badge&logo=vercel&logoColor=white)
+![Railway](https://img.shields.io/badge/Railway-black?style=for-the-badge&logo=Railway&logoColor=white)
 
-- ✅ UI Components: shadcn/ui + Radix UI
-- ✅ Component Variants: class-variance-authority
-- ✅ Theming: next-themes
-- ✅ Icons: Lucide
-- ✅ Data Tables: TanStack Table
+## 📝 Introduction
 
-- ✅ CI: GitHub Actions
-- ✅ Deployment: Vercel
+UniTrack Dashboard is the core administrative platform for tracking and analyzing student attendance in universities. Designed to provide a comprehensive and intuitive interface for academic administration, the platform supports features such as data tables for managing students, classes, and lectures, along with rich attendance analytics. Built using modern web technologies such as Next.js, Prisma, and Tailwind CSS, it offers both performance and scalability.
 
 ## ✨ Features
 
-(TODO)
+- 🔍 **Attendance Analytics**: View visualizations and insights on university-wide attendance.
+- 📊 **Data Tables**: Access, filter, and manage data for students, classes, and lectures.
+- ⚙️ **Admin Controls**: Manage courses, users, and more with full control.
+- 🛠️ **Real-Time Data**: Live updates for attendance metrics using React Query and tRPC.
+- 📈 **Customizable Dashboards**: Tailor the platform to show the most relevant data to administrators.
 
-## 📸 Screenshots
+## 🛠️ Tech Stack
 
-(TODO)
+- **[Next.js](https://nextjs.org/)** - Fullstack framework for server-side rendering and API routes
+- **[React](https://react.dev/)** - UI framework with server components for dynamic UIs
+- **[TypeScript](https://www.typescriptlang.org/)** - Strongly typed language for safer, maintainable code
+- **[Prisma](https://www.prisma.io/)** - ORM for interacting with the database efficiently
+- **[tRPC](https://trpc.io/)** - End-to-end type-safe API layer for smooth client-server communication
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework for rapid UI development
+- **[Radix UI](https://www.radix-ui.com/)** - Modular and accessible UI components
+- **[TanStack Table](https://tanstack.com/table/latest)** - Powerful table data management for UI
+- **[Next-Auth.js](https://next-auth.js.org/)** - Authentication management
+- **[Railway](https://railway.app/)** - Database hosting for scalable deployments
 
-## 📹 Demo
+## 📂 Project Structure
 
-(TODO)
-
-## 🎯 Roadmap
-
-(TODO)
-
-## 📦 Project structure
-
-(TODO)
+```bash
+.
+├── .github              # GitHub Actions CI/CD workflows
+│    └── workflows
+│        ├── build       # Build the project on every push to the main branch
+│        └── lint-pr     # Lint PR titles to enforce conventional commits
+│
+├── .vscode              # Recommended extensions and settings for VSCode
+├── prisma               # Prisma schema and migrations
+│
+├── src                  # Main source code
+│   ├── app              # Next.js App Router directory for pages and API routes
+│   ├── components       # UI and shared components, with shadcn-ui
+│   ├── lib              # Shared utility functions and hooks
+│   ├── pages            # (deprecated) Next.js Pages Router directory
+│   ├── server           # tRPC Routers, Prisma Client, and NextAuth server-side code
+│   ├── styles           # Global styles, Tailwind CSS configuration, and custom font imports
+│   └── env.mjs          # Type-safe environment variables using t3-env
+│
+├── .nvmrc               # Node Version Manager (nvm/fnm) file for setting a specific Node version
+└── package.json         # Project metadata and dependencies
+```
 
 ## 🚀 Getting Started
 
-(TODO)
-
 ### Prerequisites
 
-Make sure you have at least
-
-```sh
-node -v
-```
+- Node.js v16.x or higher
+- PostgreSQL (or equivalent) database
+- Vercel (optional for deployment)
 
 ### Installation
 
-1. Clone repo
-2. Copy .env.example to .env.local
-3. Fill in the environment variables
-4. Install dependencies
+1. Clone the repository:
 
-```sh
-npm i
+```bash
+git clone https://github.com/UniTrackApp/dashboard.git
+cd dashboard
 ```
 
-5. Run the development server
+2. Install dependencies:
 
-```sh
+```bash
+npm install
+```
+
+3. Set up environment variables by copying `.env.example` to `.env` and adding your credentials:
+
+```bash
+cp .env.example .env
+```
+
+4. Apply database migrations:
+
+```bash
+npx prisma migrate dev
+```
+
+5. Run the development server:
+
+```bash
 npm run dev
 ```
 
-6. (Optional) Run Prisma Studio
+6. Open [http://localhost:3000](http://localhost:3000) to view the app in your browser.
 
-```sh
-npx prisma studio
-```
+## ✌️ Team
 
-### Setting up ENV variables
+- [Aryan Prince](https://x.com/aryxnprince)
+- [Andrea La Fauci De Leo](https://github.com/Bosurgi)
+- [Lewis Johnson](https://github.com/lewisj576)
 
-(TODO)
+## 🎯 Roadmap
 
-## 📣 Acknowledgements
-
-## 🙌 Contributions
+- [ ] Implement some advanced charts using Recharts and shadcn-ui charts
+- [ ] Add multi-campus support
+- [ ] Enable real-time student location tracking
+- [ ] Expand data export capabilities (CSV, PDF)
+- [ ] See [GitHub Issues](https://github.com/UniTrackApp/dashboard/issues?q=sort:updated-desc+is:issue+is:open) for more details and upcoming features
 
 ## 🔑 License
 
-# Create T3 App
-
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
-
-## What's next? How do I make an app with this?
-
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
-
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
-
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
-
-## Learn More
-
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+- [GNU GPLv3](https://github.com/UniTrackApp/dashboard/blob/main/COPYING).
